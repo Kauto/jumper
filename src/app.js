@@ -88,7 +88,7 @@ PIXI.loader.on("progress", function (loader) {
     document.getElementById('loading').style.display = 'none';
     document.getElementById('main').style.display = 'block';
 // The stage to play your game.
-    var renderer = renderer = PIXI.autoDetectRenderer(700, 480);
+    var renderer = renderer = PIXI.autoDetectRenderer(800, 480);
     document.getElementById('main').appendChild(renderer.view);
 
     renderer.autoResize = true;
@@ -476,8 +476,8 @@ PIXI.loader.on("progress", function (loader) {
             }
 
             // scrollen
-            if (hero.sprite.x + stage.x > 300) {
-                stage.x = Math.min(300 - hero.sprite.x, 0);
+            if (hero.sprite.x + stage.x > 2 * renderer.width / 5) {
+                stage.x = Math.min(2 * renderer.width / 5 - hero.sprite.x, 0);
             }
             if (hero.sprite.x + stage.x < 150) {
                 stage.x = Math.min(150 - hero.sprite.x, 0);

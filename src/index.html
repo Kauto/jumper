@@ -64,12 +64,23 @@
 		}
 
 		#main {
-			width:100%;
+			width: 100%;
 			display: none;
+			max-height: 100%;
 		}
 
-		#main canvas {
-			width: 100%;
+		@media (max-aspect-ratio: 16/10) {
+			#main canvas {
+				width: 100%;
+			}
+		}
+
+		@media (min-aspect-ratio: 16/10) {
+			#main canvas {
+				height: 100vh;
+				display: block;
+				margin: auto;
+			}
 		}
 
 		.light-outer {
