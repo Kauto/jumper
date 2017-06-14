@@ -74,7 +74,9 @@ Hero.prototype.checkFloorDeath = function (level) {
         this.y = level.height - this.height;
         this.ay = -22;
         this.dead = 1;
+        return true;
     }
+    return false;
 };
 
 Hero.prototype.checkFloor = function (level) {

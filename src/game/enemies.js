@@ -5,33 +5,37 @@ function Enemies(levelData) {
     levelData.enemies(this);
 }
 
-Enemies.prototype.reset = function() {
+Enemies.prototype.reset = function () {
     this.array = [];
 };
 
-Enemies.prototype.add = function(enemy) {
+Enemies.prototype.add = function (enemy) {
     this.array.push(enemy);
 };
 
-Enemies.prototype.load = function() {
+Enemies.prototype.load = function () {
     this.array.forEach((enemy) => {
         enemy.load();
     })
 };
 
-Enemies.prototype.update = function(level, hero) {
+Enemies.prototype.update = function (level, hero) {
     this.array.forEach((enemy) => {
         enemy.update(level, hero);
-    })
+    });
 };
 
-Enemies.prototype.collision = function(hero) {
+Enemies.prototype.collision = function (hero) {
+    let result = false;
+
     this.array.forEach((enemy) => {
-        enemy.collision(hero);
-    })
+        result = result || enemy.collision(hero);
+    });
+
+    return result;
 };
 
-Enemies.prototype.addSpritesToStage = function(stage) {
+Enemies.prototype.addSpritesToStage = function (stage) {
     this.array.forEach((enemy) => {
         enemy.addSpritesToStage(stage);
     })

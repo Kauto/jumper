@@ -1,8 +1,16 @@
 require('pixi.js');
 
-const game = require('./game/index');
+const Game = require('./game/index');
+const SoundFX = require('sound-fx');
 
-game(require('./game/levels/1')).run().then(()=>alert('Win!')).catch(()=>alert('Game Over!'));
+let sound = new SoundFX();
+
+sound.load('/assets/sound/boing.mp3', 'jump');
+sound.load('/assets/sound/pop.mp3', 'pop');
+sound.load('/assets/sound/e_laught.mp3', 'death');
+//sound.load('/assets/music/jump.mp3', 'music');
+
+Game(require('./game/levels/1'), sound).run().then(()=>alert('Win!')).catch(()=>alert('Game Over!'));
 
 
 

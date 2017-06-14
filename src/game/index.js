@@ -3,11 +3,12 @@ const Hero = require('./hero');
 const Enemies = require('./enemies');
 const Mainloop = require('./mainloop');
 
-function Game(levelData) {
+function Game(levelData, sound) {
     if (!(this instanceof Game)) {
-        return new Game(levelData);
+        return new Game(levelData, sound);
     }
     this.levelData = levelData;
+    this.sound = sound;
 }
 
 Game.prototype.run = function () {
@@ -20,7 +21,7 @@ Game.prototype.run = function () {
     hero.load();
     enemies.load();
 
-    return Mainloop(level, hero, enemies).run();
+    return Mainloop(level, hero, enemies, this.sound).run();
 };
 
 module.exports = Game;

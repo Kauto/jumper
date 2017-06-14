@@ -1,10 +1,11 @@
 const Keyboard = require('./keyboard');
 
-function Mainloop(level, hero, enemies) {
-    if (!(this instanceof Mainloop)) return new Mainloop(level, hero, enemies);
+function Mainloop(level, hero, enemies, sound) {
+    if (!(this instanceof Mainloop)) return new Mainloop(level, hero, enemies, sound);
     this.level = level;
     this.hero = hero;
     this.enemies = enemies;
+    this.sound = sound;
 
     this.timer = null;
 }
@@ -36,6 +37,8 @@ Mainloop.prototype.init = function () {
 
     this.g = 0.5;
 
+    this.sound.play('music');
+
 };
 
 Mainloop.prototype.destroy = function (cb) {
@@ -53,6 +56,8 @@ Mainloop.prototype.destroy = function (cb) {
     // clear timer
     this.timer && cancelAnimationFrame(this.timer);
     this.timer = null;
+
+    this.sound.stop('music');
 
     cb && cb();
 };
@@ -95,8 +100,9 @@ Mainloop.prototype.mainloop = function (resolve, reject) {
 
         // runterfallen + gegner
         if (!this.hero.dead) {
-            this.hero.checkFloorDeath(this.level);
-            this.enemies.collision(this.hero);
+            this.hero.checkFloorDeath(this.level) && this.sound.play('death');
+            let collision = this.enemies.collision(this.hero);
+            collision && this.sound.play(collision);
         }
 
         if (this.hero.dead) {
@@ -145,7 +151,7 @@ Mainloop.prototype.mainloop = function (resolve, reject) {
 
             // jumping
             if (this.key.jump.isDown && this.hero.canJump && this.jumpKey === false) {
-                //BeginPlaySound Games & "boing.wav"
+                this.sound.play('jump');
                 this.jumpKey = true;
                 this.hero.ay = -11;
                 this.hero.canJump = false;

@@ -44,27 +44,27 @@ class Dino {
     }
 
     collision(hero) {
-        if (!this.hitPoints) {
-            return false;
-        }
+        if (this.hitPoints) {
+            if (hero.x + hero.width > this.x && hero.x < this.x + this.width) {
+                if (hero.y + hero.height > this.y + this.deathLine && hero.y < this.y + this.height) {
+                    hero.ay = -5;
+                    hero.dead = 1;
+                    return 'death';
+                }
+                else if (hero.y + hero.height <= this.y + this.deathLine && hero.y + hero.height >= this.y) {
+                    this.hitPoints -= 1;
+                    hero.ay = -Math.abs(hero.ay) / 2;
+                    hero.canJump = true;
+                    hero.canJumpDelay = 5;
+                    if (!this.hitPoints) {
 
-        if (hero.x + hero.width > this.x && hero.x < this.x + this.width) {
-            if (hero.y + hero.height > this.y + this.deathLine && hero.y < this.y + this.height) {
-                hero.ay = -5;
-                hero.dead = 1;
-            }
-            else if (hero.y + hero.height <= this.y + this.deathLine && hero.y + hero.height >= this.y) {
-                //BeginPlaySound Games & "drip.wav"
-                this.hitPoints -= 1;
-                hero.ay = -Math.abs(hero.ay) / 2;
-                hero.canJump = true;
-                hero.canJumpDelay = 5;
-                if (!this.hitPoints) {
-
-                    this.sprite.visible = false;
+                        this.sprite.visible = false;
+                    }
+                    return 'pop';
                 }
             }
         }
+        return false;
     }
 
 
