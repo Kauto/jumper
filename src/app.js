@@ -13,7 +13,6 @@ audioManager.createSound('boing').load();
 audioManager.createSound('pop').load();
 audioManager.createSound('e_laugh').load();
 
-//noinspection InfiniteLoopJS
 function loop() {
     Intro()
         .then(() => {

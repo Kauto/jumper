@@ -76,7 +76,7 @@ function Intro() {
         document.getElementById('main').appendChild(canvas);
 
         let audio = document.createElement('audio');
-        audio.src = 'assets/music/intro.mp3';
+        audio.src = 'assets/sound/intro.mp3';
         audio.preload = "auto";
         audio.load();
 
@@ -88,12 +88,13 @@ function Intro() {
             SP = Sprites,
             ANI = Animations;
 
-        scene.init(() => {
-            audio.play();
+        scene.init({
+            'walking': 'assets/walking.png'
         }).loading(() => {
 
             return true;
         }).scene((scene, layer) => {
+            audio.play();
             let l;
             l = [
                 SP.Rect({
@@ -183,11 +184,39 @@ function Intro() {
                     font: "65px Audiowide",
                     a: 0,
                     arc: 30,
+                    scaleX: 1.4,
+                    scaleY: 1.4,
                     animation: Sequence(1, -2300, [[
                         ANI.ChangeTo({
                             a: 1,
+                            arc: 20
                         }, 100, Easing.quadOut),
                         ANI.Wait()
+                    ], [
+                        ANI.ChangeTo({
+                            scaleX: 1,
+                            scaleY: 1
+                        }, 200, Easing.bounceOut)
+                    ]])
+                }),
+            ];
+            layer.unshift(l);
+            l = [
+                SP.Image({
+                    image: 'walking',
+                    x: -50,
+                    y: 400,
+                    a: 1,
+                    frameWidth: 48,
+                    animation: Sequence(true, -2500, [[
+                        ANI.ImageFrame([0, 1, 2, 3, 4, 5, 6], true, 50)
+                    ], [
+                        ANI.ChangeTo({
+                            x: 850
+                        }, 3000),
+                        ANI.ChangeTo({
+                            x: -50
+                        })
                     ]])
                 }),
             ];

@@ -20,11 +20,10 @@
   },
   "homepage": "https://github.com/Kauto/jumper#readme",
   "devDependencies": {
-    "laravel-mix": "^0.12.1",
-    "babel-plugin-transform-class-properties": "^6.24.1"
+    "laravel-mix": "^0.12.1"
   },
   "dependencies": {
-    "animationvideo": "^0.1.2",
+    "animationvideo": "^0.2.0",
     "audio-manager": "^0.1.18",
     "pixi.js": "^4.5.3"
   }
