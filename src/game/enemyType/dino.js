@@ -49,7 +49,7 @@ class Dino {
                 if (hero.y + hero.height > this.y + this.deathLine && hero.y < this.y + this.height) {
                     hero.ay = -5;
                     hero.dead = 1;
-                    return 'death';
+                    return 'e_laugh';
                 }
                 else if (hero.y + hero.height <= this.y + this.deathLine && hero.y + hero.height >= this.y) {
                     this.hitPoints -= 1;

@@ -37,7 +37,7 @@ Mainloop.prototype.init = function () {
 
     this.g = 0.5;
 
-    this.sound.play('music');
+    this.sound.playLoopSound('music', '../music/jump');
 
 };
 
@@ -57,7 +57,7 @@ Mainloop.prototype.destroy = function (cb) {
     this.timer && cancelAnimationFrame(this.timer);
     this.timer = null;
 
-    this.sound.stop('music');
+    this.sound.stopLoopSound('music', '../music/jump');
 
     cb && cb();
 };
@@ -100,9 +100,9 @@ Mainloop.prototype.mainloop = function (resolve, reject) {
 
         // runterfallen + gegner
         if (!this.hero.dead) {
-            this.hero.checkFloorDeath(this.level) && this.sound.play('death');
+            this.hero.checkFloorDeath(this.level) && this.sound.playSound('sfx', 'e_laugh');
             let collision = this.enemies.collision(this.hero);
-            collision && this.sound.play(collision);
+            collision && this.sound.playSound('sfx', collision);
         }
 
         if (this.hero.dead) {
@@ -151,7 +151,7 @@ Mainloop.prototype.mainloop = function (resolve, reject) {
 
             // jumping
             if (this.key.jump.isDown && this.hero.canJump && this.jumpKey === false) {
-                this.sound.play('jump');
+                this.sound.playSound('sfx', 'boing');
                 this.jumpKey = true;
                 this.hero.ay = -11;
                 this.hero.canJump = false;

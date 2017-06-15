@@ -1,16 +1,19 @@
 require('pixi.js');
 
 const Game = require('./game/index');
-const SoundFX = require('sound-fx');
+const AudioManager = require('audio-manager');
 
-let sound = new SoundFX();
+let audioManager = new AudioManager(['music','sfx']);
+audioManager.init();
+audioManager.settings.audioPath = 'assets/sound/';
+audioManager.setVolume('music', 1);
+audioManager.setVolume('sfx', 1);
+audioManager.createSound('boing').load();
+audioManager.createSound('pop').load();
+audioManager.createSound('e_laugh').load();
 
-sound.load('/assets/sound/boing.mp3', 'jump');
-sound.load('/assets/sound/pop.mp3', 'pop');
-sound.load('/assets/sound/e_laught.mp3', 'death');
-//sound.load('/assets/music/jump.mp3', 'music');
 
-Game(require('./game/levels/1'), sound).run().then(()=>alert('Win!')).catch(()=>alert('Game Over!'));
+Game(require('./game/levels/1'), audioManager).run().then(()=>alert('Win!')).catch(()=>alert('Game Over!'));
 
 
 
