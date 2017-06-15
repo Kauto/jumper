@@ -7,6 +7,7 @@ import {
     Animations,
     Easing
 } from 'animationvideo';
+const _once = require('lodash/once');
 
 
 function explosion(x, y, timeshift) {
@@ -65,7 +66,7 @@ function explosion(x, y, timeshift) {
 }
 
 
-function Intro() {
+function Intro(Audiomanager) {
     return new Promise((resolve, reject) => {
         //resolve();
 
@@ -76,14 +77,14 @@ function Intro() {
         document.getElementById('main').appendChild(canvas);
 
         let audio = document.createElement('audio');
-        audio.src = 'assets/sound/intro.mp3';
+        audio.src = 'assets/music/intro.mp3';
         audio.preload = "auto";
         audio.load();
 
         document.getElementById('loading').style.display = 'none';
         document.getElementById('main').style.display = 'block';
 
-        let scene = Scenes.Default(),
+        let scene = Scenes.Audio(audio),
             engine = Engine(canvas, scene),
             SP = Sprites,
             ANI = Animations;
@@ -94,15 +95,21 @@ function Intro() {
 
             return true;
         }).scene((scene, layer) => {
-            audio.play();
+
             let l;
             l = [
                 SP.Rect({
-                    color: '#FFF',
+                    color: '#000',
                     animation: Sequence(1, 0, [[
+                        ANI.Wait(41000),
+                    ], [
+                        ANI.Wait(41000),
+                        ANI.ChangeTo({
+                            color: '#FFF'
+                        }, 100, Easing.quadInOut),
                         ANI.ChangeTo({
                             color: '#000'
-                        }, 200, Easing.quadInOut),
+                        }, 100, Easing.quadInOut),
                         ANI.Wait(2000),
                         ANI.ChangeTo({
                             color: '#FFF'
@@ -124,7 +131,7 @@ function Intro() {
                     font: "65px Audiowide",
                     a: 0,
                     arc: -30,
-                    animation: Sequence(1, 0, [[
+                    animation: Sequence(1, -41000, [[
                         ANI.ChangeTo({
                             a: 1,
                         }, 100, Easing.quadOut),
@@ -139,7 +146,7 @@ function Intro() {
                     font: "90px Audiowide",
                     a: 0,
                     arc: 0,
-                    animation: Sequence(1, -300, [[
+                    animation: Sequence(1, -41300, [[
                         ANI.ChangeTo({
                             a: 1,
                         }, 100, Easing.quadOut),
@@ -154,7 +161,7 @@ function Intro() {
                     font: "90px Audiowide",
                     a: 0,
                     arc: 0,
-                    animation: Sequence(1, -800, [[
+                    animation: Sequence(1, -41800, [[
                         ANI.ChangeTo({
                             a: 1,
                         }, 100, Easing.quadOut),
@@ -169,7 +176,7 @@ function Intro() {
                     font: "65px Audiowide",
                     a: 0,
                     arc: 30,
-                    animation: Sequence(1, -1100, [[
+                    animation: Sequence(1, -42100, [[
                         ANI.ChangeTo({
                             a: 1,
                         }, 100, Easing.quadOut),
@@ -186,7 +193,7 @@ function Intro() {
                     arc: 30,
                     scaleX: 1.4,
                     scaleY: 1.4,
-                    animation: Sequence(1, -2300, [[
+                    animation: Sequence(1, -43300, [[
                         ANI.ChangeTo({
                             a: 1,
                             arc: 20
@@ -208,7 +215,7 @@ function Intro() {
                     y: 400,
                     a: 1,
                     frameWidth: 48,
-                    animation: Sequence(true, -2500, [[
+                    animation: Sequence(true, -43500, [[
                         ANI.ImageFrame([0, 1, 2, 3, 4, 5, 6], true, 50)
                     ], [
                         ANI.ChangeTo({
@@ -223,7 +230,7 @@ function Intro() {
             layer.unshift(l);
             l = [];
             for (let i = 0; i < 20; i++) {
-                l.push(explosion(Math.random() * (engine.getWidth() - 100) + 50, Math.random() * (engine.getHeight() - 100) + 50, Math.floor(i * 1000 + 1000 * Math.random())));
+                l.push(explosion(Math.random() * (engine.getWidth() - 100) + 50, Math.random() * (engine.getHeight() - 100) + 50, Math.floor(41000 + i * 1000 + 1000 * Math.random())));
             }
             layer.unshift(l);
             l = [
@@ -242,6 +249,24 @@ function Intro() {
                     ]])
                 })
 
+            ];
+            layer.unshift(l);
+
+            let play = _once(function () {
+                Audiomanager.playSound('sfx', 'intro');
+            });
+            l = [
+                function (ctx, t) {
+                    if (t >= 41000) {
+                        play();
+                    }
+                }
+            ];
+            layer.unshift(l);
+            l = [
+                function (ctx, t) {
+                    console.log(t);
+                }
             ];
             layer.unshift(l);
             return layer;

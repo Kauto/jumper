@@ -12,9 +12,10 @@ audioManager.setVolume('sfx', 1);
 audioManager.createSound('boing').load();
 audioManager.createSound('pop').load();
 audioManager.createSound('e_laugh').load();
+audioManager.createSound('intro').load();
 
 function loop() {
-    Intro()
+    Intro(audioManager)
         .then(() => {
             return Game(require('./game/levels/1'), audioManager).run()
         })

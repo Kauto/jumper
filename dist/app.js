@@ -20953,9 +20953,10 @@ audioManager.setVolume('sfx', 1);
 audioManager.createSound('boing').load();
 audioManager.createSound('pop').load();
 audioManager.createSound('e_laugh').load();
+audioManager.createSound('intro').load();
 
 function loop() {
-    Intro().then(function () {
+    Intro(audioManager).then(function () {
         return Game(__webpack_require__(103), audioManager).run();
     }).then(function () {
         alert('Win!');
@@ -23265,6 +23266,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_animationvideo__ = __webpack_require__(90);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_animationvideo___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_animationvideo__);
 
+var _once = __webpack_require__(223);
 
 function explosion(x, y, timeshift) {
     return new __WEBPACK_IMPORTED_MODULE_0_animationvideo__["Sprites"].Emitter({
@@ -23316,7 +23318,7 @@ function explosion(x, y, timeshift) {
     });
 }
 
-function Intro() {
+function Intro(Audiomanager) {
     return new Promise(function (resolve, reject) {
         //resolve();
 
@@ -23327,14 +23329,14 @@ function Intro() {
         document.getElementById('main').appendChild(canvas);
 
         var audio = document.createElement('audio');
-        audio.src = 'assets/sound/intro.mp3';
+        audio.src = 'assets/music/intro.mp3';
         audio.preload = "auto";
         audio.load();
 
         document.getElementById('loading').style.display = 'none';
         document.getElementById('main').style.display = 'block';
 
-        var scene = __WEBPACK_IMPORTED_MODULE_0_animationvideo__["Scenes"].Default(),
+        var scene = __WEBPACK_IMPORTED_MODULE_0_animationvideo__["Scenes"].Audio(audio),
             engine = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_animationvideo__["Engine"])(canvas, scene),
             SP = __WEBPACK_IMPORTED_MODULE_0_animationvideo__["Sprites"],
             ANI = __WEBPACK_IMPORTED_MODULE_0_animationvideo__["Animations"];
@@ -23345,13 +23347,15 @@ function Intro() {
 
             return true;
         }).scene(function (scene, layer) {
-            audio.play();
+
             var l = void 0;
             l = [SP.Rect({
-                color: '#FFF',
-                animation: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_animationvideo__["Sequence"])(1, 0, [[ANI.ChangeTo({
+                color: '#000',
+                animation: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_animationvideo__["Sequence"])(1, 0, [[ANI.Wait(41000)], [ANI.Wait(41000), ANI.ChangeTo({
+                    color: '#FFF'
+                }, 100, __WEBPACK_IMPORTED_MODULE_0_animationvideo__["Easing"].quadInOut), ANI.ChangeTo({
                     color: '#000'
-                }, 200, __WEBPACK_IMPORTED_MODULE_0_animationvideo__["Easing"].quadInOut), ANI.Wait(2000), ANI.ChangeTo({
+                }, 100, __WEBPACK_IMPORTED_MODULE_0_animationvideo__["Easing"].quadInOut), ANI.Wait(2000), ANI.ChangeTo({
                     color: '#FFF'
                 }, 100, __WEBPACK_IMPORTED_MODULE_0_animationvideo__["Easing"].quadInOut), ANI.ChangeTo({
                     color: '#000'
@@ -23366,7 +23370,7 @@ function Intro() {
                 font: "65px Audiowide",
                 a: 0,
                 arc: -30,
-                animation: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_animationvideo__["Sequence"])(1, 0, [[ANI.ChangeTo({
+                animation: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_animationvideo__["Sequence"])(1, -41000, [[ANI.ChangeTo({
                     a: 1
                 }, 100, __WEBPACK_IMPORTED_MODULE_0_animationvideo__["Easing"].quadOut), ANI.Wait()]])
             }), SP.Text({
@@ -23377,7 +23381,7 @@ function Intro() {
                 font: "90px Audiowide",
                 a: 0,
                 arc: 0,
-                animation: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_animationvideo__["Sequence"])(1, -300, [[ANI.ChangeTo({
+                animation: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_animationvideo__["Sequence"])(1, -41300, [[ANI.ChangeTo({
                     a: 1
                 }, 100, __WEBPACK_IMPORTED_MODULE_0_animationvideo__["Easing"].quadOut), ANI.Wait()]])
             }), SP.Text({
@@ -23388,7 +23392,7 @@ function Intro() {
                 font: "90px Audiowide",
                 a: 0,
                 arc: 0,
-                animation: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_animationvideo__["Sequence"])(1, -800, [[ANI.ChangeTo({
+                animation: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_animationvideo__["Sequence"])(1, -41800, [[ANI.ChangeTo({
                     a: 1
                 }, 100, __WEBPACK_IMPORTED_MODULE_0_animationvideo__["Easing"].quadOut), ANI.Wait()]])
             }), SP.Text({
@@ -23399,7 +23403,7 @@ function Intro() {
                 font: "65px Audiowide",
                 a: 0,
                 arc: 30,
-                animation: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_animationvideo__["Sequence"])(1, -1100, [[ANI.ChangeTo({
+                animation: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_animationvideo__["Sequence"])(1, -42100, [[ANI.ChangeTo({
                     a: 1
                 }, 100, __WEBPACK_IMPORTED_MODULE_0_animationvideo__["Easing"].quadOut), ANI.Wait()]])
             }), SP.Text({
@@ -23412,7 +23416,7 @@ function Intro() {
                 arc: 30,
                 scaleX: 1.4,
                 scaleY: 1.4,
-                animation: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_animationvideo__["Sequence"])(1, -2300, [[ANI.ChangeTo({
+                animation: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_animationvideo__["Sequence"])(1, -43300, [[ANI.ChangeTo({
                     a: 1,
                     arc: 20
                 }, 100, __WEBPACK_IMPORTED_MODULE_0_animationvideo__["Easing"].quadOut), ANI.Wait()], [ANI.ChangeTo({
@@ -23427,7 +23431,7 @@ function Intro() {
                 y: 400,
                 a: 1,
                 frameWidth: 48,
-                animation: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_animationvideo__["Sequence"])(true, -2500, [[ANI.ImageFrame([0, 1, 2, 3, 4, 5, 6], true, 50)], [ANI.ChangeTo({
+                animation: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_animationvideo__["Sequence"])(true, -43500, [[ANI.ImageFrame([0, 1, 2, 3, 4, 5, 6], true, 50)], [ANI.ChangeTo({
                     x: 850
                 }, 3000), ANI.ChangeTo({
                     x: -50
@@ -23436,7 +23440,7 @@ function Intro() {
             layer.unshift(l);
             l = [];
             for (var i = 0; i < 20; i++) {
-                l.push(explosion(Math.random() * (engine.getWidth() - 100) + 50, Math.random() * (engine.getHeight() - 100) + 50, Math.floor(i * 1000 + 1000 * Math.random())));
+                l.push(explosion(Math.random() * (engine.getWidth() - 100) + 50, Math.random() * (engine.getHeight() - 100) + 50, Math.floor(41000 + i * 1000 + 1000 * Math.random())));
             }
             layer.unshift(l);
             l = [new SP.FastBlur({
@@ -23450,6 +23454,20 @@ function Intro() {
                     a: 0.4
                 }, 1000)]])
             })];
+            layer.unshift(l);
+
+            var play = _once(function () {
+                Audiomanager.playSound('sfx', 'intro');
+            });
+            l = [function (ctx, t) {
+                if (t >= 41000) {
+                    play();
+                }
+            }];
+            layer.unshift(l);
+            l = [function (ctx, t) {
+                console.log(t);
+            }];
             layer.unshift(l);
             return layer;
         });
@@ -44464,6 +44482,504 @@ module.exports = function(module) {
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__(89);
+
+
+/***/ }),
+/* 213 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var root = __webpack_require__(218);
+
+/** Built-in value references. */
+var Symbol = root.Symbol;
+
+module.exports = Symbol;
+
+
+/***/ }),
+/* 214 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Symbol = __webpack_require__(213),
+    getRawTag = __webpack_require__(216),
+    objectToString = __webpack_require__(217);
+
+/** `Object#toString` result references. */
+var nullTag = '[object Null]',
+    undefinedTag = '[object Undefined]';
+
+/** Built-in value references. */
+var symToStringTag = Symbol ? Symbol.toStringTag : undefined;
+
+/**
+ * The base implementation of `getTag` without fallbacks for buggy environments.
+ *
+ * @private
+ * @param {*} value The value to query.
+ * @returns {string} Returns the `toStringTag`.
+ */
+function baseGetTag(value) {
+  if (value == null) {
+    return value === undefined ? undefinedTag : nullTag;
+  }
+  return (symToStringTag && symToStringTag in Object(value))
+    ? getRawTag(value)
+    : objectToString(value);
+}
+
+module.exports = baseGetTag;
+
+
+/***/ }),
+/* 215 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(global) {/** Detect free variable `global` from Node.js. */
+var freeGlobal = typeof global == 'object' && global && global.Object === Object && global;
+
+module.exports = freeGlobal;
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(20)))
+
+/***/ }),
+/* 216 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Symbol = __webpack_require__(213);
+
+/** Used for built-in method references. */
+var objectProto = Object.prototype;
+
+/** Used to check objects for own properties. */
+var hasOwnProperty = objectProto.hasOwnProperty;
+
+/**
+ * Used to resolve the
+ * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
+ * of values.
+ */
+var nativeObjectToString = objectProto.toString;
+
+/** Built-in value references. */
+var symToStringTag = Symbol ? Symbol.toStringTag : undefined;
+
+/**
+ * A specialized version of `baseGetTag` which ignores `Symbol.toStringTag` values.
+ *
+ * @private
+ * @param {*} value The value to query.
+ * @returns {string} Returns the raw `toStringTag`.
+ */
+function getRawTag(value) {
+  var isOwn = hasOwnProperty.call(value, symToStringTag),
+      tag = value[symToStringTag];
+
+  try {
+    value[symToStringTag] = undefined;
+    var unmasked = true;
+  } catch (e) {}
+
+  var result = nativeObjectToString.call(value);
+  if (unmasked) {
+    if (isOwn) {
+      value[symToStringTag] = tag;
+    } else {
+      delete value[symToStringTag];
+    }
+  }
+  return result;
+}
+
+module.exports = getRawTag;
+
+
+/***/ }),
+/* 217 */
+/***/ (function(module, exports) {
+
+/** Used for built-in method references. */
+var objectProto = Object.prototype;
+
+/**
+ * Used to resolve the
+ * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
+ * of values.
+ */
+var nativeObjectToString = objectProto.toString;
+
+/**
+ * Converts `value` to a string using `Object.prototype.toString`.
+ *
+ * @private
+ * @param {*} value The value to convert.
+ * @returns {string} Returns the converted string.
+ */
+function objectToString(value) {
+  return nativeObjectToString.call(value);
+}
+
+module.exports = objectToString;
+
+
+/***/ }),
+/* 218 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var freeGlobal = __webpack_require__(215);
+
+/** Detect free variable `self`. */
+var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
+
+/** Used as a reference to the global object. */
+var root = freeGlobal || freeSelf || Function('return this')();
+
+module.exports = root;
+
+
+/***/ }),
+/* 219 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var toInteger = __webpack_require__(225);
+
+/** Error message constants. */
+var FUNC_ERROR_TEXT = 'Expected a function';
+
+/**
+ * Creates a function that invokes `func`, with the `this` binding and arguments
+ * of the created function, while it's called less than `n` times. Subsequent
+ * calls to the created function return the result of the last `func` invocation.
+ *
+ * @static
+ * @memberOf _
+ * @since 3.0.0
+ * @category Function
+ * @param {number} n The number of calls at which `func` is no longer invoked.
+ * @param {Function} func The function to restrict.
+ * @returns {Function} Returns the new restricted function.
+ * @example
+ *
+ * jQuery(element).on('click', _.before(5, addContactToList));
+ * // => Allows adding up to 4 contacts to the list.
+ */
+function before(n, func) {
+  var result;
+  if (typeof func != 'function') {
+    throw new TypeError(FUNC_ERROR_TEXT);
+  }
+  n = toInteger(n);
+  return function() {
+    if (--n > 0) {
+      result = func.apply(this, arguments);
+    }
+    if (n <= 1) {
+      func = undefined;
+    }
+    return result;
+  };
+}
+
+module.exports = before;
+
+
+/***/ }),
+/* 220 */
+/***/ (function(module, exports) {
+
+/**
+ * Checks if `value` is the
+ * [language type](http://www.ecma-international.org/ecma-262/7.0/#sec-ecmascript-language-types)
+ * of `Object`. (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is an object, else `false`.
+ * @example
+ *
+ * _.isObject({});
+ * // => true
+ *
+ * _.isObject([1, 2, 3]);
+ * // => true
+ *
+ * _.isObject(_.noop);
+ * // => true
+ *
+ * _.isObject(null);
+ * // => false
+ */
+function isObject(value) {
+  var type = typeof value;
+  return value != null && (type == 'object' || type == 'function');
+}
+
+module.exports = isObject;
+
+
+/***/ }),
+/* 221 */
+/***/ (function(module, exports) {
+
+/**
+ * Checks if `value` is object-like. A value is object-like if it's not `null`
+ * and has a `typeof` result of "object".
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
+ * @example
+ *
+ * _.isObjectLike({});
+ * // => true
+ *
+ * _.isObjectLike([1, 2, 3]);
+ * // => true
+ *
+ * _.isObjectLike(_.noop);
+ * // => false
+ *
+ * _.isObjectLike(null);
+ * // => false
+ */
+function isObjectLike(value) {
+  return value != null && typeof value == 'object';
+}
+
+module.exports = isObjectLike;
+
+
+/***/ }),
+/* 222 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var baseGetTag = __webpack_require__(214),
+    isObjectLike = __webpack_require__(221);
+
+/** `Object#toString` result references. */
+var symbolTag = '[object Symbol]';
+
+/**
+ * Checks if `value` is classified as a `Symbol` primitive or object.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a symbol, else `false`.
+ * @example
+ *
+ * _.isSymbol(Symbol.iterator);
+ * // => true
+ *
+ * _.isSymbol('abc');
+ * // => false
+ */
+function isSymbol(value) {
+  return typeof value == 'symbol' ||
+    (isObjectLike(value) && baseGetTag(value) == symbolTag);
+}
+
+module.exports = isSymbol;
+
+
+/***/ }),
+/* 223 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var before = __webpack_require__(219);
+
+/**
+ * Creates a function that is restricted to invoking `func` once. Repeat calls
+ * to the function return the value of the first invocation. The `func` is
+ * invoked with the `this` binding and arguments of the created function.
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Function
+ * @param {Function} func The function to restrict.
+ * @returns {Function} Returns the new restricted function.
+ * @example
+ *
+ * var initialize = _.once(createApplication);
+ * initialize();
+ * initialize();
+ * // => `createApplication` is invoked once
+ */
+function once(func) {
+  return before(2, func);
+}
+
+module.exports = once;
+
+
+/***/ }),
+/* 224 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var toNumber = __webpack_require__(226);
+
+/** Used as references for various `Number` constants. */
+var INFINITY = 1 / 0,
+    MAX_INTEGER = 1.7976931348623157e+308;
+
+/**
+ * Converts `value` to a finite number.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.12.0
+ * @category Lang
+ * @param {*} value The value to convert.
+ * @returns {number} Returns the converted number.
+ * @example
+ *
+ * _.toFinite(3.2);
+ * // => 3.2
+ *
+ * _.toFinite(Number.MIN_VALUE);
+ * // => 5e-324
+ *
+ * _.toFinite(Infinity);
+ * // => 1.7976931348623157e+308
+ *
+ * _.toFinite('3.2');
+ * // => 3.2
+ */
+function toFinite(value) {
+  if (!value) {
+    return value === 0 ? value : 0;
+  }
+  value = toNumber(value);
+  if (value === INFINITY || value === -INFINITY) {
+    var sign = (value < 0 ? -1 : 1);
+    return sign * MAX_INTEGER;
+  }
+  return value === value ? value : 0;
+}
+
+module.exports = toFinite;
+
+
+/***/ }),
+/* 225 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var toFinite = __webpack_require__(224);
+
+/**
+ * Converts `value` to an integer.
+ *
+ * **Note:** This method is loosely based on
+ * [`ToInteger`](http://www.ecma-international.org/ecma-262/7.0/#sec-tointeger).
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to convert.
+ * @returns {number} Returns the converted integer.
+ * @example
+ *
+ * _.toInteger(3.2);
+ * // => 3
+ *
+ * _.toInteger(Number.MIN_VALUE);
+ * // => 0
+ *
+ * _.toInteger(Infinity);
+ * // => 1.7976931348623157e+308
+ *
+ * _.toInteger('3.2');
+ * // => 3
+ */
+function toInteger(value) {
+  var result = toFinite(value),
+      remainder = result % 1;
+
+  return result === result ? (remainder ? result - remainder : result) : 0;
+}
+
+module.exports = toInteger;
+
+
+/***/ }),
+/* 226 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var isObject = __webpack_require__(220),
+    isSymbol = __webpack_require__(222);
+
+/** Used as references for various `Number` constants. */
+var NAN = 0 / 0;
+
+/** Used to match leading and trailing whitespace. */
+var reTrim = /^\s+|\s+$/g;
+
+/** Used to detect bad signed hexadecimal string values. */
+var reIsBadHex = /^[-+]0x[0-9a-f]+$/i;
+
+/** Used to detect binary string values. */
+var reIsBinary = /^0b[01]+$/i;
+
+/** Used to detect octal string values. */
+var reIsOctal = /^0o[0-7]+$/i;
+
+/** Built-in method references without a dependency on `root`. */
+var freeParseInt = parseInt;
+
+/**
+ * Converts `value` to a number.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to process.
+ * @returns {number} Returns the number.
+ * @example
+ *
+ * _.toNumber(3.2);
+ * // => 3.2
+ *
+ * _.toNumber(Number.MIN_VALUE);
+ * // => 5e-324
+ *
+ * _.toNumber(Infinity);
+ * // => Infinity
+ *
+ * _.toNumber('3.2');
+ * // => 3.2
+ */
+function toNumber(value) {
+  if (typeof value == 'number') {
+    return value;
+  }
+  if (isSymbol(value)) {
+    return NAN;
+  }
+  if (isObject(value)) {
+    var other = typeof value.valueOf == 'function' ? value.valueOf() : value;
+    value = isObject(other) ? (other + '') : other;
+  }
+  if (typeof value != 'string') {
+    return value === 0 ? value : +value;
+  }
+  value = value.replace(reTrim, '');
+  var isBinary = reIsBinary.test(value);
+  return (isBinary || reIsOctal.test(value))
+    ? freeParseInt(value.slice(2), isBinary ? 2 : 8)
+    : (reIsBadHex.test(value) ? NAN : +value);
+}
+
+module.exports = toNumber;
 
 
 /***/ })
