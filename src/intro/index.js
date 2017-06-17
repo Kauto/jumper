@@ -90,6 +90,11 @@ function Intro(Audiomanager) {
             ANI = Animations;
 
         scene.init({
+            's1': 'assets/intro/s1.jpg',
+            's2': 'assets/intro/s2.jpg',
+            't1': 'assets/intro/t1.jpg',
+            't2': 'assets/intro/t2.jpg',
+            't3': 'assets/intro/t3.jpg',
             'walking': 'assets/walking.png'
         }).loading(() => {
 
@@ -99,11 +104,12 @@ function Intro(Audiomanager) {
             let l;
             l = [
                 SP.Rect({
-                    color: '#000',
+                    color: '#fff',
                     animation: Sequence(1, 0, [[
-                        ANI.Wait(41000),
-                    ], [
-                        ANI.Wait(41000),
+                        ANI.ChangeTo({
+                            color: '#000'
+                        }, 1000, Easing.quadInOut),
+                        ANI.Wait(40000),
                         ANI.ChangeTo({
                             color: '#FFF'
                         }, 100, Easing.quadInOut),
@@ -118,6 +124,32 @@ function Intro(Audiomanager) {
                             color: '#000'
                         }, 100, Easing.quadInOut),
                         ANI.Wait()
+                    ]])
+                })
+            ];
+            layer.unshift(l);
+            l = [
+                SP.Image({
+                    image: 's1',
+                    x: 350,
+                    y: 240,
+                    scaleX: 2,
+                    scaleY: 2,
+                    a: 0,
+                    animation: Sequence(1, -2000, [[
+                        ANI.ChangeTo({
+                            a: 1
+                        }, 1000),
+                        ANI.Wait(6000),
+                        ANI.ChangeTo({
+                            a: 0
+                        }, 1000)
+                    ], [
+                        ANI.ChangeTo({
+                            x: 400,
+                            scaleX: 1.8,
+                            scaleY: 1.8
+                        }, 8000)
                     ]])
                 })
             ];
@@ -239,13 +271,56 @@ function Intro(Audiomanager) {
                     scaleX: 20,
                     scaleY: 20,
                     a: 0.4,
+                    pixelated: true,
                     animation: Sequence(true, 0, [[
                         ANI.ChangeTo({
                             a: 0.1
-                        }, 1000),
+                        }, 5000),
                         ANI.ChangeTo({
                             a: 0.4
-                        }, 1000),
+                        }, 5000),
+                    ]])
+                })
+
+            ];
+            layer.unshift(l);
+            l = [
+
+                SP.Scroller({
+                    text: "Oh Tobi! Du bist mein Ein und Alles!",
+                    x: (i) => 440 + i * 8,
+                    y: 75,
+                    color: '#F00',
+                    font: '14px Monospace',
+                    a: 0,
+                    animation: (i) => Sequence(1, -3000 - i * 5, [[
+                        ANI.ChangeTo({
+                            a: 1,
+                            color: '#000'
+                        }, 300),
+                        ANI.Wait(3000),
+                        ANI.ChangeTo({
+                            a: 0
+                        }, 300),
+                    ]])
+                }),
+                SP.Rect({
+                    x: 425,
+                    y: 50,
+                    width: 0,
+                    height: 0,
+                    color: '#FFF',
+                    borderColor: '#000',
+                    animation: Sequence(1, -2500, [[
+                        ANI.ChangeTo({
+                            width: 350,
+                            height: 50
+                        }, 300, Easing.bounceOut),
+                        ANI.Wait(4000),
+                        ANI.ChangeTo({
+                            width: 0,
+                            height: 0
+                        }, 300, Easing.bounceIn)
                     ]])
                 })
 
