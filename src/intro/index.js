@@ -119,7 +119,15 @@ function Intro (Audiomanager) {
     document.getElementById('main').appendChild(canvas);
 
     let audio = document.createElement('audio');
-    audio.src = 'assets/music/intro.mp3';
+
+    // for debug
+    audio.controls = true;
+    document.getElementById('main').appendChild(audio);
+    audio.src = 'assets/music/intro.php';
+
+    //for real
+    //audio.src = 'assets/music/intro.mp3';
+
     audio.preload = 'auto';
     audio.load();
 
@@ -381,7 +389,32 @@ function Intro (Audiomanager) {
             ANI.Wait()
           ]])
         }),
-
+        SP.Scroller({
+          text: 'PRESS START',
+          x: (i) => 300 + i * 20,
+          y: 420,
+          color: '#FFF',
+          font: '32px Audiowide',
+          a: 1,
+          animation: (i) => Sequence(true, -44500 - i * 10 , [[
+            ANI.ChangeTo({
+              color: '#F00',
+            }, 100, Easing.quadInOut),
+            ANI.ChangeTo({
+              color: '#ff0fe9',
+            }, 100, Easing.quadInOut),
+            ANI.ChangeTo({
+              color: '#2840ff',
+            }, 100, Easing.quadInOut),
+            ANI.ChangeTo({
+              color: '#14ffeb',
+            }, 100, Easing.quadInOut),
+            ANI.ChangeTo({
+              color: '#FFF',
+            }, 100, Easing.quadInOut),
+            ANI.Wait(1000)
+          ]])
+        }),
       ];
       layer.unshift(l);
       l = [
@@ -430,13 +463,13 @@ function Intro (Audiomanager) {
       layer.unshift(l);
       l=[];
       textBox(l, 'Oh Tobi! Du bist mein Ein und Alles!', 425, 50, 350, 2500);
-      textBox(l, 'Yeah! Du rockst mein Hearth', 50, 250, 270, 10500);
-      textBox(l, 'Wuff wuff wuff', 250, 100, 170, 18500);
+      textBox(l, 'Yeah! Du rockst mein Hearth!', 50, 250, 270, 10500);
+      textBox(l, 'Wuff wuff wuff', 250, 100, 160, 18500);
       textBox(l, 'Oh ja! Wir sind glücklich!', 510, 80, 250, 26500);
       textBox(l, 'Oh nein! Steffi wird entführt!', 250, 260, 300, 33500);
-      textBox(l, 'Oh nein!', 100, 10, 100, 34000);
-      textBox(l, 'Oh nein!', 350, 360, 100, 34500);
-      textBox(l, 'Oh nein!', 550, 100, 100, 35000);
+      textBox(l, 'Oh nein!', 100, 10, 110, 34000);
+      textBox(l, 'Oh nein!', 350, 360, 110, 34500);
+      textBox(l, 'Oh nein!', 550, 100, 110, 35000);
       layer.unshift(l);
 
       let play = _once(function () {

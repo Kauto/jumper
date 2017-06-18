@@ -17,23 +17,44 @@ audioManager.createSound('intro').load();
 audioManager.createSound('ding').load();
 audioManager.createSound('gestoehn').load();
 
-
 const renderer = PIXI.autoDetectRenderer(800, 480);
 
-function loop() {
-    Intro(audioManager)
-        .then(() => {
-            return Game(renderer, audioManager).run(require('./game/levels/1'))
-        })
-        .then(() => {
-            alert('Win!');
-            loop();
-        })
-        .catch((e) => {
-        console.error(e);
-            alert('Game Over!');
-            loop();
-        });
+function loop () {
+  Intro(audioManager)
+    .then(() => {
+      return Game(renderer, audioManager).run(require('./game/levels/1'));
+    })
+    .then(() => {
+      alert('Win!');
+      loop();
+    })
+    .catch((e) => {
+      console.error(e);
+      alert('Game Over!');
+      loop();
+    });
 }
 
-loop();
+document.getElementById('loading').style.display = 'none';
+document.getElementById('main').style.display = 'block';
+document.getElementById('fullscreen').addEventListener('click', () => {
+  var elem = document.getElementById('main');
+  if (elem.requestFullscreen) {
+    elem.requestFullscreen();
+  } else if (elem.msRequestFullscreen) {
+    elem.msRequestFullscreen();
+  } else if (elem.mozRequestFullScreen) {
+    elem.mozRequestFullScreen();
+  } else if (elem.webkitRequestFullscreen) {
+    elem.webkitRequestFullscreen();
+  }
+});
+document.getElementById('start').addEventListener('click', () => {
+  // clear dom
+  let myNode = document.getElementById('main');
+  while (myNode.firstChild) {
+    myNode.removeChild(myNode.firstChild);
+  }
+
+  loop();
+});

@@ -4,7 +4,7 @@ let fs = require('fs'),
     minify = require('html-minifier').minify,
     _template = require('lodash/template');
 
-
+function minimizeHtml () {
 let data = _template(fs.readFileSync(__dirname + '/src/index.html', 'utf8'))({
         production: global.process.env.NODE_ENV === 'production',
         base64: function (file) {
@@ -25,7 +25,7 @@ let data = _template(fs.readFileSync(__dirname + '/src/index.html', 'utf8'))({
     });
 fs.writeFile(__dirname + '/index.html', result, () => {
 });
-
+}
 
 let mix = require('laravel-mix');
 
@@ -41,9 +41,9 @@ let mix = require('laravel-mix');
  */
 
 if (global.process.env.NODE_ENV === 'production') {
-    mix.js('src/app.js', 'dist/app.min.js');
+    mix.js('src/app.js', 'dist/app.min.js').then(minimizeHtml);
 } else {
-    mix.js('src/app.js', 'dist/');
+    mix.js('src/app.js', 'dist/').then(minimizeHtml);
 }
 
 // Full API
