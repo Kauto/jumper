@@ -12,7 +12,10 @@ audioManager.setVolume('sfx', 1);
 audioManager.createSound('boing').load();
 audioManager.createSound('pop').load();
 audioManager.createSound('e_laugh').load();
+audioManager.createSound('e_laugh').load();
 audioManager.createSound('intro').load();
+audioManager.createSound('ding').load();
+audioManager.createSound('gestoehn').load();
 
 function loop() {
     Intro(audioManager)
