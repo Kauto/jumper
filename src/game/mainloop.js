@@ -95,6 +95,7 @@ Mainloop.prototype.mainloop = function (resolve, reject) {
     // apply schwerkraft
     this.hero.applyAdditionalForce(0, this.g);
     this.hero.updatePositionY();
+    this.hero.checkAnimation();
 
     this.hero.animate(this.key.down.isDown);
 

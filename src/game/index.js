@@ -18,8 +18,8 @@ Game.prototype.run = function () {
 
     // Load Sprites
     this.levelData.load();
-    hero.load();
     enemies.load();
+    hero.load();
 
     return Mainloop(level, hero, enemies, this.sound).run();
 };

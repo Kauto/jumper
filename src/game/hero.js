@@ -5,28 +5,91 @@ function Hero(levelData) {
     this.ay = 0;
     this.x = 0;
     this.y = -100;
-    this.size = 2;
+    this.size = 1;
     this.height = levelData.blockSize * this.size;
     this.width = levelData.blockSize;
 
     this.canJump = false;
     this.canJumpDelay = 0;
+
+    this.walkingFrames = [];
+    this.idleFrames = [];
+    this.jumpingFrames = [];
+
+    this.currentAnim = 'none';
 }
 
 Hero.prototype.load = function () {
-    for (let i = 1; i <= 4; i++) {
-        PIXI.loader.add('H' + i, "assets/h" + i + ".png");
-    }
+    PIXI.loader
+        .add('./assets/idle.json')
+        .add('./assets/jumping.json')
+        .add('./assets/walking.json')
+        .load(function () {
+            for (var i = 0; i < 7; i++) {
+                var val = '0' + i;
+
+                this.idleFrames.push(PIXI.Texture.fromFrame('idle' + val + '.png'));
+                this.walkingFrames.push(PIXI.Texture.fromFrame('walking' + val + '.png'));
+                this.jumpingFrames.push(PIXI.Texture.fromFrame('jumping' + val + '.png'));
+            }
+
+            // create an AnimatedSprite (brings back memories from the days of Flash, right ?)
+            this.sprite = new PIXI.extras.AnimatedSprite(this.walkingFrames);
+            this.sprite.width = this.width;
+            this.sprite.x = this.x;
+            this.sprite.y = this.y;
+            this.sprite.animationSpeed = 0.05;
+
+            // this.sprite.play();
+        }.bind(this));
 };
 
 Hero.prototype.addSpritesToStage = function (stage) {
-    this.sprite = new PIXI.Sprite(
-        PIXI.loader.resources["H1"].texture
-    );
-    this.sprite.x = this.x;
-    this.sprite.y = this.y;
-
     stage.addChild(this.sprite);
+};
+
+Hero.prototype.checkAnimation = function() {
+    // jumping
+    if (!this.canJump && !this.dead) {
+        this.sprite.animationSpeed = 0.13;
+
+        if (this.currentAnim !== 'jumping') {
+            this.currentAnim = 'jumping';
+            this.sprite.textures = this.jumpingFrames;
+        }
+    }
+    else {
+        this.sprite.animationSpeed = 0.05;
+
+        if (this.ax === 0 || this.dead) {
+            if (this.currentAnim !== 'idle') {
+                this.currentAnim = 'idle';
+                this.sprite.textures = this.idleFrames;
+            }
+        }
+        else if (this.ax < 0) {
+            if (this.currentAnim !== 'walking') {
+                this.currentAnim = 'walking';
+                this.sprite.textures = this.walkingFrames;
+            }
+
+            this.sprite.scale.x = -1;
+            this.sprite.anchor.set(1, 0);
+        }
+        else if (this.ax > 0){
+            if (this.currentAnim !== 'walking') {
+                this.currentAnim = 'walking';
+                this.sprite.textures = this.walkingFrames;
+            }
+
+            this.sprite.scale.x = 1;
+            this.sprite.anchor.set(0, 0);
+        }
+    }
+
+    if (!this.sprite.playing) {
+        this.sprite.play();
+    }
 };
 
 Hero.prototype.updatePositionX = function (level) {
@@ -66,7 +129,9 @@ Hero.prototype.moveInAir = function () {
 };
 
 Hero.prototype.animate = function (special) {
-    this.sprite.texture = PIXI.loader.resources["H" + (special ? "2" : "1")].texture;
+    // console.log('PLAYYY');
+    // this.sprite.play();
+    // this.sprite.texture = PIXI.loader.resources["H" + (special ? "2" : "1")].texture;
 };
 
 Hero.prototype.checkFloorDeath = function (level) {
