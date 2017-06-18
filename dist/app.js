@@ -11665,100 +11665,100 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Dino = function () {
-    function Dino(levelData, x, y) {
-        var moveToLeft = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
+  function Dino(levelData, x, y) {
+    var moveToLeft = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
 
-        _classCallCheck(this, Dino);
+    _classCallCheck(this, Dino);
 
-        this.width = this.height = levelData.blockSize;
-        this.x = x;
-        this.y = y;
-        this.ax = moveToLeft ? -3 : 3;
-        this.maxAni = 1;
-        this.maxAniT = 5;
-        this.hitPoints = 1;
-        this.aniT = this.ani = 0;
-        this.deathLine = Math.ceil(levelData.blockSize / 3);
+    this.width = this.height = levelData.blockSize;
+    this.x = x;
+    this.y = y;
+    this.ax = moveToLeft ? -3 : 3;
+    this.maxAni = 1;
+    this.maxAniT = 5;
+    this.hitPoints = 1;
+    this.aniT = this.ani = 0;
+    this.deathLine = Math.ceil(levelData.blockSize / 3);
+  }
+
+  _createClass(Dino, [{
+    key: 'animate',
+    value: function animate() {
+      this.aniT++;
+
+      if (this.aniT >= this.maxAniT) {
+        this.aniT = 0;
+        this.ani++;
+        if (this.ani > this.maxAni) {
+          this.ani = 0;
+        }
+      }
     }
+  }, {
+    key: 'update',
+    value: function update(level, hero) {
+      if (!this.hitPoints) {
+        return false;
+      }
 
-    _createClass(Dino, [{
-        key: "animate",
-        value: function animate() {
-            this.aniT++;
+      this.animate();
 
-            if (this.aniT >= this.maxAniT) {
-                this.aniT = 0;
-                this.ani++;
-                if (this.ani > this.maxAni) {
-                    this.ani = 0;
-                }
-            }
-        }
-    }, {
-        key: "update",
-        value: function update(level, hero) {
+      if (level.isOccupied(this.x + this.ax + (this.ax > 0 ? this.width : 0), this.y, 0, 1)) {
+        this.ax = -this.ax;
+      } else {
+        this.x += this.ax;
+      }
+
+      this.sprite.texture = PIXI.loader.resources['G0' + this.ani + (this.ax > 0 ? 'd' : '')].texture;
+      this.sprite.x = this.x;
+      this.sprite.y = this.y;
+    }
+  }, {
+    key: 'collision',
+    value: function collision(hero) {
+      if (this.hitPoints) {
+        if (hero.x + hero.width > this.x && hero.x < this.x + this.width) {
+          if (hero.y + hero.height > this.y + this.deathLine && hero.y < this.y + this.height) {
+            hero.ay = -5;
+            hero.dead = 1;
+            return 'e_laugh';
+          } else if (hero.y + hero.height <= this.y + this.deathLine && hero.y + hero.height >= this.y) {
+            this.hitPoints -= 1;
+            hero.ay = -Math.abs(hero.ay) / 2;
+            hero.canJump = true;
+            hero.canJumpDelay = 5;
             if (!this.hitPoints) {
-                return false;
+
+              this.sprite.visible = false;
             }
-
-            this.animate();
-
-            if (level.isOccupied(this.x + this.ax + (this.ax > 0 ? this.width : 0), this.y, 0, 1)) {
-                this.ax = -this.ax;
-            } else {
-                this.x += this.ax;
-            }
-
-            this.sprite.texture = PIXI.loader.resources["G0" + this.ani + (this.ax > 0 ? "d" : "")].texture;
-            this.sprite.x = this.x;
-            this.sprite.y = this.y;
+            return 'pop';
+          }
         }
-    }, {
-        key: "collision",
-        value: function collision(hero) {
-            if (this.hitPoints) {
-                if (hero.x + hero.width > this.x && hero.x < this.x + this.width) {
-                    if (hero.y + hero.height > this.y + this.deathLine && hero.y < this.y + this.height) {
-                        hero.ay = -5;
-                        hero.dead = 1;
-                        return 'e_laugh';
-                    } else if (hero.y + hero.height <= this.y + this.deathLine && hero.y + hero.height >= this.y) {
-                        this.hitPoints -= 1;
-                        hero.ay = -Math.abs(hero.ay) / 2;
-                        hero.canJump = true;
-                        hero.canJumpDelay = 5;
-                        if (!this.hitPoints) {
+      }
+      return false;
+    }
+  }, {
+    key: 'addSpritesToStage',
+    value: function addSpritesToStage(stage) {
+      this.sprite = new PIXI.Sprite(PIXI.loader.resources['G00'].texture);
+      this.sprite.x = this.x;
+      this.sprite.y = this.y;
 
-                            this.sprite.visible = false;
-                        }
-                        return 'pop';
-                    }
-                }
-            }
-            return false;
-        }
-    }, {
-        key: "addSpritesToStage",
-        value: function addSpritesToStage(stage) {
-            this.sprite = new PIXI.Sprite(PIXI.loader.resources["G00"].texture);
-            this.sprite.x = this.x;
-            this.sprite.y = this.y;
+      stage.addChild(this.sprite);
+    }
+  }, {
+    key: 'load',
+    value: function load() {
+      try {
+        PIXI.loader.add('G00', 'assets/G00.png');
+        PIXI.loader.add('G00d', 'assets/G00d.png');
+        PIXI.loader.add('G01', 'assets/G01.png');
+        PIXI.loader.add('G01d', 'assets/G01d.png');
+      } catch (e) {}
+    }
+  }]);
 
-            stage.addChild(this.sprite);
-        }
-    }, {
-        key: "load",
-        value: function load() {
-            try {
-                PIXI.loader.add('G00', "assets/G00.png");
-                PIXI.loader.add('G00d', "assets/G00d.png");
-                PIXI.loader.add('G01', "assets/G01.png");
-                PIXI.loader.add('G01d', "assets/G01d.png");
-            } catch (e) {}
-        }
-    }]);
-
-    return Dino;
+  return Dino;
 }();
 
 module.exports = Dino;
@@ -20970,13 +20970,16 @@ audioManager.createSound('intro').load();
 audioManager.createSound('ding').load();
 audioManager.createSound('gestoehn').load();
 
+var renderer = PIXI.autoDetectRenderer(800, 480);
+
 function loop() {
     Intro(audioManager).then(function () {
-        return Game(__webpack_require__(104), audioManager).run();
+        return Game(renderer, audioManager).run(__webpack_require__(104));
     }).then(function () {
         alert('Win!');
         loop();
-    }).catch(function () {
+    }).catch(function (e) {
+        console.error(e);
         alert('Game Over!');
         loop();
     });
@@ -22601,56 +22604,56 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var Dino = __webpack_require__(38);
 
 var Plant = function (_Dino) {
-    _inherits(Plant, _Dino);
+  _inherits(Plant, _Dino);
 
-    function Plant(levelData, x, y) {
-        _classCallCheck(this, Plant);
+  function Plant(levelData, x, y) {
+    _classCallCheck(this, Plant);
 
-        var _this = _possibleConstructorReturn(this, (Plant.__proto__ || Object.getPrototypeOf(Plant)).call(this, levelData, x, y));
+    var _this = _possibleConstructorReturn(this, (Plant.__proto__ || Object.getPrototypeOf(Plant)).call(this, levelData, x, y));
 
-        _this.height = _this.orgHeight = levelData.blockSize * 2;
-        _this.orgY = y;
-        _this.t = 0;
-        _this.deathLine = 0;
-        return _this;
+    _this.height = _this.orgHeight = levelData.blockSize * 2;
+    _this.orgY = y;
+    _this.t = 0;
+    _this.deathLine = 0;
+    return _this;
+  }
+
+  _createClass(Plant, [{
+    key: 'update',
+    value: function update(level, hero) {
+      this.animate();
+
+      this.t = this.t + 0.021;
+      var s = Math.sin(this.t);
+      this.height = this.orgHeight / 2 + s * (this.orgHeight / 2);
+      this.y = this.orgY + (this.orgHeight - this.height);
+
+      this.sprite.texture = PIXI.loader.resources['G1' + this.ani + (this.x + this.width / 2 < hero.x + hero.width / 2 ? 'd' : '')].texture;
+      this.sprite.y = this.y;
+      this.sprite.height = this.height;
     }
+  }, {
+    key: 'addSpritesToStage',
+    value: function addSpritesToStage(stage) {
+      this.sprite = new PIXI.Sprite(PIXI.loader.resources['G10'].texture);
+      this.sprite.x = this.x;
+      this.sprite.y = this.y;
 
-    _createClass(Plant, [{
-        key: "update",
-        value: function update(level, hero) {
-            this.animate();
+      stage.addChild(this.sprite);
+    }
+  }, {
+    key: 'load',
+    value: function load() {
+      try {
+        PIXI.loader.add('G10', 'assets/G10.png');
+        PIXI.loader.add('G10d', 'assets/G10d.png');
+        PIXI.loader.add('G11', 'assets/G11.png');
+        PIXI.loader.add('G11d', 'assets/G11d.png');
+      } catch (e) {}
+    }
+  }]);
 
-            this.t = this.t + 0.021;
-            var s = Math.sin(this.t);
-            this.height = this.orgHeight / 2 + s * (this.orgHeight / 2);
-            this.y = this.orgY + (this.orgHeight - this.height);
-
-            this.sprite.texture = PIXI.loader.resources["G1" + this.ani + (this.x + this.width / 2 < hero.x + hero.width / 2 ? "d" : "")].texture;
-            this.sprite.y = this.y;
-            this.sprite.height = this.height;
-        }
-    }, {
-        key: "addSpritesToStage",
-        value: function addSpritesToStage(stage) {
-            this.sprite = new PIXI.Sprite(PIXI.loader.resources["G10"].texture);
-            this.sprite.x = this.x;
-            this.sprite.y = this.y;
-
-            stage.addChild(this.sprite);
-        }
-    }, {
-        key: "load",
-        value: function load() {
-            try {
-                PIXI.loader.add('G10', "assets/G10.png");
-                PIXI.loader.add('G10d', "assets/G10d.png");
-                PIXI.loader.add('G11', "assets/G11.png");
-                PIXI.loader.add('G11d', "assets/G11d.png");
-            } catch (e) {}
-        }
-    }]);
-
-    return Plant;
+  return Plant;
 }(Dino);
 
 module.exports = Plant;
@@ -22660,183 +22663,187 @@ module.exports = Plant;
 /***/ (function(module, exports) {
 
 function Hero(levelData) {
-    if (!(this instanceof Hero)) return new Hero(levelData);
-    this.dead = 0;
-    this.ax = 0;
-    this.ay = 0;
-    this.x = 0;
-    this.y = -100;
-    this.size = 1;
-    this.height = levelData.blockSize * this.size;
-    this.width = levelData.blockSize;
+  if (!(this instanceof Hero)) return new Hero(levelData);
+  this.dead = 0;
+  this.ax = 0;
+  this.ay = 0;
+  this.x = 0;
+  this.y = -100;
+  this.size = 1;
+  this.height = levelData.blockSize * this.size;
+  this.width = levelData.blockSize;
 
-    this.canJump = false;
-    this.canJumpDelay = 0;
+  this.canJump = false;
+  this.canJumpDelay = 0;
 
-    this.walkingFrames = [];
-    this.idleFrames = [];
-    this.jumpingFrames = [];
+  this.walkingFrames = [];
+  this.idleFrames = [];
+  this.jumpingFrames = [];
 
-    this.currentAnim = 'none';
+  this.currentAnim = 'none';
 }
 
+Hero.prototype.processLoad = function () {
+  for (var i = 0; i < 7; i++) {
+    var val = '0' + i;
+
+    this.idleFrames.push(PIXI.Texture.fromFrame('idle' + val + '.png'));
+    this.walkingFrames.push(PIXI.Texture.fromFrame('walking' + val + '.png'));
+    this.jumpingFrames.push(PIXI.Texture.fromFrame('jumping' + val + '.png'));
+  }
+
+  // create an AnimatedSprite (brings back memories from the days of Flash, right ?)
+  this.sprite = new PIXI.extras.AnimatedSprite(this.walkingFrames);
+  this.sprite.width = this.width;
+  this.sprite.x = this.x;
+  this.sprite.y = this.y;
+  this.sprite.animationSpeed = 0.05;
+};
+
 Hero.prototype.load = function () {
-    PIXI.loader.add('./assets/idle.json').add('./assets/jumping.json').add('./assets/walking.json').load(function () {
-        for (var i = 0; i < 7; i++) {
-            var val = '0' + i;
-
-            this.idleFrames.push(PIXI.Texture.fromFrame('idle' + val + '.png'));
-            this.walkingFrames.push(PIXI.Texture.fromFrame('walking' + val + '.png'));
-            this.jumpingFrames.push(PIXI.Texture.fromFrame('jumping' + val + '.png'));
-        }
-
-        // create an AnimatedSprite (brings back memories from the days of Flash, right ?)
-        this.sprite = new PIXI.extras.AnimatedSprite(this.walkingFrames);
-        this.sprite.width = this.width;
-        this.sprite.x = this.x;
-        this.sprite.y = this.y;
-        this.sprite.animationSpeed = 0.05;
-
-        // this.sprite.play();
-    }.bind(this));
+  try {
+    PIXI.loader.add('./assets/idle.json').add('./assets/jumping.json').add('./assets/walking.json').load(this.processLoad.bind(this));
+  } catch (e) {
+    this.processLoad();
+  }
 };
 
 Hero.prototype.addSpritesToStage = function (stage) {
-    stage.addChild(this.sprite);
+  stage.addChild(this.sprite);
 };
 
 Hero.prototype.checkAnimation = function () {
-    // jumping
-    if (!this.canJump && !this.dead) {
-        this.sprite.animationSpeed = 0.13;
+  // jumping
+  if (!this.canJump && !this.dead) {
+    this.sprite.animationSpeed = 0.13;
 
-        if (this.currentAnim !== 'jumping') {
-            this.currentAnim = 'jumping';
-            this.sprite.textures = this.jumpingFrames;
-        }
-    } else {
-        this.sprite.animationSpeed = 0.05;
-
-        if (this.ax === 0 || this.dead) {
-            if (this.currentAnim !== 'idle') {
-                this.currentAnim = 'idle';
-                this.sprite.textures = this.idleFrames;
-            }
-        } else if (this.ax < 0) {
-            if (this.currentAnim !== 'walking') {
-                this.currentAnim = 'walking';
-                this.sprite.textures = this.walkingFrames;
-            }
-
-            this.sprite.scale.x = -1;
-            this.sprite.anchor.set(1, 0);
-        } else if (this.ax > 0) {
-            if (this.currentAnim !== 'walking') {
-                this.currentAnim = 'walking';
-                this.sprite.textures = this.walkingFrames;
-            }
-
-            this.sprite.scale.x = 1;
-            this.sprite.anchor.set(0, 0);
-        }
+    if (this.currentAnim !== 'jumping') {
+      this.currentAnim = 'jumping';
+      this.sprite.textures = this.jumpingFrames;
     }
+  } else {
+    this.sprite.animationSpeed = 0.05;
 
-    if (!this.sprite.playing) {
-        this.sprite.play();
+    if (this.ax === 0 || this.dead) {
+      if (this.currentAnim !== 'idle') {
+        this.currentAnim = 'idle';
+        this.sprite.textures = this.idleFrames;
+      }
+    } else if (this.ax < 0) {
+      if (this.currentAnim !== 'walking') {
+        this.currentAnim = 'walking';
+        this.sprite.textures = this.walkingFrames;
+      }
+
+      this.sprite.scale.x = -1;
+      this.sprite.anchor.set(1, 0);
+    } else if (this.ax > 0) {
+      if (this.currentAnim !== 'walking') {
+        this.currentAnim = 'walking';
+        this.sprite.textures = this.walkingFrames;
+      }
+
+      this.sprite.scale.x = 1;
+      this.sprite.anchor.set(0, 0);
     }
+  }
+
+  if (!this.sprite.playing) {
+    this.sprite.play();
+  }
 };
 
 Hero.prototype.updatePositionX = function (level) {
-    if (level.isOccupied(this.x + this.ax + (this.ax > 0 ? this.width : 0), this.y, 0, this.size)) {
-        this.x = Math.round(this.x / level.blockSize) * level.blockSize;
-        this.ax = 0;
-    } else {
-        this.x += this.ax;
-    }
-    this.sprite.x = this.x;
+  if (level.isOccupied(this.x + this.ax + (this.ax > 0 ? this.width : 0), this.y, 0, this.size)) {
+    this.x = Math.round(this.x / level.blockSize) * level.blockSize;
+    this.ax = 0;
+  } else {
+    this.x += this.ax;
+  }
+  this.sprite.x = this.x;
 };
 
 Hero.prototype.updatePositionY = function () {
-    this.y += this.ay;
-    this.sprite.y = this.y;
+  this.y += this.ay;
+  this.sprite.y = this.y;
 };
 
 Hero.prototype.applyAdditionalForce = function (ax, ay) {
-    this.ax += ax;
-    this.ay += ay;
+  this.ax += ax;
+  this.ay += ay;
 };
 
 Hero.prototype.moveInAir = function () {
-    if (this.canJump) {
-        this.ax = 0;
+  if (this.canJump) {
+    this.ax = 0;
+  } else {
+    if (this.ax < -0.2) {
+      this.ax = this.ax + 0.2;
     } else {
-        if (this.ax < -0.2) {
-            this.ax = this.ax + 0.2;
-        } else {
-            if (this.ax > 0.2) {
-                this.ax = this.ax - 0.2;
-            } else {
-                this.ax = 0;
-            }
-        }
+      if (this.ax > 0.2) {
+        this.ax = this.ax - 0.2;
+      } else {
+        this.ax = 0;
+      }
     }
+  }
 };
 
 Hero.prototype.animate = function (special) {
-    // console.log('PLAYYY');
-    // this.sprite.play();
-    // this.sprite.texture = PIXI.loader.resources["H" + (special ? "2" : "1")].texture;
+  // console.log('PLAYYY');
+  // this.sprite.play();
+  // this.sprite.texture = PIXI.loader.resources["H" + (special ? "2" : "1")].texture;
 };
 
 Hero.prototype.checkFloorDeath = function (level) {
-    if (this.y >= level.height - this.height) {
-        this.y = level.height - this.height;
-        this.ay = -22;
-        this.dead = 1;
-        return true;
-    }
-    return false;
+  if (this.y >= level.height - this.height) {
+    this.y = level.height - this.height;
+    this.ay = -22;
+    this.dead = 1;
+    return true;
+  }
+  return false;
 };
 
 Hero.prototype.checkFloor = function (level) {
-    if (this.y >= -this.height) {
-        if (level.isOccupied(this.x, this.y + this.height, 1)) {
-            this.y = Math.floor(this.y / level.blockSize) * level.blockSize;
-            this.ay = -this.ay / 6;
-            this.canJump = true;
-            this.canJumpDelay = 5;
-        } else {
-            if (this.canJumpDelay === 0) {
-                this.canJump = false;
-            } else {
-                this.canJumpDelay -= 1;
-            }
-        }
+  if (this.y >= -this.height) {
+    if (level.isOccupied(this.x, this.y + this.height, 1)) {
+      this.y = Math.floor(this.y / level.blockSize) * level.blockSize;
+      this.ay = -this.ay / 6;
+      this.canJump = true;
+      this.canJumpDelay = 5;
+    } else {
+      if (this.canJumpDelay === 0) {
+        this.canJump = false;
+      } else {
+        this.canJumpDelay -= 1;
+      }
     }
+  }
 };
 
 Hero.prototype.checkCeiling = function (level) {
-    if (this.y > 0) {
-        if (level.isOccupied(this.x, this.y, 1)) {
-            this.y = Math.round(this.y / level.blockSize) * level.blockSize + 1;
-            this.ay = 0;
-        }
+  if (this.y > 0) {
+    if (level.isOccupied(this.x, this.y, 1)) {
+      this.y = Math.round(this.y / level.blockSize) * level.blockSize + 1;
+      this.ay = 0;
     }
+  }
 };
 
 Hero.prototype.deathAnimation = function (level) {
-    if (this.dead === 1) {
-        //BeginPlaySound Games & "e_laugh.wav"
-        this.dead = this.dead + 1;
-    }
-    if (this.y > level.height) {
-        this.y = level.height + 1;
-        this.dead += 1;
-    } else {
-        //hero.sprite.rotation += 0.1;
-        //Addpartikel 1, hero.sprite.x + 20 - LevelX, hero.sprite.y, hero.sprite.x + 28 - LevelX, hero.sprite.y + 48, True
-    }
-    return this.dead >= 55;
+  if (this.dead === 1) {
+    //BeginPlaySound Games & "e_laugh.wav"
+    this.dead = this.dead + 1;
+  }
+  if (this.y > level.height) {
+    this.y = level.height + 1;
+    this.dead += 1;
+  } else {
+    //hero.sprite.rotation += 0.1;
+    //Addpartikel 1, hero.sprite.x + 20 - LevelX, hero.sprite.y, hero.sprite.x + 28 - LevelX, hero.sprite.y + 48, True
+  }
+  return this.dead >= 55;
 };
 
 module.exports = Hero;
@@ -22850,25 +22857,26 @@ var Hero = __webpack_require__(100);
 var Enemies = __webpack_require__(98);
 var Mainloop = __webpack_require__(105);
 
-function Game(levelData, sound) {
-    if (!(this instanceof Game)) {
-        return new Game(levelData, sound);
-    }
-    this.levelData = levelData;
-    this.sound = sound;
+function Game(renderer, sound) {
+  if (!(this instanceof Game)) {
+    return new Game(renderer, sound);
+  }
+  this.mainloop = Mainloop(renderer, sound);
+  this.renderer = renderer;
+  this.sound = sound;
 }
 
-Game.prototype.run = function () {
-    var level = Level(this.levelData);
-    var hero = Hero(this.levelData);
-    var enemies = Enemies(this.levelData);
+Game.prototype.run = function (levelData) {
+  var level = Level(levelData);
+  var hero = Hero(levelData);
+  var enemies = Enemies(levelData);
 
-    // Load Sprites
-    this.levelData.load();
-    enemies.load();
-    hero.load();
+  // Load Sprites
+  levelData.load();
+  enemies.load();
+  hero.load();
 
-    return Mainloop(level, hero, enemies, this.sound).run();
+  return this.mainloop.run(level, hero, enemies);
 };
 
 module.exports = Game;
@@ -22878,43 +22886,43 @@ module.exports = Game;
 /***/ (function(module, exports) {
 
 function Keyboard(keyCode) {
-    if (!(this instanceof Keyboard)) return new Keyboard(keyCode);
+  if (!(this instanceof Keyboard)) return new Keyboard(keyCode);
 
-    this.code = keyCode;
-    this.isDown = false;
-    this.isUp = true;
-    this.press = undefined;
-    this.release = undefined;
-    //The `downHandler`
-    this.downHandler = function (event) {
-        if (event.keyCode === this.code) {
-            if (this.isUp && this.press) this.press();
-            this.isDown = true;
-            this.isUp = false;
+  this.code = keyCode;
+  this.isDown = false;
+  this.isUp = true;
+  this.press = undefined;
+  this.release = undefined;
+  //The `downHandler`
+  this.downHandler = function (event) {
+    if (event.keyCode === this.code) {
+      if (this.isUp && this.press) this.press();
+      this.isDown = true;
+      this.isUp = false;
 
-            event.preventDefault();
-        }
-    };
+      event.preventDefault();
+    }
+  };
 
-    //The `upHandler`
-    this.upHandler = function (event) {
-        if (event.keyCode === this.code) {
-            if (this.isDown && this.release) this.release();
-            this.isDown = false;
-            this.isUp = true;
+  //The `upHandler`
+  this.upHandler = function (event) {
+    if (event.keyCode === this.code) {
+      if (this.isDown && this.release) this.release();
+      this.isDown = false;
+      this.isUp = true;
 
-            event.preventDefault();
-        }
-    };
+      event.preventDefault();
+    }
+  };
 
-    //Attach event listeners
-    window.addEventListener("keydown", this.downHandler.bind(this), false);
-    window.addEventListener("keyup", this.upHandler.bind(this), false);
+  //Attach event listeners
+  window.addEventListener('keydown', this.downHandler.bind(this), false);
+  window.addEventListener('keyup', this.upHandler.bind(this), false);
 }
 
 Keyboard.prototype.destroy = function () {
-    window.removeEventListener("keydown", this.downHandler.bind(this), false);
-    window.removeEventListener("keyup", this.upHandler.bind(this), false);
+  window.removeEventListener('keydown', this.downHandler.bind(this), false);
+  window.removeEventListener('keyup', this.upHandler.bind(this), false);
 };
 
 module.exports = Keyboard;
@@ -22926,75 +22934,75 @@ module.exports = Keyboard;
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
 function Level(levelData) {
-    if (!(this instanceof Level)) return new Level(levelData);
+  if (!(this instanceof Level)) return new Level(levelData);
 
-    var level = levelData.level();
-    this.data = [];
-    for (var y = 0; y < level.length; y++) {
-        this.data[y] = [];
+  var level = levelData.level();
+  this.data = [];
+  for (var y = 0; y < level.length; y++) {
+    this.data[y] = [];
 
-        for (var x = 0; x < level[y].length; x++) {
-            var asc = level[y].charCodeAt(x);
-            if (asc < 97) {
-                this.data[y][x] = asc - 48;
-            } else {
-                this.data[y][x] = asc - 87;
-            }
-        }
+    for (var x = 0; x < level[y].length; x++) {
+      var asc = level[y].charCodeAt(x);
+      if (asc < 97) {
+        this.data[y][x] = asc - 48;
+      } else {
+        this.data[y][x] = asc - 87;
+      }
     }
+  }
 
-    this.blockSize = levelData.blockSize;
-    this.width = level[0].length * this.blockSize;
-    this.height = level.length * this.blockSize;
+  this.blockSize = levelData.blockSize;
+  this.width = level[0].length * this.blockSize;
+  this.height = level.length * this.blockSize;
 }
 
 Level.prototype.getLevelData = function (x, y) {
-    if (y < 0 || y >= this.data.length) {
-        return 0;
-    }
-    if (x < 0 || x >= this.data[y].length) {
-        return 10;
-    }
-    return this.data[y][x];
+  if (y < 0 || y >= this.data.length) {
+    return 0;
+  }
+  if (x < 0 || x >= this.data[y].length) {
+    return 10;
+  }
+  return this.data[y][x];
 };
 
 Level.prototype.addSpritesToStage = function (stage) {
-    for (var y = 0; y < this.data.length; y++) {
-        for (var x = 0; x < this.data[y].length; x++) {
-            if (this.data[y][x]) {
-                var sprite = new PIXI.Sprite(PIXI.loader.resources["j" + this.data[y][x]].texture);
-                sprite.x = x * 48;
-                sprite.y = y * 48;
-                stage.addChild(sprite);
-            }
-        }
+  for (var y = 0; y < this.data.length; y++) {
+    for (var x = 0; x < this.data[y].length; x++) {
+      if (this.data[y][x]) {
+        var sprite = new PIXI.Sprite(PIXI.loader.resources['j' + this.data[y][x]].texture);
+        sprite.x = x * 48;
+        sprite.y = y * 48;
+        stage.addChild(sprite);
+      }
     }
+  }
 };
 
 Level.prototype.pixelPositionToLevelPosition = function (pixelX, pixelY) {
-    return [Math.floor(pixelX / this.blockSize), Math.floor(pixelY / this.blockSize)];
+  return [Math.floor(pixelX / this.blockSize), Math.floor(pixelY / this.blockSize)];
 };
 
 Level.prototype.isOccupied = function (pixelX, pixelY) {
-    var sizeX = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
-    var sizeY = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
+  var sizeX = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
+  var sizeY = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
 
-    var _pixelPositionToLevel = this.pixelPositionToLevelPosition(pixelX, pixelY),
-        _pixelPositionToLevel2 = _slicedToArray(_pixelPositionToLevel, 2),
-        x = _pixelPositionToLevel2[0],
-        y = _pixelPositionToLevel2[1];
+  var _pixelPositionToLevel = this.pixelPositionToLevelPosition(pixelX, pixelY),
+      _pixelPositionToLevel2 = _slicedToArray(_pixelPositionToLevel, 2),
+      x = _pixelPositionToLevel2[0],
+      y = _pixelPositionToLevel2[1];
 
-    sizeX = Math.max(0, sizeX - (pixelX % this.blockSize === 0 ? 1 : 0));
-    sizeY = Math.max(0, sizeY - (pixelY % this.blockSize === 0 ? 1 : 0));
+  sizeX = Math.max(0, sizeX - (pixelX % this.blockSize === 0 ? 1 : 0));
+  sizeY = Math.max(0, sizeY - (pixelY % this.blockSize === 0 ? 1 : 0));
 
-    for (var repeatX = 0; repeatX <= sizeX; repeatX++) {
-        for (var repeatY = 0; repeatY <= sizeY; repeatY++) {
-            if (this.getLevelData(x + repeatX, y + repeatY) > 9) {
-                return true;
-            }
-        }
+  for (var repeatX = 0; repeatX <= sizeX; repeatX++) {
+    for (var repeatY = 0; repeatY <= sizeY; repeatY++) {
+      if (this.getLevelData(x + repeatX, y + repeatY) > 9) {
+        return true;
+      }
     }
-    return false;
+  }
+  return false;
 };
 
 module.exports = Level;
@@ -23013,24 +23021,26 @@ var data = {
     var level = [];
     //                            1         2         3         4         5         6         7         8         9         10        11        12        13        14        15        16        17
     //                  012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789
-    level[0] = "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006666a000000000000000000000000000000000000000000000";
-    level[1] = "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006666a000000000000000000000000000000000000000000000";
-    level[2] = "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000066666a000000000000000000000000000000000000000000000";
-    level[3] = "00000000000000000000000000000000000000000000000000000000000000bbbb0000000000000000000000000000000000000000000000000000000bbbbb66a000000000000000000000000000000000000000000000";
-    level[4] = "00000000000000000000000000000000000000000000100b0000000000000baaaa000000000000000000000000000000000000000000000000000000b6666666a000000000000000000000000000000000000000000000";
-    level[5] = "000000000000000000000000000000000000000bbbbbbbbb000000bbb00000000000000000000000000000000000000000000000000000000000000b66666666a000000000000b0000bbbbb00bbbbb0b0bbbbb0bbbb000";
-    level[6] = "0000000000000000000000000000000000000abaaaaaaaaa0000000000000000000000000000000000000000000001000001001000000001000000ba666aaaaaa00000000000b1b0000a010a000a000a0a000a0000a000";
-    level[7] = "00b000000000000000000054000001a00bb0000aaaaaaaa000000000000a0010000000000000005400000001000aaaaaaa0b00b000b0000b00001baa6666666666000000000baaab000a0aa1000a00000a000a0aaaa007";
-    level[8] = "bbab010bb00001001100002300000aa00000000aaaaaaaa01000001000aa0abbb0000000010000231011110b00000000000a00a000a0000a0000baaa666666666660a00000b00000b00a100a000a00000a011a0a000008";
-    level[9] = "aaaa0abaaaabbaaabbbbbbabbaaaaaa00000000aaaaaaaaaaaaaaaaaaaaabaaaa0000000aaaaaaaaaaaaaaaa00000000000a00a000a0000a000baaaaaaaaaaaaaaaaaaaa00a00000a0aaaaa00aaaaa000aaaaa0aaaabbb";
+    level[0] = '00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006666a000000000000000000000000000000000000000000000';
+    level[1] = '00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006666a000000000000000000000000000000000000000000000';
+    level[2] = '00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000066666a000000000000000000000000000000000000000000000';
+    level[3] = '00000000000000000000000000000000000000000000000000000000000000bbbb0000000000000000000000000000000000000000000000000000000bbbbb66a000000000000000000000000000000000000000000000';
+    level[4] = '00000000000000000000000000000000000000000000100b0000000000000baaaa000000000000000000000000000000000000000000000000000000b6666666a000000000000000000000000000000000000000000000';
+    level[5] = '000000000000000000000000000000000000000bbbbbbbbb000000bbb00000000000000000000000000000000000000000000000000000000000000b66666666a000000000000b0000bbbbb00bbbbb0b0bbbbb0bbbb000';
+    level[6] = '0000000000000000000000000000000000000abaaaaaaaaa0000000000000000000000000000000000000000000001000001001000000001000000ba666aaaaaa00000000000b1b0000a010a000a000a0a000a0000a000';
+    level[7] = '00b000000000000000000054000001a00bb0000aaaaaaaa000000000000a0010000000000000005400000001000aaaaaaa0b00b000b0000b00001baa6666666666000000000baaab000a0aa1000a00000a000a0aaaa007';
+    level[8] = 'bbab010bb00001001100002300000aa00000000aaaaaaaa01000001000aa0abbb0000000010000231011110b00000000000a00a000a0000a0000baaa666666666660a00000b00000b00a100a000a00000a011a0a000008';
+    level[9] = 'aaaa0abaaaabbaaabbbbbbabbaaaaaa00000000aaaaaaaaaaaaaaaaaaaaabaaaa0000000aaaaaaaaaaaaaaaa00000000000a00a000a0000a000baaaaaaaaaaaaaaaaaaaa00a00000a0aaaaa00aaaaa000aaaaa0aaaabbb';
 
     return level;
   },
 
   load: function load() {
-    for (var i = 0; i <= 11; i++) {
-      PIXI.loader.add('j' + i, "assets/j" + i + ".png");
-    }
+    try {
+      for (var i = 0; i <= 11; i++) {
+        PIXI.loader.add('j' + i, 'assets/j' + i + '.png');
+      }
+    } catch (e) {}
   },
 
   enemies: function enemies(_enemies) {
@@ -23043,108 +23053,101 @@ var data = {
     _enemies.add(new Dino(this, this.blockSize * 121, this.blockSize * 8));
 
     /*
-    
-    With Gegner(3)
-      .Enabled = True
-      .GegnerArt = 1
-      .Ani = 0
-      .AniT = 0
-      .SX = GegnerArt(.GegnerArt).Speed
-      .x = 48 * 40
-      .y = 48 * 4 - GegnerArt(.GegnerArt).H
-      .RY = 0
-      .RX = 48 + GegnerArt(.GegnerArt).W * 2
-      .Gedreht = 0
-      .Shown = False
-      .Boden = 0
-    End With
-    
-    
-    'Vogel
-    With Gegner(6)
-      .Enabled = True
-      .GegnerArt = 3
-      .Ani = 0
-      .AniT = 0
-      .SX = -GegnerArt(.GegnerArt).Speed
-      .x = 48 * 0
-      .y = 48 * 3 - GegnerArt(.GegnerArt).H
-      .GrenzeX1 = 48 * 0
-      .GrenzeX2 = 48 * 5
-      .RY = 96
-      .RX = GegnerArt(.GegnerArt).W * 2
-      .Gedreht = 0
-      .Shown = False
-      .Boden = 0
-    End With
-    
-    With Gegner(7)
-      .Enabled = True
-      .GegnerArt = 3
-      .Ani = 0
-      .AniT = 0
-      .SX = -GegnerArt(.GegnerArt).Speed
-      .x = 48 * 91
-      .y = 48 * 5 - GegnerArt(.GegnerArt).H
-      .GrenzeX1 = 48 * 91
-      .GrenzeX2 = 48 * 97
-      .RY = 96
-      .RX = GegnerArt(.GegnerArt).W * 3
-      .Gedreht = 0
-      .Shown = False
-      .Boden = 0
-    End With
-    
-    With Gegner(8)
-      .Enabled = True
-      .GegnerArt = 3
-      .Ani = 0
-      .AniT = 0
-      .SX = -GegnerArt(.GegnerArt).Speed
-      .x = 48 * 112
-      .y = 48 * 6 - GegnerArt(.GegnerArt).H
-      .GrenzeX1 = 48 * 112
-      .GrenzeX2 = 48 * 117
-      .RY = 96
-      .RX = GegnerArt(.GegnerArt).W * 4
-      .Gedreht = 0
-      .Shown = False
-      .Boden = 0
-    End With
-    
-    'Hund
-    With Gegner(9)
-      .Enabled = True
-      .GegnerArt = 2
-      .Ani = 0
-      .AniT = 0
-      .SX = -GegnerArt(.GegnerArt).Speed
-      .x = 48 * 78
-      .y = 48 * 8 - GegnerArt(.GegnerArt).H
-      .GrenzeX1 = 48 * 75
-      .GrenzeX2 = 48 * 86
-      .RY = 0
-      .RX = 48 + GegnerArt(.GegnerArt).W * 3
-      .Gedreht = 0
-      .Shown = False
-    End With
-    
-    With Gegner(10)
-      .Enabled = True
-      .GegnerArt = 2
-      .Ani = 0
-      .AniT = 0
-      .SX = -GegnerArt(.GegnerArt).Speed
-      .x = 48 * 82
-      .y = 48 * 8 - GegnerArt(.GegnerArt).H
-      .GrenzeX1 = 48 * 75
-      .GrenzeX2 = 48 * 86
-      .RY = 96
-      .RX = GegnerArt(.GegnerArt).W * 4
-      .Gedreht = 0
-      .Shown = False
-    End With
-            */
+      With Gegner(3)
+     .Enabled = True
+     .GegnerArt = 1
+     .Ani = 0
+     .AniT = 0
+     .SX = GegnerArt(.GegnerArt).Speed
+     .x = 48 * 40
+     .y = 48 * 4 - GegnerArt(.GegnerArt).H
+     .RY = 0
+     .RX = 48 + GegnerArt(.GegnerArt).W * 2
+     .Gedreht = 0
+     .Shown = False
+     .Boden = 0
+     End With
+       'Vogel
+     With Gegner(6)
+     .Enabled = True
+     .GegnerArt = 3
+     .Ani = 0
+     .AniT = 0
+     .SX = -GegnerArt(.GegnerArt).Speed
+     .x = 48 * 0
+     .y = 48 * 3 - GegnerArt(.GegnerArt).H
+     .GrenzeX1 = 48 * 0
+     .GrenzeX2 = 48 * 5
+     .RY = 96
+     .RX = GegnerArt(.GegnerArt).W * 2
+     .Gedreht = 0
+     .Shown = False
+     .Boden = 0
+     End With
+      With Gegner(7)
+     .Enabled = True
+     .GegnerArt = 3
+     .Ani = 0
+     .AniT = 0
+     .SX = -GegnerArt(.GegnerArt).Speed
+     .x = 48 * 91
+     .y = 48 * 5 - GegnerArt(.GegnerArt).H
+     .GrenzeX1 = 48 * 91
+     .GrenzeX2 = 48 * 97
+     .RY = 96
+     .RX = GegnerArt(.GegnerArt).W * 3
+     .Gedreht = 0
+     .Shown = False
+     .Boden = 0
+     End With
+      With Gegner(8)
+     .Enabled = True
+     .GegnerArt = 3
+     .Ani = 0
+     .AniT = 0
+     .SX = -GegnerArt(.GegnerArt).Speed
+     .x = 48 * 112
+     .y = 48 * 6 - GegnerArt(.GegnerArt).H
+     .GrenzeX1 = 48 * 112
+     .GrenzeX2 = 48 * 117
+     .RY = 96
+     .RX = GegnerArt(.GegnerArt).W * 4
+     .Gedreht = 0
+     .Shown = False
+     .Boden = 0
+     End With
+      'Hund
+     With Gegner(9)
+     .Enabled = True
+     .GegnerArt = 2
+     .Ani = 0
+     .AniT = 0
+     .SX = -GegnerArt(.GegnerArt).Speed
+     .x = 48 * 78
+     .y = 48 * 8 - GegnerArt(.GegnerArt).H
+     .GrenzeX1 = 48 * 75
+     .GrenzeX2 = 48 * 86
+     .RY = 0
+     .RX = 48 + GegnerArt(.GegnerArt).W * 3
+     .Gedreht = 0
+     .Shown = False
+     End With
+      With Gegner(10)
+     .Enabled = True
+     .GegnerArt = 2
+     .Ani = 0
+     .AniT = 0
+     .SX = -GegnerArt(.GegnerArt).Speed
+     .x = 48 * 82
+     .y = 48 * 8 - GegnerArt(.GegnerArt).H
+     .GrenzeX1 = 48 * 75
+     .GrenzeX2 = 48 * 86
+     .RY = 96
+     .RX = GegnerArt(.GegnerArt).W * 4
+     .Gedreht = 0
+     .Shown = False
+     End With
+     */
   }
 };
 
@@ -23156,179 +23159,187 @@ module.exports = data;
 
 var Keyboard = __webpack_require__(102);
 
-function Mainloop(level, hero, enemies, sound) {
-    if (!(this instanceof Mainloop)) return new Mainloop(level, hero, enemies, sound);
-    this.level = level;
-    this.hero = hero;
-    this.enemies = enemies;
-    this.sound = sound;
+function Mainloop(renderer, sound) {
+  if (!(this instanceof Mainloop)) return new Mainloop(renderer, sound);
 
-    this.timer = null;
+  this.renderer = renderer;
+  this.sound = sound;
+
+  this.timer = null;
 }
 
 Mainloop.prototype.init = function () {
-    this.key = {
-        left: Keyboard(37),
-        right: Keyboard(39),
-        down: Keyboard(40),
-        jump: Keyboard(32)
-    };
+  this.key = {
+    left: Keyboard(37),
+    right: Keyboard(39),
+    down: Keyboard(40),
+    jump: Keyboard(32)
+  };
 
-    // add canvas to DOM
-    this.renderer = PIXI.autoDetectRenderer(800, 480);
-    document.getElementById('main').appendChild(this.renderer.view);
+  // add canvas to DOM
+  document.getElementById('main').appendChild(this.renderer.view);
 
-    // add background
-    this.all = new PIXI.Container();
-    this.all.addChild(new PIXI.Sprite(PIXI.loader.resources["j0"].texture));
+  // add background
+  this.all = new PIXI.Container();
+  try {
+    this.all.addChild(new PIXI.Sprite(PIXI.loader.resources['j0'].texture));
+  } catch (e) {}
 
-    this.stage = new PIXI.Container();
-    this.all.addChild(this.stage);
+  this.stage = new PIXI.Container();
+  this.all.addChild(this.stage);
 
-    this.level.addSpritesToStage(this.stage);
-    this.enemies.addSpritesToStage(this.stage);
-    this.hero.addSpritesToStage(this.stage);
+  this.level.addSpritesToStage(this.stage);
+  this.enemies.addSpritesToStage(this.stage);
+  this.hero.addSpritesToStage(this.stage);
 
-    this.g = 0.5;
+  this.g = 0.5;
 
-    this.sound.playLoopSound('music', '../music/jump');
+  this.sound.playLoopSound('music', '../music/jump');
 };
 
 Mainloop.prototype.destroy = function (cb) {
-    var _this = this;
+  var _this = this;
 
-    // unbind keys
-    Object.keys(this.key).forEach(function (index) {
-        _this.key[index].destroy();
-    });
+  // unbind keys
+  Object.keys(this.key).forEach(function (index) {
+    _this.key[index].destroy();
+  });
 
-    // clear dom
-    var myNode = document.getElementById("main");
-    while (myNode.firstChild) {
-        myNode.removeChild(myNode.firstChild);
-    }
+  // clear dom
+  var myNode = document.getElementById('main');
+  while (myNode.firstChild) {
+    myNode.removeChild(myNode.firstChild);
+  }
 
-    // clear timer
-    this.timer && cancelAnimationFrame(this.timer);
-    this.timer = null;
+  // clear timer
+  this.timer && cancelAnimationFrame(this.timer);
+  this.timer = null;
 
-    this.sound.stopLoopSound('music', '../music/jump');
+  this.sound.stopLoopSound('music', '../music/jump');
 
-    cb && cb();
+  cb && cb();
 };
 
-Mainloop.prototype.run = function () {
-    var _this2 = this;
+Mainloop.prototype.run = function (level, hero, enemies) {
+  var _this2 = this;
 
-    return new Promise(function (resolve, reject) {
+  return new Promise(function (resolve, reject) {
+    _this2.level = level;
+    _this2.hero = hero;
+    _this2.enemies = enemies;
 
-        document.getElementById('loading').style.display = 'block';
-        document.getElementById('main').style.display = 'none';
+    if (PIXI.loader._queue._tasks.length) {
 
-        PIXI.loader.on("progress", function (loader) {
-            var element = document.getElementById('progress');
-            if (element) {
-                element.style.display = 'block';
-                element.value = Math.round(loader.progress);
-                element.innerHTML = Math.round(loader.progress) + '%';
-            }
-        }).load(function () {
-            document.getElementById('loading').style.display = 'none';
-            document.getElementById('main').style.display = 'block';
-            _this2.init();
+      document.getElementById('loading').style.display = 'block';
+      document.getElementById('main').style.display = 'none';
 
-            _this2.mainloop(resolve, reject);
-        });
-    });
+      PIXI.loader.on('progress', function (loader) {
+        var element = document.getElementById('progress');
+        if (element) {
+          element.style.display = 'block';
+          element.value = Math.round(loader.progress);
+          element.innerHTML = Math.round(loader.progress) + '%';
+        }
+      }).load(function () {
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('main').style.display = 'block';
+        _this2.init();
+        _this2.mainloop(resolve, reject);
+      });
+    } else {
+      _this2.init();
+      _this2.mainloop(resolve, reject);
+    }
+  });
 };
 
 Mainloop.prototype.mainloop = function (resolve, reject) {
-    this.timer = requestAnimationFrame(this.mainloop.bind(this, resolve, reject));
+  this.timer = requestAnimationFrame(this.mainloop.bind(this, resolve, reject));
 
-    // move enemies
-    this.enemies.update(this.level, this.hero);
+  // move enemies
+  this.enemies.update(this.level, this.hero);
 
-    // apply schwerkraft
-    this.hero.applyAdditionalForce(0, this.g);
-    this.hero.updatePositionY();
-    this.hero.checkAnimation();
+  // apply schwerkraft
+  this.hero.applyAdditionalForce(0, this.g);
+  this.hero.updatePositionY();
+  this.hero.checkAnimation();
 
-    this.hero.animate(this.key.down.isDown);
+  this.hero.animate(this.key.down.isDown);
 
-    // runterfallen + gegner
-    if (!this.hero.dead) {
-        this.hero.checkFloorDeath(this.level) && this.sound.playSound('sfx', 'e_laugh');
-        var collision = this.enemies.collision(this.hero);
-        collision && this.sound.playSound('sfx', collision);
+  // runterfallen + gegner
+  if (!this.hero.dead) {
+    this.hero.checkFloorDeath(this.level) && this.sound.playSound('sfx', 'e_laugh');
+    var collision = this.enemies.collision(this.hero);
+    collision && this.sound.playSound('sfx', collision);
+  }
+
+  if (this.hero.dead) {
+    if (this.hero.deathAnimation(this.level)) {
+      return this.destroy(reject);
     }
+  } else {
+    /*    if (GewonnenT = 0 ) {
+     'simple Animation
+     if (Keys(vbKeyDown) > 126 Or hero.AY < -1.5 ) {
+     hero.Ani = 1
+     } else {
+     hero.Ani = 0
+     }
+     }*/
 
-    if (this.hero.dead) {
-        if (this.hero.deathAnimation(this.level)) {
-            return this.destroy(reject);
+    // collision detection with level
+    this.hero.checkCeiling(this.level);
+    this.hero.checkFloor(this.level);
+
+    this.hero.moveInAir();
+
+    if (true /*GewonnenT = 0*/) {
+        if (this.key.right.isDown) {
+          if (this.hero.canJump) {
+            this.hero.ax = 3;
+          } else {
+            this.hero.ax = this.hero.ax + 0.25;
+          }
         }
+        if (this.key.left.isDown) {
+          if (this.hero.canJump) {
+            this.hero.ax = -3;
+          } else {
+            this.hero.ax = this.hero.ax - 0.25;
+          }
+        }
+        /*      if (Keys(vbKeyEscape) > 126 ) {
+         hero.AY = -12
+         hero.dead = 1
+         'Talk = False
+         'E = 1
+         */
+      }
+
+    // jumping
+    if (this.key.jump.isDown && this.hero.canJump && this.jumpKey === false) {
+      this.sound.playSound('sfx', 'boing');
+      this.jumpKey = true;
+      this.hero.ay = -11;
+      this.hero.canJump = false;
+      //Addpartikel 15, hero.sprite.x - LevelX, hero.sprite.y + 96, hero.sprite.x + 48 - LevelX, hero.sprite.y + 96, False
     } else {
-        /*    if (GewonnenT = 0 ) {
-                     'simple Animation
-                     if (Keys(vbKeyDown) > 126 Or hero.AY < -1.5 ) {
-                     hero.Ani = 1
-                     } else {
-                     hero.Ani = 0
-                     }
-                     }*/
-
-        // collision detection with level
-        this.hero.checkCeiling(this.level);
-        this.hero.checkFloor(this.level);
-
-        this.hero.moveInAir();
-
-        if (true /*GewonnenT = 0*/) {
-                if (this.key.right.isDown) {
-                    if (this.hero.canJump) {
-                        this.hero.ax = 3;
-                    } else {
-                        this.hero.ax = this.hero.ax + 0.25;
-                    }
-                }
-                if (this.key.left.isDown) {
-                    if (this.hero.canJump) {
-                        this.hero.ax = -3;
-                    } else {
-                        this.hero.ax = this.hero.ax - 0.25;
-                    }
-                }
-                /*      if (Keys(vbKeyEscape) > 126 ) {
-                 hero.AY = -12
-                 hero.dead = 1
-                 'Talk = False
-                 'E = 1
-                 */
-            }
-
-        // jumping
-        if (this.key.jump.isDown && this.hero.canJump && this.jumpKey === false) {
-            this.sound.playSound('sfx', 'boing');
-            this.jumpKey = true;
-            this.hero.ay = -11;
-            this.hero.canJump = false;
-            //Addpartikel 15, hero.sprite.x - LevelX, hero.sprite.y + 96, hero.sprite.x + 48 - LevelX, hero.sprite.y + 96, False
-        } else {
-            if (this.key.jump.isUp) this.jumpKey = false;
-        }
-
-        //check links und rechts
-        this.hero.updatePositionX(this.level);
-
-        // scrollen
-        if (this.hero.x + this.stage.x > 2 * this.renderer.width / 5) {
-            this.stage.x = Math.min(2 * this.renderer.width / 5 - this.hero.x, 0);
-        }
-        if (this.hero.x + this.stage.x < 150) {
-            this.stage.x = Math.min(150 - this.hero.x, 0);
-        }
+      if (this.key.jump.isUp) this.jumpKey = false;
     }
 
-    this.renderer.render(this.all);
+    //check links und rechts
+    this.hero.updatePositionX(this.level);
+
+    // scrollen
+    if (this.hero.x + this.stage.x > 2 * this.renderer.width / 5) {
+      this.stage.x = Math.min(2 * this.renderer.width / 5 - this.hero.x, 0);
+    }
+    if (this.hero.x + this.stage.x < 150) {
+      this.stage.x = Math.min(150 - this.hero.x, 0);
+    }
+  }
+
+  this.renderer.render(this.all);
 };
 
 module.exports = Mainloop;

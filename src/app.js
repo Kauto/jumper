@@ -17,16 +17,20 @@ audioManager.createSound('intro').load();
 audioManager.createSound('ding').load();
 audioManager.createSound('gestoehn').load();
 
+
+const renderer = PIXI.autoDetectRenderer(800, 480);
+
 function loop() {
     Intro(audioManager)
         .then(() => {
-            return Game(require('./game/levels/1'), audioManager).run()
+            return Game(renderer, audioManager).run(require('./game/levels/1'))
         })
         .then(() => {
             alert('Win!');
             loop();
         })
-        .catch(() => {
+        .catch((e) => {
+        console.error(e);
             alert('Game Over!');
             loop();
         });
