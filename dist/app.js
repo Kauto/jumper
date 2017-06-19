@@ -5270,6 +5270,8 @@ module.exports = g;
 
 
 /* harmony default export */ __webpack_exports__["a"] = (function (music, images, sceneAnimation) {
+  var addBindings = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
+
   return new Promise(function (resolve, reject) {
     var canvas = document.createElement('canvas');
     canvas.width = 800;
@@ -5337,8 +5339,10 @@ module.exports = g;
       resolve();
     }
 
-    canvas.addEventListener('click', destroy, false);
-    window.addEventListener('keydown', destroy, false);
+    if (addBindings) {
+      canvas.addEventListener('click', destroy, false);
+      window.addEventListener('keydown', destroy, false);
+    }
   });
 });;
 
@@ -25128,7 +25132,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__effects_effects__["a" /* textBox */])(Audiomanager, l, 'Oh ja! Oh ja! Oh ja!', 500, 380, 210, 25000);
     layer.unshift(l);
     return layer;
-  });
+  }, false);
 });
 
 /***/ }),

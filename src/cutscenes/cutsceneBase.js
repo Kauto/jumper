@@ -8,7 +8,7 @@ import {
   Easing
 } from 'animationvideo';
 
-export default function (music, images, sceneAnimation) {
+export default function (music, images, sceneAnimation, addBindings = true) {
   return new Promise((resolve, reject) => {
     let canvas = document.createElement('canvas');
     canvas.width = 800;
@@ -36,7 +36,7 @@ export default function (music, images, sceneAnimation) {
       audio.preload = 'auto';
       audio.load();
 
-     scene = Scenes.Audio(audio);
+      scene = Scenes.Audio(audio);
     } else {
       scene = Scenes.Default();
     }
@@ -74,9 +74,11 @@ export default function (music, images, sceneAnimation) {
       resolve();
     }
 
-    canvas.addEventListener('click', destroy, false);
-    window.addEventListener(
-      'keydown', destroy, false
-    );
+    if (addBindings) {
+      canvas.addEventListener('click', destroy, false);
+      window.addEventListener(
+        'keydown', destroy, false
+      );
+    }
   });
 };

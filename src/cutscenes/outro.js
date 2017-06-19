@@ -337,5 +337,5 @@ export default function (Audiomanager) {
     textBox(Audiomanager, l, 'Oh ja! Oh ja! Oh ja!', 500, 380, 210, 25000);
     layer.unshift(l);
     return layer;
-  });
+  }, false);
 }
