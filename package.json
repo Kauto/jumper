@@ -25,6 +25,7 @@
   "dependencies": {
     "animationvideo": "^0.4.1",
     "audio-manager": "^0.1.18",
+    "color": "^1.0.3",
     "pixi.js": "^4.5.3"
   }
 }

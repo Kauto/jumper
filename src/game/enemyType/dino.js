@@ -72,6 +72,8 @@ class Dino {
     );
     this.sprite.x = this.x;
     this.sprite.y = this.y;
+    this.sprite.width = this.width;
+    this.sprite.height = this.height;
 
     stage.addChild(this.sprite);
   }

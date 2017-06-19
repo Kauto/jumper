@@ -2,6 +2,7 @@ function Level (levelData) {
   if (!(this instanceof Level)) return new Level(levelData);
 
   let level = levelData.level();
+  this.levelData = levelData;
   this.data = [];
   for (let y = 0; y < level.length; y++) {
     this.data[y] = [];
@@ -17,6 +18,7 @@ function Level (levelData) {
   }
 
   this.blockSize = levelData.blockSize;
+  this.musicFile = levelData.musicFile;
   this.width = level[0].length * this.blockSize;
   this.height = level.length * this.blockSize;
 }
@@ -36,14 +38,28 @@ Level.prototype.addSpritesToStage = function (stage) {
     for (let x = 0; x < this.data[y].length; x++) {
       if (this.data[y][x]) {
         let sprite = new PIXI.Sprite(
-          PIXI.loader.resources['j' + this.data[y][x]].texture
+          this.levelData.getTextureBlock(this.data[y][x])
         );
-        sprite.x = x * 48;
-        sprite.y = y * 48;
+        sprite.x = x * this.blockSize;
+        sprite.y = y * this.blockSize;
+        sprite.width = sprite.height = this.blockSize;
         stage.addChild(sprite);
       }
     }
   }
+};
+
+
+Level.prototype.addBackgroundToStage = function (stage) {
+  try {
+    let sprite = new PIXI.Sprite(
+      this.levelData.getTextureBackground()
+    );
+    sprite.width = 800;
+    sprite.height = 480;
+
+    stage.addChild(sprite);
+  } catch (e) {}
 };
 
 Level.prototype.pixelPositionToLevelPosition = function (pixelX, pixelY) {

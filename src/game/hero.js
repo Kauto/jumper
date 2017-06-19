@@ -8,6 +8,7 @@ function Hero (levelData) {
   this.size = 1;
   this.height = levelData.blockSize * this.size;
   this.width = levelData.blockSize;
+  this.scaleValue = 1;
 
   this.canJump = false;
   this.canJumpDelay = 0;
@@ -31,9 +32,13 @@ Hero.prototype.processLoad = function () {
   // create an AnimatedSprite (brings back memories from the days of Flash, right ?)
   this.sprite = new PIXI.extras.AnimatedSprite(this.walkingFrames);
   this.sprite.width = this.width;
+  this.sprite.height = this.height;
   this.sprite.x = this.x;
   this.sprite.y = this.y;
   this.sprite.animationSpeed = 0.05;
+
+  this.scaleValue = this.sprite.scale.x;
+
 };
 
 Hero.prototype.load = function () {
@@ -63,30 +68,31 @@ Hero.prototype.checkAnimation = function () {
     }
   }
   else {
-    this.sprite.animationSpeed = 0.05;
-
     if (this.ax === 0 || this.dead) {
       if (this.currentAnim !== 'idle') {
         this.currentAnim = 'idle';
         this.sprite.textures = this.idleFrames;
+        this.sprite.animationSpeed = 0.05;
       }
     }
     else if (this.ax < 0) {
       if (this.currentAnim !== 'walking') {
         this.currentAnim = 'walking';
         this.sprite.textures = this.walkingFrames;
+        this.sprite.animationSpeed = 0.3;
       }
 
-      this.sprite.scale.x = -1;
+      this.sprite.scale.x = -this.scaleValue;
       this.sprite.anchor.set(1, 0);
     }
     else if (this.ax > 0) {
       if (this.currentAnim !== 'walking') {
         this.currentAnim = 'walking';
         this.sprite.textures = this.walkingFrames;
+        this.sprite.animationSpeed = 0.3;
       }
 
-      this.sprite.scale.x = 1;
+      this.sprite.scale.x = this.scaleValue;
       this.sprite.anchor.set(0, 0);
     }
   }

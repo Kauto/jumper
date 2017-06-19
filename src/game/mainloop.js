@@ -22,11 +22,8 @@ Mainloop.prototype.init = function () {
 
   // add background
   this.all = new PIXI.Container();
-  try {
-    this.all.addChild(new PIXI.Sprite(
-      PIXI.loader.resources['j0'].texture
-    ));
-  } catch (e) {}
+
+  this.level.addBackgroundToStage(this.all);
 
   this.stage = new PIXI.Container();
   this.all.addChild(this.stage);
@@ -37,7 +34,7 @@ Mainloop.prototype.init = function () {
 
   this.g = 0.5;
 
-  this.sound.playLoopSound('music', '../music/jump');
+  this.sound.playLoopSound('music', this.level.musicFile);
 
 };
 
@@ -57,7 +54,7 @@ Mainloop.prototype.destroy = function (cb) {
   this.timer && cancelAnimationFrame(this.timer);
   this.timer = null;
 
-  this.sound.stopLoopSound('music', '../music/jump');
+  this.sound.stopLoopSound('music', this.level.musicFile);
 
   cb && cb();
 };

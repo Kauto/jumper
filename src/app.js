@@ -1,37 +1,52 @@
 require('pixi.js');
 
-const Intro = require('./intro/index').default;
+const Intro = require('./cutscenes/intro').default;
+const Death = require('./cutscenes/death').default;
+const Win = require('./cutscenes/win').default;
+const Outro = require('./cutscenes/outro').default;
 const Game = require('./game/index');
 const AudioManager = require('audio-manager');
 
 let audioManager = new AudioManager(['music', 'sfx']);
-audioManager.init();
 audioManager.settings.audioPath = 'assets/sound/';
 audioManager.setVolume('music', 1);
 audioManager.setVolume('sfx', 1);
 audioManager.createSound('boing').load();
 audioManager.createSound('pop').load();
 audioManager.createSound('e_laugh').load();
-audioManager.createSound('e_laugh').load();
 audioManager.createSound('intro').load();
 audioManager.createSound('ding').load();
 audioManager.createSound('gestoehn').load();
+audioManager.createSound('whip').load();
+audioManager.createSound('schlag').load();
+audioManager.createSound('schall').load();
 
 const renderer = PIXI.autoDetectRenderer(800, 480);
+const game = Game(renderer, audioManager);
 
 function loop () {
   Intro(audioManager)
     .then(() => {
-      return Game(renderer, audioManager).run(require('./game/levels/1'));
-    })
+      level(0);
+    });
+}
+const levels = [
+  require('./game/levels/1')
+];
+function level (pos) {
+  game.run(levels[pos])
     .then(() => {
-      alert('Win!');
-      loop();
+      if (pos >= levels.length - 1) {
+        Outro(audioManager);
+      } else {
+        Win(audioManager, pos + 1).then(() => level(pos + 1));
+      }
     })
     .catch((e) => {
-      console.error(e);
-      alert('Game Over!');
-      loop();
+      if (e) {
+        console.error(e);
+      }
+      Death(audioManager).then(() => level(pos));
     });
 }
 
@@ -50,6 +65,9 @@ document.getElementById('fullscreen').addEventListener('click', () => {
   }
 });
 document.getElementById('start').addEventListener('click', () => {
+  // init in a click event to work with audio-protection
+  audioManager.init();
+
   // clear dom
   let myNode = document.getElementById('main');
   while (myNode.firstChild) {
