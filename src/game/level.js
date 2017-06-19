@@ -1,3 +1,5 @@
+const _inRange = require('lodash/inRange');
+
 function Level (levelData) {
   if (!(this instanceof Level)) return new Level(levelData);
 
@@ -24,7 +26,10 @@ function Level (levelData) {
 }
 
 Level.prototype.getLevelData = function (x, y) {
-  if (y < 0 || y >= this.data.length) {
+  if (y < 0) {
+    return this.getLevelData(x, 0);
+  }
+  if (y >= this.data.length) {
     return 0;
   }
   if (x < 0 || x >= this.data[y].length) {
@@ -49,7 +54,6 @@ Level.prototype.addSpritesToStage = function (stage) {
   }
 };
 
-
 Level.prototype.addBackgroundToStage = function (stage) {
   try {
     let sprite = new PIXI.Sprite(
@@ -66,20 +70,28 @@ Level.prototype.pixelPositionToLevelPosition = function (pixelX, pixelY) {
   return [Math.floor(pixelX / this.blockSize), Math.floor(pixelY / this.blockSize)];
 };
 
-Level.prototype.isOccupied = function (pixelX, pixelY, sizeX = 0, sizeY = 0) {
+Level.prototype.isCheck = function (pixelX, pixelY, sizeX, sizeY, callback) {
   let [x, y] = this.pixelPositionToLevelPosition(pixelX, pixelY);
   sizeX = Math.max(0, sizeX - (pixelX % this.blockSize === 0 ? 1 : 0));
   sizeY = Math.max(0, sizeY - (pixelY % this.blockSize === 0 ? 1 : 0));
 
   for (let repeatX = 0; repeatX <= sizeX; repeatX++) {
     for (let repeatY = 0; repeatY <= sizeY; repeatY++) {
-      if (this.getLevelData(x + repeatX, y + repeatY) > 9) {
+      if (callback(x + repeatX, y + repeatY)) {
         return true;
       }
 
     }
   }
   return false;
+};
+
+Level.prototype.isOccupied = function (pixelX, pixelY, sizeX = 0, sizeY = 0) {
+  return this.isCheck(pixelX, pixelY, sizeX, sizeY, (x, y) => this.getLevelData(x, y) > 9);
+};
+
+Level.prototype.isVictory = function (pixelX, pixelY, sizeX = 0, sizeY = 0) {
+  return this.isCheck(pixelX, pixelY, sizeX, sizeY, (x, y) => _inRange(this.getLevelData(x, y), 7, 9));
 };
 
 module.exports = Level;

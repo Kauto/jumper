@@ -2,22 +2,27 @@ const Dino = require('../enemyType/dino');
 const Plant = require('../enemyType/plant');
 
 const data = {
-  blockSize: 48,
+  blockSize: 32,
 
   level: function () {
     let level = [];
-//                        1         2         3         4         5         6         7         8
-//              0123456789012345678901234567890123456789012345678901234567890123456789012345678901234563456789
-    level[0] = '0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000';
-    level[1] = '0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000';
-    level[2] = '0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000';
-    level[3] = '00000000000000000000000000000000000000000000000000000000000000bbbb0000000000000000000000';
-    level[4] = '00000000000000000000000000000000000000000000000b0000000000000baaaa0000000000000000000000';
-    level[5] = '000000000000000000000000000000000000000bbbbbbbbb000000bbb0000000000000000000000000000000';
-    level[6] = '0000000000000000000000000000000000000abaaaaaaaaa0000000000000000000000000000000000000000';
-    level[7] = '00b000000000000000000054000001a00bb0000aaaaaaaa000000000000a0010000000000000005400000007';
-    level[8] = 'bbab010bb00001001100002300000aa00000000aaaaaaaa01000001000aa0abbb00000000100002310111108';
-    level[9] = 'aaaa0abaaaabbaaabbbbbbabbaaaaaa00000000aaaaaaaaaaaaaaaaaaaaabaaaa0000000aaaaaaaaaaaaaaab';
+//                         1         2         3
+//               0123456789012345678901234567890
+    level[ 0] = '0006666666a000000000000aaaa0000';
+    level[ 1] = '0006666666a000000000000aaaa0000';
+    level[ 2] = '0006666666a0000000aaa00aaaa0000';
+    level[ 3] = 'aaaaaaaa66a0000000aa000aaaa0000';
+    level[ 4] = 'a666666666aaaa0000aa000aaaa0000';
+    level[ 5] = 'a666666666a0000000aa000aaaa0000';
+    level[ 6] = 'a66aa666aaa0000100aa000aaaa0000';
+    level[ 7] = 'a666aaaaa660000bbaa0000aaaa0000';
+    level[ 8] = 'a66666666660bbbaaa00000aaaa0000';
+    level[ 9] = 'aaaaaaaaaaaaaaaaaa00540aaaa0000';
+    level[10] = 'a0000000111000000000230aaaa0000';
+    level[11] = 'a000aaabbbaaaaabbbaaaaaaaaa0000';
+    level[12] = 'a00000000000000000000054000007a';
+    level[13] = 'a00000111100000000000023000008a';
+    level[14] = 'aaaaaabaaaabbaaabbbbbbabbaaaaaa';
 
     return level;
   },
@@ -38,15 +43,12 @@ const data = {
     return PIXI.loader.resources['j0'].texture;
   },
 
-  musicFile: '../music/guile',
+  musicFile: '../music/ken',
 
   enemies: function (enemies) {
-    enemies.add(new Dino(this, this.blockSize * 12, this.blockSize * 8));
-    enemies.add(new Dino(this, this.blockSize * 15, this.blockSize * 8));
-    enemies.add(new Plant(this, this.blockSize * 40, this.blockSize * 3));
-    enemies.add(new Dino(this, this.blockSize * 15, this.blockSize * 8, false));
-    enemies.add(new Dino(this, this.blockSize * 53, this.blockSize * 8));
-    enemies.add(new Dino(this, this.blockSize * 50, this.blockSize * 8));
+    enemies.add(new Dino(this, this.blockSize * 12, this.blockSize * 13));
+    enemies.add(new Dino(this, this.blockSize * 15, this.blockSize * 13, false));
+    enemies.add(new Dino(this, this.blockSize * 6, this.blockSize * 6));
 
     /*
 

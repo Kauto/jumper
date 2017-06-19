@@ -84,8 +84,8 @@ Mainloop.prototype.run = function (level, hero, enemies) {
         this.mainloop(resolve, reject);
       });
     } else {
-        this.init();
-        this.mainloop(resolve, reject);
+      this.init();
+      this.mainloop(resolve, reject);
     }
   });
 };
@@ -101,36 +101,36 @@ Mainloop.prototype.mainloop = function (resolve, reject) {
   this.hero.updatePositionY();
   this.hero.checkAnimation();
 
-  this.hero.animate(this.key.down.isDown);
-
-  // runterfallen + gegner
-  if (!this.hero.dead) {
-    this.hero.checkFloorDeath(this.level) && this.sound.playSound('sfx', 'e_laugh');
-    let collision = this.enemies.collision(this.hero);
-    collision && this.sound.playSound('sfx', collision);
+  if (!this.hero.victory) {
+    this.hero.checkVictory(this.level) && this.sound.playSound('sfx', 'bionic');
   }
 
-  if (this.hero.dead) {
-    if (this.hero.deathAnimation(this.level)) {
-      return this.destroy(reject);
+  if (this.hero.victory) {
+    if (this.hero.victoryAnimation(this.level)) {
+      return this.destroy(resolve);
     }
   } else {
-    /*    if (GewonnenT = 0 ) {
-     'simple Animation
-     if (Keys(vbKeyDown) > 126 Or hero.AY < -1.5 ) {
-     hero.Ani = 1
-     } else {
-     hero.Ani = 0
-     }
-     }*/
+    this.hero.animate(this.key.down.isDown);
 
-    // collision detection with level
-    this.hero.checkCeiling(this.level);
-    this.hero.checkFloor(this.level);
+    // runterfallen + gegner
+    if (!this.hero.dead) {
+      this.hero.checkFloorDeath(this.level) && this.sound.playSound('sfx', 'e_laugh');
+      let collision = this.enemies.collision(this.hero);
+      collision && this.sound.playSound('sfx', collision);
+    }
 
-    this.hero.moveInAir();
+    if (this.hero.dead) {
+      if (this.hero.deathAnimation(this.level)) {
+        return this.destroy(reject);
+      }
+    } else {
 
-    if (true /*GewonnenT = 0*/) {
+      // collision detection with level
+      this.hero.checkCeiling(this.level);
+      this.hero.checkFloor(this.level);
+
+      this.hero.moveInAir();
+
       if (this.key.right.isDown) {
         if (this.hero.canJump) {
           this.hero.ax = 3;
@@ -145,34 +145,28 @@ Mainloop.prototype.mainloop = function (resolve, reject) {
           this.hero.ax = this.hero.ax - 0.25;
         }
       }
-      /*      if (Keys(vbKeyEscape) > 126 ) {
-       hero.AY = -12
-       hero.dead = 1
-       'Talk = False
-       'E = 1
-       */
-    }
 
-    // jumping
-    if (this.key.jump.isDown && this.hero.canJump && this.jumpKey === false) {
-      this.sound.playSound('sfx', 'boing');
-      this.jumpKey = true;
-      this.hero.ay = -11;
-      this.hero.canJump = false;
-      //Addpartikel 15, hero.sprite.x - LevelX, hero.sprite.y + 96, hero.sprite.x + 48 - LevelX, hero.sprite.y + 96, False
-    } else {
-      if (this.key.jump.isUp) this.jumpKey = false;
-    }
+      // jumping
+      if (this.key.jump.isDown && this.hero.canJump && this.jumpKey === false) {
+        this.sound.playSound('sfx', 'boing');
+        this.jumpKey = true;
+        this.hero.ay = -11;
+        this.hero.canJump = false;
+        //Addpartikel 15, hero.sprite.x - LevelX, hero.sprite.y + 96, hero.sprite.x + 48 - LevelX, hero.sprite.y + 96, False
+      } else {
+        if (this.key.jump.isUp) this.jumpKey = false;
+      }
 
-    //check links und rechts
-    this.hero.updatePositionX(this.level);
+      //check links und rechts
+      this.hero.updatePositionX(this.level);
 
-    // scrollen
-    if (this.hero.x + this.stage.x > 2 * this.renderer.width / 5) {
-      this.stage.x = Math.min(2 * this.renderer.width / 5 - this.hero.x, 0);
-    }
-    if (this.hero.x + this.stage.x < 150) {
-      this.stage.x = Math.min(150 - this.hero.x, 0);
+      // scrollen
+      if (this.hero.x + this.stage.x > 2 * this.renderer.width / 5) {
+        this.stage.x = Math.max(this.renderer.view.width - this.level.width, Math.min(2 * this.renderer.width / 5 - this.hero.x, 0));
+      }
+      if (this.hero.x + this.stage.x < 150) {
+        this.stage.x = Math.max(this.renderer.view.width - this.level.width, Math.min(150 - this.hero.x, 0));
+      }
     }
   }
 

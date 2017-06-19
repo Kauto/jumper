@@ -17,6 +17,8 @@ audioManager.createSound('e_laugh').load();
 audioManager.createSound('intro').load();
 audioManager.createSound('ding').load();
 audioManager.createSound('gestoehn').load();
+audioManager.createSound('gestoehn2').load();
+audioManager.createSound('bionic').load();
 audioManager.createSound('whip').load();
 audioManager.createSound('schlag').load();
 audioManager.createSound('schall').load();
@@ -31,7 +33,8 @@ function loop () {
     });
 }
 const levels = [
-  require('./game/levels/1')
+  require('./game/levels/1'),
+  require('./game/levels/2')
 ];
 function level (pos) {
   game.run(levels[pos])

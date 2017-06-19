@@ -1,6 +1,7 @@
 function Hero (levelData) {
   if (!(this instanceof Hero)) return new Hero(levelData);
   this.dead = 0;
+  this.victory = 0;
   this.ax = 0;
   this.ay = 0;
   this.x = 0;
@@ -143,6 +144,31 @@ Hero.prototype.animate = function (special) {
   // this.sprite.play();
   // this.sprite.texture = PIXI.loader.resources["H" + (special ? "2" : "1")].texture;
 };
+
+Hero.prototype.checkVictory = function (level) {
+  if (level.isVictory(this.x, this.y)) {
+    this.ay = -11;
+    this.victory = 1;
+    return true;
+  }
+  return false;
+};
+
+Hero.prototype.victoryAnimation = function (level) {
+  this.ay = -11;
+  if (this.victory === 1) {
+    this.victory += 1;
+  }
+  if (this.y < -this.height) {
+    this.y = -this.height;
+    this.victory += 1;
+  } else {
+    //hero.sprite.rotation += 0.1;
+    //Addpartikel 1, hero.sprite.x + 20 - LevelX, hero.sprite.y, hero.sprite.x + 28 - LevelX, hero.sprite.y + 48, True
+  }
+  return (this.victory >= 100);
+};
+
 
 Hero.prototype.checkFloorDeath = function (level) {
   if (this.y >= level.height - this.height) {
