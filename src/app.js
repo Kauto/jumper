@@ -1,6 +1,9 @@
 require('pixi.js');
 require('pixi-particles');
 
+PIXI.loader.add('particle', 'assets/particle.png');
+
+
 const Intro = require('./cutscenes/intro').default;
 const Death = require('./cutscenes/death').default;
 const Win = require('./cutscenes/win').default;

@@ -1,4 +1,5 @@
 const Keyboard = require('./keyboard');
+const Emitters = require('./emitters');
 
 function Mainloop (renderer, sound) {
   if (!(this instanceof Mainloop)) return new Mainloop(renderer, sound);
@@ -22,24 +23,32 @@ Mainloop.prototype.init = function () {
   document.getElementById('main').appendChild(this.renderer.view);
 
   // add background
-  this.all = new PIXI.Container();
+  this.stageRoot = new PIXI.Container();
 
-  this.level.addBackgroundToStage(this.all);
+  this.level.addBackgroundToStage(this.stageRoot);
 
   this.stage = new PIXI.Container();
-  this.all.addChild(this.stage);
+  this.stageRoot.addChild(this.stage);
 
   this.level.addSpritesToStage(this.stage);
   this.enemies.addSpritesToStage(this.stage);
   this.hero.addSpritesToStage(this.stage);
 
+  this.emitters = Emitters(this.renderer, this.stage, this.level.levelData);
+  this.emitters.hero_jump();
+  this.enemies.addEmitter(this.emitters);
+
   this.g = 0.5;
 
-  this.sound.playLoopSound('music', this.level.musicFile);
+  this.now = Date.now();
 
+  this.sound.playLoopSound('music', this.level.musicFile);
 };
 
 Mainloop.prototype.destroy = function (cb) {
+  // destroy particle
+  this.emitters.destroy();
+
   // unbind keys
   Object.keys(this.key).forEach((index) => {
     this.key[index].destroy();
@@ -93,6 +102,7 @@ Mainloop.prototype.run = function (level, hero, enemies) {
 
 Mainloop.prototype.mainloop = function (resolve, reject) {
   this.timer = requestAnimationFrame(this.mainloop.bind(this, resolve, reject));
+	var now = Date.now();
 
   // move enemies
   this.enemies.update(this.level, this.hero);
@@ -150,6 +160,7 @@ Mainloop.prototype.mainloop = function (resolve, reject) {
       // jumping
       if ((this.key.jump.isDown || this.key.up.isDown) && this.hero.canJump && this.jumpKey === false) {
         this.sound.playSound('sfx', 'boing');
+        this.emitters.play('hero.jump', this.hero.x, this.hero.y + this.hero.height);
         this.jumpKey = true;
         this.hero.ay = -11;
         this.hero.canJump = false;
@@ -173,7 +184,13 @@ Mainloop.prototype.mainloop = function (resolve, reject) {
     }
   }
 
-  this.renderer.render(this.all);
+
+	// The emitter requires the elapsed
+	// number of seconds since the last update
+	this.emitters.update((now - this.now) * 0.001);
+	this.now = now;
+
+  this.renderer.render(this.stageRoot);
 };
 
 module.exports = Mainloop;
