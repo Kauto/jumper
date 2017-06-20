@@ -3,7 +3,6 @@ require('pixi-particles');
 
 PIXI.loader.add('particle', 'assets/particle.png');
 
-
 const Intro = require('./cutscenes/intro').default;
 const Death = require('./cutscenes/death').default;
 const Win = require('./cutscenes/win').default;
@@ -37,23 +36,21 @@ const renderer = PIXI.autoDetectRenderer(800, 480);
 const game = Game(renderer, audioManager);
 
 function loop () {
-  Intro(audioManager)
-    .then(() => {
-      level(0);
-    });
+  level(0);
 }
 const levels = [
-  require('./game/levels/1'),
-  require('./game/levels/2')
+  () => Intro(audioManager),
+  () => game.run(require('./game/levels/1')),
+  () => Win(audioManager, 1),
+  () => game.run(require('./game/levels/2')),
+  () => Win(audioManager, 2),
+  () => game.run(require('./game/levels/3')),
+  () => Outro(audioManager)
 ];
 function level (pos) {
-  game.run(levels[pos])
+  levels[pos]()
     .then(() => {
-      if (pos >= levels.length - 1) {
-        Outro(audioManager);
-      } else {
-        Win(audioManager, pos + 1).then(() => level(pos + 1));
-      }
+      level(pos + 1);
     })
     .catch((e) => {
       if (e) {
