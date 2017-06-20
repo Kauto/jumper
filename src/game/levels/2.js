@@ -1,5 +1,6 @@
 const Dino = require('../enemyType/dino');
 const Plant = require('../enemyType/plant');
+const _inRange = require('lodash/fp/inRange');
 
 const data = {
   blockSize: 32,

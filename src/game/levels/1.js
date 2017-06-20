@@ -4,6 +4,11 @@ const Snail = require('../enemyType/snail');
 const data = {
   blockSize: 48,
   musicFile: '../music/guile',
+  blockChecks: {
+    'isVictory': _inRange(7, 9),
+    'isOcuppied': _inRange(10, 20),
+    'isStandable': _inRange(20, 22),
+  },
 
   level: function () {
     let level = [];
@@ -38,12 +43,6 @@ const data = {
 
   getTextureBackground: function () {
     return PIXI.loader.resources['l1bg'].texture;
-  },
-
-  blockChecks: {
-    'isVictory': _inRange(7, 9),
-    'isOcuppied': _inRange(10, 20),
-    'isStandable': _inRange(20, 22),
   },
 
   enemies: function (enemies) {

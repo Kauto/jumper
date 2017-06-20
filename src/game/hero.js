@@ -184,8 +184,11 @@ Hero.prototype.checkFloorDeath = function (level) {
 Hero.prototype.checkFloor = function (level) {
   if (this.y >= -this.height) {
     if (level.isStandable(this.x, this.y + this.height, 1)) {
-      this.y = Math.floor(this.y / level.blockSize) * level.blockSize;
-      this.ay = -this.ay / 6;
+      if (this.ay >= 0) {
+        this.y = Math.floor(this.y / level.blockSize) * level.blockSize;
+        this.ay = -this.ay / 6;
+      }
+
       this.canJump = true;
       this.canJumpDelay = 5;
     } else {
