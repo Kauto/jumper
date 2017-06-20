@@ -35,6 +35,14 @@ Enemies.prototype.collision = function (hero) {
     return result;
 };
 
+Enemies.prototype.addEmitter = function (emitters) {
+    let result = false;
+
+    this.array.forEach((enemy) => {
+        result = enemy.addEmitter(emitters);
+    });
+};
+
 Enemies.prototype.addSpritesToStage = function (stage) {
     this.array.forEach((enemy) => {
         enemy.addSpritesToStage(stage);

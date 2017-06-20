@@ -11775,6 +11775,69 @@ var Dino = function () {
   }
 
   _createClass(Dino, [{
+    key: 'addEmitter',
+    value: function addEmitter(emitters) {
+      this.emitters = emitters;
+      this.emitters.add('enemies.' + this.spriteName, this.getEmitterConfig());
+    }
+  }, {
+    key: 'getEmitterConfig',
+    value: function getEmitterConfig() {
+      return {
+        'alpha': {
+          'start': 0.53,
+          'end': 0
+        },
+        'scale': {
+          'start': 1,
+          'end': 0.5,
+          'minimumScaleMultiplier': 1
+        },
+        'color': {
+          'start': '#eb1717',
+          'end': '#ff1313'
+        },
+        'speed': {
+          'start': 100,
+          'end': 10,
+          'minimumSpeedMultiplier': 1
+        },
+        'acceleration': {
+          'x': 0,
+          'y': 0
+        },
+        'maxSpeed': 0,
+        'startRotation': {
+          'min': 0,
+          'max': 360
+        },
+        'noRotation': false,
+        'rotationSpeed': {
+          'min': 0,
+          'max': 0
+        },
+        'lifetime': {
+          'min': 0.2,
+          'max': 0.8
+        },
+        'blendMode': 'normal',
+        'frequency': 0.001,
+        'emitterLifetime': 0.1,
+        'maxParticles': 10,
+        'pos': {
+          'x': 0,
+          'y': 0
+        },
+        'addAtBack': false,
+        'spawnType': 'circle',
+        'spawnCircle': {
+          'x': this.width / 2,
+          'y': this.height / 2,
+          'r': 0
+        }
+      };
+    }
+  }, {
     key: 'animate',
     value: function animate() {
       this.aniT++;
@@ -11824,15 +11887,13 @@ var Dino = function () {
             hero.dead = 1;
             return 'e_laugh';
           } else if (hero.y + hero.height <= this.y + this.deathLine && hero.y + hero.height >= this.y) {
-            console.log('POP 1 >> ', this.hitPoints);
             this.hitPoints -= 1;
-            console.log('POP 2 >> ', this.hitPoints);
             hero.ay = -Math.abs(hero.ay) / 2;
             hero.canJump = true;
             hero.canJumpDelay = 5;
             if (!this.hitPoints) {
-              console.log('dead');
               this.sprite.visible = false;
+              this.emitters.play('enemies.' + this.spriteName, this.x, this.y);
             }
             return 'pop';
           }
@@ -22761,6 +22822,8 @@ module.exports = __webpack_require__(98);
 
 __webpack_require__(99);
 __webpack_require__(203);
+
+PIXI.loader.add('particle', 'assets/particle.png');
 
 var Intro = __webpack_require__(204).default;
 var Death = __webpack_require__(205).default;
@@ -45934,6 +45997,14 @@ Enemies.prototype.collision = function (hero) {
     return result;
 };
 
+Enemies.prototype.addEmitter = function (emitters) {
+    var result = false;
+
+    this.array.forEach(function (enemy) {
+        result = enemy.addEmitter(emitters);
+    });
+};
+
 Enemies.prototype.addSpritesToStage = function (stage) {
     this.array.forEach(function (enemy) {
         enemy.addSpritesToStage(stage);
@@ -45947,6 +46018,7 @@ module.exports = Enemies;
 /***/ (function(module, exports, __webpack_require__) {
 
 var Keyboard = __webpack_require__(229);
+var Emitters = __webpack_require__(242);
 
 function Mainloop(renderer, sound) {
   if (!(this instanceof Mainloop)) return new Mainloop(renderer, sound);
@@ -45970,24 +46042,33 @@ Mainloop.prototype.init = function () {
   document.getElementById('main').appendChild(this.renderer.view);
 
   // add background
-  this.all = new PIXI.Container();
+  this.stageRoot = new PIXI.Container();
 
-  this.level.addBackgroundToStage(this.all);
+  this.level.addBackgroundToStage(this.stageRoot);
 
   this.stage = new PIXI.Container();
-  this.all.addChild(this.stage);
+  this.stageRoot.addChild(this.stage);
 
   this.level.addSpritesToStage(this.stage);
   this.enemies.addSpritesToStage(this.stage);
   this.hero.addSpritesToStage(this.stage);
 
+  this.emitters = Emitters(this.renderer, this.stage, this.level.levelData);
+  this.emitters.hero_jump();
+  this.enemies.addEmitter(this.emitters);
+
   this.g = 0.5;
+
+  this.now = Date.now();
 
   this.sound.playLoopSound('music', this.level.musicFile);
 };
 
 Mainloop.prototype.destroy = function (cb) {
   var _this = this;
+
+  // destroy particle
+  this.emitters.destroy();
 
   // unbind keys
   Object.keys(this.key).forEach(function (index) {
@@ -46044,6 +46125,7 @@ Mainloop.prototype.run = function (level, hero, enemies) {
 
 Mainloop.prototype.mainloop = function (resolve, reject) {
   this.timer = requestAnimationFrame(this.mainloop.bind(this, resolve, reject));
+  var now = Date.now();
 
   // move enemies
   this.enemies.update(this.level, this.hero);
@@ -46101,6 +46183,7 @@ Mainloop.prototype.mainloop = function (resolve, reject) {
       // jumping
       if ((this.key.jump.isDown || this.key.up.isDown) && this.hero.canJump && this.jumpKey === false) {
         this.sound.playSound('sfx', 'boing');
+        this.emitters.play('hero.jump', this.hero.x, this.hero.y + this.hero.height);
         this.jumpKey = true;
         this.hero.ay = -11;
         this.hero.canJump = false;
@@ -46124,7 +46207,12 @@ Mainloop.prototype.mainloop = function (resolve, reject) {
     }
   }
 
-  this.renderer.render(this.all);
+  // The emitter requires the elapsed
+  // number of seconds since the last update
+  this.emitters.update((now - this.now) * 0.001);
+  this.now = now;
+
+  this.renderer.render(this.stageRoot);
 };
 
 module.exports = Mainloop;
@@ -48086,6 +48174,156 @@ var Plant = function (_Dino) {
 }(Dino);
 
 module.exports = Plant;
+
+/***/ }),
+/* 242 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _isArray = __webpack_require__(243);
+
+function Emitters(renderer, stage, levelData) {
+  if (!(this instanceof Emitters)) return new Emitters(renderer, stage, levelData);
+  this.list = {};
+  this.stage = stage;
+  this.renderer = renderer;
+  this.levelData = levelData;
+}
+
+Emitters.prototype.destroy = function () {
+  var _this = this;
+
+  Object.keys(this.list).forEach(function (index) {
+    _this.list[index].destroy();
+    delete _this.list[index];
+  });
+  this.list = {};
+  if (this.renderer.plugins && this.renderer.plugins.sprite && this.renderer.plugins.sprite.sprites) this.renderer.plugins.sprite.sprites.length = 0;
+};
+
+Emitters.prototype.add = function (name, config) {
+  var texture = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'particle';
+
+  if (this.list[name]) {
+    this.list[name].destroy();
+  }
+  this.list[name] = this.create(config, texture);
+  this.list[name].emit = false;
+};
+
+Emitters.prototype.update = function (elapsedTime) {
+  var _this2 = this;
+
+  Object.keys(this.list).forEach(function (index) {
+    _this2.list[index].update(elapsedTime);
+  });
+};
+
+Emitters.prototype.play = function (name, x, y) {
+  if (!this.list[name]) return;
+  this.list[name].emit = true;
+  this.list[name].resetPositionTracking();
+  this.list[name].updateOwnerPos(x, y);
+};
+
+Emitters.prototype.create = function (config) {
+  var texture = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'particle';
+
+  return new PIXI.particles.Emitter(
+  // The PIXI.Container to put the emitter in
+  // if using blend modes, it's important to put this
+  // on top of a bitmap, and not use the root stage Container
+  this.stage,
+
+  // The collection of particle images to use
+  _isArray(texture) ? texture : [PIXI.loader.resources[texture].texture], config);
+};
+
+Emitters.prototype.hero_jump = function () {
+  this.add('hero.jump', {
+    'alpha': {
+      'start': 1,
+      'end': 0
+    },
+    'scale': {
+      'start': 0.1,
+      'end': 0.01,
+      'minimumScaleMultiplier': 1
+    },
+    'color': {
+      'start': '#e4f9ff',
+      'end': '#3fcbff'
+    },
+    'speed': {
+      'start': 150,
+      'end': 50,
+      'minimumSpeedMultiplier': 1
+    },
+    'acceleration': {
+      'x': 0,
+      'y': 0
+    },
+    'maxSpeed': 0,
+    'startRotation': {
+      'min': 180,
+      'max': 360
+    },
+    'noRotation': true,
+    'lifetime': {
+      'min': 0.2,
+      'max': 0.8
+    },
+    'blendMode': 'normal',
+    'frequency': 0.001,
+    'emitterLifetime': 0.2,
+    'maxParticles': 50,
+    'pos': {
+      'x': 0,
+      'y': 0
+    },
+    'addAtBack': false,
+    'spawnType': 'rect',
+    'spawnRect': {
+      'x': 0,
+      'y': 0,
+      'w': this.levelData.blockSize,
+      'h': 0
+    }
+  });
+};
+
+module.exports = Emitters;
+
+/***/ }),
+/* 243 */
+/***/ (function(module, exports) {
+
+/**
+ * Checks if `value` is classified as an `Array` object.
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is an array, else `false`.
+ * @example
+ *
+ * _.isArray([1, 2, 3]);
+ * // => true
+ *
+ * _.isArray(document.body.children);
+ * // => false
+ *
+ * _.isArray('abc');
+ * // => false
+ *
+ * _.isArray(_.noop);
+ * // => false
+ */
+var isArray = Array.isArray;
+
+module.exports = isArray;
+
 
 /***/ })
 /******/ ]);

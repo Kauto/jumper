@@ -13,6 +13,67 @@ class Dino {
     this.spriteName = 'G0';
   }
 
+  addEmitter (emitters) {
+    this.emitters = emitters;
+    this.emitters.add('enemies.' + this.spriteName, this.getEmitterConfig());
+  }
+
+  getEmitterConfig () {
+    return {
+      'alpha': {
+        'start': 0.53,
+        'end': 0
+      },
+      'scale': {
+        'start': 1,
+        'end': 0.5,
+        'minimumScaleMultiplier': 1
+      },
+      'color': {
+        'start': '#eb1717',
+        'end': '#ff1313'
+      },
+      'speed': {
+        'start': 100,
+        'end': 10,
+        'minimumSpeedMultiplier': 1
+      },
+      'acceleration': {
+        'x': 0,
+        'y': 0
+      },
+      'maxSpeed': 0,
+      'startRotation': {
+        'min': 0,
+        'max': 360
+      },
+      'noRotation': false,
+      'rotationSpeed': {
+        'min': 0,
+        'max': 0
+      },
+      'lifetime': {
+        'min': 0.2,
+        'max': 0.8
+      },
+      'blendMode': 'normal',
+      'frequency': 0.001,
+      'emitterLifetime': 0.1,
+      'maxParticles': 10,
+      'pos': {
+        'x': 0,
+        'y': 0
+      },
+      'addAtBack': false,
+      'spawnType': 'circle',
+      'spawnCircle': {
+        'x': this.width / 2,
+        'y': this.height / 2,
+        'r': 0
+      }
+    };
+  }
+
   animate () {
     this.aniT++;
 
@@ -61,15 +122,13 @@ class Dino {
           return 'e_laugh';
         }
         else if (hero.y + hero.height <= this.y + this.deathLine && hero.y + hero.height >= this.y) {
-          console.log('POP 1 >> ', this.hitPoints);
           this.hitPoints -= 1;
-          console.log('POP 2 >> ', this.hitPoints);
           hero.ay = -Math.abs(hero.ay) / 2;
           hero.canJump = true;
           hero.canJumpDelay = 5;
           if (!this.hitPoints) {
-            console.log('dead');
             this.sprite.visible = false;
+            this.emitters.play('enemies.' + this.spriteName, this.x, this.y);
           }
           return 'pop';
         }
