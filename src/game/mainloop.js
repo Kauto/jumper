@@ -172,7 +172,7 @@ Mainloop.prototype.mainloop = function (resolve, reject) {
       }
 
       //check links und rechts
-      this.hero.updatePositionX(this.level);
+      this.hero.updatePositionXY(this.level);
 
       // scrollen
       if (this.hero.x + this.stage.x > 2 * this.renderer.width / 5) {

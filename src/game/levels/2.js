@@ -45,6 +45,12 @@ const data = {
 
   musicFile: '../music/ken',
 
+  blockChecks: {
+    'isVictory': _inRange(7, 9),
+    'isOcuppied': _inRange(10, 20),
+    'isStandable': _inRange(20, 22),
+  },
+
   enemies: function (enemies) {
     enemies.add(new Dino(this, this.blockSize * 12, this.blockSize * 13));
     enemies.add(new Dino(this, this.blockSize * 15, this.blockSize * 13, false));

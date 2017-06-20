@@ -114,6 +114,7 @@ export default function (Audiomanager) {
           ANI.ChangeTo({
             a: 1
           }, 1000),
+          ANI.Callback(()=>Audiomanager.playSound('sfx', 'dog'), 0),
           ANI.Wait(6000),
           ANI.ChangeTo({
             a: 0

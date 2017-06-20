@@ -15,17 +15,22 @@ let audioManager = new AudioManager(['music', 'sfx']);
 audioManager.settings.audioPath = 'assets/sound/';
 audioManager.setVolume('music', 1);
 audioManager.setVolume('sfx', 1);
+// intro
+audioManager.createSound('ding').load();
+audioManager.createSound('dog').load();
+audioManager.createSound('gestoehn').load();
+audioManager.createSound('intro').load();
+// game
 audioManager.createSound('boing').load();
 audioManager.createSound('pop').load();
 audioManager.createSound('e_laugh').load();
-audioManager.createSound('intro').load();
-audioManager.createSound('ding').load();
-audioManager.createSound('gestoehn').load();
-audioManager.createSound('gestoehn2').load();
 audioManager.createSound('bionic').load();
+// cutscenes
 audioManager.createSound('whip').load();
 audioManager.createSound('schlag').load();
 audioManager.createSound('schall').load();
+// outro
+audioManager.createSound('gestoehn2').load();
 audioManager.createSound('electric').load();
 
 const renderer = PIXI.autoDetectRenderer(800, 480);
