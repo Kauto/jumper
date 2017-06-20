@@ -127,43 +127,43 @@ export default function (Audiomanager) {
         ]])
       }),
       SP.FastBlur({
-        x: 200,
+        x: 400,
         y: 200,
-        width: 200,
-        height: 50,
+        width: 150,
+        height: 80,
         pixel: true,
         scaleX: 1,
         scaleY: 1,
         animation: Sequence(1, -26000, [[
           ANI.Callback(() => Audiomanager.playSound('sfx', 'gestoehn'), 0),
           ANI.ChangeTo({
-            scaleX: 10,
-            scaleY: 10
+            scaleX: 15,
+            scaleY: 15
           }, 1000),
-          ANI.Wait(7000)
+          ANI.Wait(6000)
         ]])
       }),
       SP.Image({
         image: 'st1',
-        x: 450,
-        y: 240,
-        scaleX: 1.1,
-        scaleY: 1.1,
+        x: 400,
+        y: 290,
+        scaleX: 0.9,
+        scaleY: 0.9,
         a: 0,
         animation: Sequence(1, -26000, [[
           ANI.ChangeTo({
             a: 1
           }, 1000),
-          ANI.Wait(6000),
+          ANI.Wait(5000),
           ANI.ChangeTo({
             a: 0
           }, 1000)
         ], [
           ANI.ChangeTo({
             x: 400,
-            scaleX: 1.0,
-            scaleY: 1.0
-          }, 8000)
+            scaleX: 0.8,
+            scaleY: 0.8
+          }, 7000)
         ]])
       })
     ];
@@ -330,7 +330,7 @@ export default function (Audiomanager) {
     textBox(Audiomanager, l, 'Oh Tobi! Du bist mein Ein und Alles!', 425, 50, 350, 2500);
     textBox(Audiomanager, l, 'Yeah! Du rockst mein Heart!', 50, 250, 260, 10500);
     textBox(Audiomanager, l, 'Wuff wuff wuff', 250, 100, 160, 18500);
-    textBox(Audiomanager, l, 'Oh ja! Wir sind glücklich!', 510, 80, 250, 26500);
+    textBox(Audiomanager, l, 'Oh ja! Wir sind glücklich!', 30, 380, 250, 26500);
     textBox(Audiomanager, l, 'Oh nein! Steffi wird entführt!', 250, 260, 300, 33500);
     textBox(Audiomanager, l, 'Oh nein!', 100, 10, 110, 34000);
     textBox(Audiomanager, l, 'Oh nein!', 350, 360, 110, 34500);

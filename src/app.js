@@ -22,6 +22,7 @@ audioManager.createSound('bionic').load();
 audioManager.createSound('whip').load();
 audioManager.createSound('schlag').load();
 audioManager.createSound('schall').load();
+audioManager.createSound('electric').load();
 
 const renderer = PIXI.autoDetectRenderer(800, 480);
 const game = Game(renderer, audioManager);

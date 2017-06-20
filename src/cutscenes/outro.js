@@ -11,7 +11,11 @@ import cutsceneBase from './cutsceneBase';
 export default function (Audiomanager) {
   return cutsceneBase('assets/music/outro', {
     's1': 'assets/intro/s1.jpg',
+    't2': 'assets/intro/t2.jpg',
     't3': 'assets/intro/t3.jpg',
+    'f1': 'assets/intro/f1.jpg',
+    'f2': 'assets/intro/f2.jpg',
+    'f3': 'assets/intro/f3.jpg',
     'st1': 'assets/intro/st1.jpg',
     'walking': 'assets/walking.png'
   }, (scene, layer) => {
@@ -105,31 +109,90 @@ export default function (Audiomanager) {
         ]])
 
       }),
-      SP.FastBlur({
-        x: 200,
-        y: 200,
-        width: 200,
-        height: 50,
-        pixel: true,
-        scaleX: 1,
-        scaleY: 1,
+      SP.Image({
+        image: 'f1',
+        x: 800,
+        y: 120,
+        scaleX: 0.8,
+        scaleY: 0.8,
+        a: 0,
         animation: Sequence(1, -16500, [[
-          ANI.Callback(() => Audiomanager.playSound('sfx', 'gestoehn'), 0),
           ANI.ChangeTo({
-            scaleX: 10,
-            scaleY: 10
+            a: 1
           }, 1000),
-          ANI.Wait(7000)
+          ANI.Wait(4500),
+          ANI.ChangeTo({
+            a: 0
+          }, 1000)
+        ], [
+          ANI.ChangeTo({
+            x: 400,
+            scaleX: 0.9,
+            scaleY: 0.9
+          }, 6500)
         ]])
       }),
       SP.Image({
-        image: 'st1',
-        x: 450,
-        y: 240,
-        scaleX: 1.1,
-        scaleY: 1.1,
+        image: 'f2',
+        x: 0,
+        y: 360,
+        scaleX: 1,
+        scaleY: 1,
         a: 0,
         animation: Sequence(1, -16500, [[
+          ANI.ChangeTo({
+            a: 1
+          }, 1000),
+          ANI.Wait(5000),
+          ANI.ChangeTo({
+            a: 0
+          }, 1000)
+        ], [
+          ANI.ChangeTo({
+            x: 400,
+            scaleX: 0.9,
+            scaleY: 0.9
+          }, 7000)
+        ]])
+      }),
+      SP.Image({
+        image: 'f3',
+        x: 800,
+        y: 240,
+        scaleX: 0.2,
+        scaleY: 0.2,
+        a: 0,
+        animation: Sequence(1, -16500, [[
+          ANI.ChangeTo({
+            a: 1
+          }, 1000),
+          ANI.Wait(12000),
+          ANI.ChangeTo({
+            a: 0
+          }, 1000)
+        ], [
+          ANI.ChangeTo({
+            x: 400,
+            scaleX: 0.25,
+            scaleY: 0.25
+          }, 7000, Easing.quadOut),
+          ANI.Wait(300),
+          ANI.ChangeTo({
+            x: 3800,
+            y: -3000,
+            scaleX: 3,
+            scaleY: 3
+          }, 2000, Easing.quadInOut),
+        ]])
+      }),
+      SP.Image({
+        image: 't2',
+        x: 350,
+        y: 240,
+        scaleX: 2,
+        scaleY: 2,
+        a: 0,
+        animation: Sequence(1, -28500, [[
           ANI.ChangeTo({
             a: 1
           }, 1000),
@@ -140,8 +203,48 @@ export default function (Audiomanager) {
         ], [
           ANI.ChangeTo({
             x: 400,
-            scaleX: 1.0,
-            scaleY: 1.0
+            scaleX: 1.8,
+            scaleY: 1.8
+          }, 8000)
+        ]])
+      }),
+      SP.FastBlur({
+        x: 400,
+        y: 200,
+        width: 150,
+        height: 80,
+        pixel: true,
+        scaleX: 1,
+        scaleY: 1,
+        animation: Sequence(1, -36500, [[
+          ANI.Callback(() => Audiomanager.playSound('sfx', 'gestoehn'), 0),
+          ANI.ChangeTo({
+            scaleX: 15,
+            scaleY: 15
+          }, 1000),
+          ANI.Wait(7000)
+        ]])
+      }),
+      SP.Image({
+        image: 'st1',
+        x: 400,
+        y: 290,
+        scaleX: 0.9,
+        scaleY: 0.9,
+        a: 0,
+        animation: Sequence(1, -36500, [[
+          ANI.ChangeTo({
+            a: 1
+          }, 1000),
+          ANI.Wait(6000),
+          ANI.ChangeTo({
+            a: 0
+          }, 1000)
+        ], [
+          ANI.ChangeTo({
+            x: 400,
+            scaleX: 0.8,
+            scaleY: 0.8
           }, 8000)
         ]])
       })
@@ -219,7 +322,7 @@ export default function (Audiomanager) {
         scaleY: 40,
         a: 1,
         pixel: true,
-        animation: Sequence(1, -24500, [[
+        animation: Sequence(1, -44500, [[
           ANI.Wait(8000)
         ]])
       }),
@@ -239,7 +342,7 @@ export default function (Audiomanager) {
         count: 100,
         color: (i) => Color('#b78d6f').mix(Color('#FFF0E5'), Math.random()).string(),
         animation: function (i) {
-          return Sequence(true, -24500 - i, [[
+          return Sequence(true, -44500 - i, [[
             () => i % 2 ? null : ANI.ChangeTo({
               x: Math.random() * scene.w,
               y: Math.random() * scene.h
@@ -278,7 +381,7 @@ export default function (Audiomanager) {
         },
         a: 0,
         animation: function (i) {
-          return Sequence(1, -33000 - i * 50, [[
+          return Sequence(1, -53000 - i * 50, [[
             ANI.ChangeTo({
               y: ANI.ChangeTo.createChangeByFunction(function () {
                 return Math.random() * 50 + 350;
@@ -295,7 +398,7 @@ export default function (Audiomanager) {
         color: '#FFF',
         font: '32px Audiowide',
         a: 0,
-        animation: Sequence(1, -33000, [[
+        animation: Sequence(1, -53000, [[
           ANI.ChangeTo({
             a: 1
           }, 300, Easing.quadOut),
@@ -309,9 +412,9 @@ export default function (Audiomanager) {
         a: 0,
         font: '100px Arial',
         scaleX: 0.9,
-        scaleY: 0.9,
+        scaleY: 1.2,
         color: '#F00',
-        animation: Sequence(true, -33000, [[
+        animation: Sequence(true, -53000, [[
           ANI.ChangeTo({
             a: 1,
           }, 3000, Easing.quadOut),
@@ -319,11 +422,11 @@ export default function (Audiomanager) {
         ], [
           ANI.ChangeTo({
             scaleX: 1,
-            scaleY: 1,
+            scaleY: 1.3,
           }, 400, Easing.quadInOut),
           ANI.ChangeTo({
             scaleX: 0.9,
-            scaleY: 0.9,
+            scaleY: 1.2,
           }, 400, Easing.quadInOut),
           ANI.Wait(400)
         ]])
@@ -333,8 +436,11 @@ export default function (Audiomanager) {
     l = [];
     textBox(Audiomanager, l, 'Oh Tobi! Du hast mich gerettet!', 500, 50, 290, 1000);
     textBox(Audiomanager, l, 'Natürlich! Wer sonst?', 80, 80, 210, 9000);
-    textBox(Audiomanager, l, 'Oh Tobi!', 600, 60, 110, 17000);
-    textBox(Audiomanager, l, 'Oh ja! Oh ja! Oh ja!', 500, 380, 210, 25000);
+    textBox(Audiomanager, l, 'Alles TROTZ unserer "Freunde"!', 260, 260, 280, 17000);
+    textBox(Audiomanager, l, '(Lasst mich hier raus!)', 50, 60, 230, 25000);
+    textBox(Audiomanager, l, 'Komm her Bitch!', 550, 60, 170, 30000);
+    textBox(Audiomanager, l, 'Oh Tobi!', 600, 60, 110, 37000);
+    textBox(Audiomanager, l, 'Oh ja! Oh ja! Oh ja!', 500, 380, 210, 45000);
     layer.unshift(l);
     return layer;
   }, false);

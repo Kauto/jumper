@@ -41,9 +41,9 @@ let mix = require('laravel-mix');
  */
 
 if (global.process.env.NODE_ENV === 'production') {
-    mix.js('src/app.js', 'dist/app.min.js').then(minimizeHtml);
+    mix.js('src/app.js', 'dist/app.min.js').setPublicPath('dist').then(minimizeHtml);
 } else {
-    mix.js('src/app.js', 'dist/').then(minimizeHtml);
+    mix.js('src/app.js', 'dist/app.js').setPublicPath('dist').then(minimizeHtml);
 }
 
 // Full API
