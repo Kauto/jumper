@@ -23,6 +23,9 @@ function Level (levelData) {
   this.musicFile = levelData.musicFile;
   this.width = level[0].length * this.blockSize;
   this.height = level.length * this.blockSize;
+  this.checkIsOccupied = this.levelData.blockChecks.isOcuppied;
+  this.checkIsVictory = this.levelData.blockChecks.isVictory;
+  this.checkIsStandable = this.levelData.blockChecks.isStandable;
 }
 
 Level.prototype.getLevelData = function (x, y) {
@@ -87,11 +90,16 @@ Level.prototype.isCheck = function (pixelX, pixelY, sizeX, sizeY, callback) {
 };
 
 Level.prototype.isOccupied = function (pixelX, pixelY, sizeX = 0, sizeY = 0) {
-  return this.isCheck(pixelX, pixelY, sizeX, sizeY, (x, y) => this.getLevelData(x, y) > 9);
+  return this.isCheck(pixelX, pixelY, sizeX, sizeY, (x, y) => this.checkIsOccupied(this.getLevelData(x, y)));
+};
+
+
+Level.prototype.isStandable = function (pixelX, pixelY, sizeX = 0, sizeY = 0) {
+  return this.isCheck(pixelX, pixelY, sizeX, sizeY, (x, y) => this.checkIsOccupied(this.getLevelData(x, y)) || this.checkIsStandable(this.getLevelData(x, y)));
 };
 
 Level.prototype.isVictory = function (pixelX, pixelY, sizeX = 0, sizeY = 0) {
-  return this.isCheck(pixelX, pixelY, sizeX, sizeY, (x, y) => _inRange(this.getLevelData(x, y), 7, 9));
+  return this.isCheck(pixelX, pixelY, sizeX, sizeY, (x, y) => this.checkIsVictory(this.getLevelData(x, y)));
 };
 
 module.exports = Level;

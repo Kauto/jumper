@@ -103,7 +103,7 @@ Hero.prototype.checkAnimation = function () {
   }
 };
 
-Hero.prototype.updatePositionX = function (level) {
+Hero.prototype.updatePositionXY = function (level) {
   if (level.isOccupied(this.x + this.ax + (this.ax > 0 ? this.width : 0), this.y, 0, this.size)) {
     this.x = Math.round(this.x / level.blockSize) * level.blockSize;
     this.ax = 0;
@@ -111,6 +111,7 @@ Hero.prototype.updatePositionX = function (level) {
     this.x += this.ax;
   }
   this.sprite.x = this.x;
+  this.sprite.y = this.y;
 };
 
 Hero.prototype.updatePositionY = function () {
@@ -182,7 +183,7 @@ Hero.prototype.checkFloorDeath = function (level) {
 
 Hero.prototype.checkFloor = function (level) {
   if (this.y >= -this.height) {
-    if (level.isOccupied(this.x, this.y + this.height, 1)) {
+    if (level.isStandable(this.x, this.y + this.height, 1)) {
       this.y = Math.floor(this.y / level.blockSize) * level.blockSize;
       this.ay = -this.ay / 6;
       this.canJump = true;
