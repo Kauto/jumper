@@ -26,6 +26,7 @@
     "animationvideo": "^0.4.1",
     "audio-manager": "^0.1.18",
     "color": "^1.0.3",
+    "pixi-particles": "^2.1.5",
     "pixi.js": "^4.5.3"
   }
 }

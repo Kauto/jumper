@@ -1,4 +1,5 @@
 require('pixi.js');
+require('pixi-particles');
 
 const Intro = require('./cutscenes/intro').default;
 const Death = require('./cutscenes/death').default;

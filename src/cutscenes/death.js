@@ -26,7 +26,7 @@ export default function (Audiomanager) {
     layer.unshift(l);
     l = [
       SP.StarField({
-        moveY: -24,
+        moveY: -26,
         moveZ: -0.5,
         a: 1,
         animation: Sequence(1, 0, [[

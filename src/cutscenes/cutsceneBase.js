@@ -46,13 +46,14 @@ export default function (music, images, sceneAnimation, addBindings = true) {
     scene.init(images).scene((scene, layer) => {
       layer = sceneAnimation(scene, layer, destroy);
 
+      /*
       if (process.env.NODE_ENV === 'development') {
         layer.unshift([
           function (ctx, t) {
             console.log(t);
           }
         ]);
-      }
+      }*/
       return layer;
     });
     engine.run();

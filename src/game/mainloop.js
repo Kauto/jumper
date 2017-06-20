@@ -12,6 +12,7 @@ function Mainloop (renderer, sound) {
 Mainloop.prototype.init = function () {
   this.key = {
     left: Keyboard(37),
+    up: Keyboard(38),
     right: Keyboard(39),
     down: Keyboard(40),
     jump: Keyboard(32)
@@ -147,14 +148,16 @@ Mainloop.prototype.mainloop = function (resolve, reject) {
       }
 
       // jumping
-      if (this.key.jump.isDown && this.hero.canJump && this.jumpKey === false) {
+      if ((this.key.jump.isDown || this.key.up.isDown) && this.hero.canJump && this.jumpKey === false) {
         this.sound.playSound('sfx', 'boing');
         this.jumpKey = true;
         this.hero.ay = -11;
         this.hero.canJump = false;
         //Addpartikel 15, hero.sprite.x - LevelX, hero.sprite.y + 96, hero.sprite.x + 48 - LevelX, hero.sprite.y + 96, False
       } else {
-        if (this.key.jump.isUp) this.jumpKey = false;
+        if (this.key.jump.isUp && this.key.up.isUp) {
+          this.jumpKey = false;
+        }
       }
 
       //check links und rechts

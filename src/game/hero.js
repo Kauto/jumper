@@ -218,7 +218,7 @@ Hero.prototype.deathAnimation = function (level) {
     //hero.sprite.rotation += 0.1;
     //Addpartikel 1, hero.sprite.x + 20 - LevelX, hero.sprite.y, hero.sprite.x + 28 - LevelX, hero.sprite.y + 48, True
   }
-  return (this.dead >= 55);
+  return (this.dead >= 15);
 };
 
 module.exports = Hero;
