@@ -10,6 +10,7 @@ function Hero (levelData) {
   this.height = levelData.blockSize * this.size;
   this.width = levelData.blockSize;
   this.scaleValue = 1;
+  this.sprite = null;
 
   this.canJump = false;
   this.canJumpDelay = 0;
@@ -47,15 +48,14 @@ Hero.prototype.load = function () {
     PIXI.loader
       .add('./assets/idle.json')
       .add('./assets/jumping.json')
-      .add('./assets/walking.json')
-      .load(this.processLoad.bind(this));
+      .add('./assets/walking.json');
   } catch (e) {
-    this.processLoad();
   }
 };
 
 Hero.prototype.addSpritesToStage = function (stage) {
-  stage.addChild(this.sprite);
+    this.processLoad();
+    stage.addChild(this.sprite);
 };
 
 Hero.prototype.checkAnimation = function () {
