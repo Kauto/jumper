@@ -10,6 +10,7 @@ class Dino {
     this.hitPoints = 1;
     this.aniT = this.ani = 0;
     this.deathLine = Math.ceil(levelData.blockSize / 3);
+    this.spriteName = 'G0';
   }
 
   animate () {
@@ -21,6 +22,15 @@ class Dino {
       if (this.ani > this.maxAni) {
         this.ani = 0;
       }
+    }
+
+    if (this.ax < 0) {
+      this.sprite.scale.x = this.scaleValue;
+      this.sprite.anchor.set(0, 0);
+    }
+    else if (this.ax > 0) {
+      this.sprite.scale.x = -this.scaleValue;
+      this.sprite.anchor.set(1, 0);
     }
   }
 
@@ -37,7 +47,7 @@ class Dino {
       this.x += this.ax;
     }
 
-    this.sprite.texture = PIXI.loader.resources['G0' + this.ani + ((this.ax > 0) ? 'd' : '')].texture;
+    this.sprite.texture = PIXI.loader.resources[this.spriteName + this.ani].texture;
     this.sprite.x = this.x;
     this.sprite.y = this.y;
   }
@@ -51,12 +61,14 @@ class Dino {
           return 'e_laugh';
         }
         else if (hero.y + hero.height <= this.y + this.deathLine && hero.y + hero.height >= this.y) {
+          console.log('POP 1 >> ', this.hitPoints);
           this.hitPoints -= 1;
+          console.log('POP 2 >> ', this.hitPoints);
           hero.ay = -Math.abs(hero.ay) / 2;
           hero.canJump = true;
           hero.canJumpDelay = 5;
           if (!this.hitPoints) {
-
+            console.log('dead');
             this.sprite.visible = false;
           }
           return 'pop';
@@ -68,12 +80,14 @@ class Dino {
 
   addSpritesToStage (stage) {
     this.sprite = new PIXI.Sprite(
-      PIXI.loader.resources['G00'].texture
+      PIXI.loader.resources[this.spriteName + '0'].texture
     );
     this.sprite.x = this.x;
     this.sprite.y = this.y;
     this.sprite.width = this.width;
     this.sprite.height = this.height;
+
+    this.scaleValue = this.sprite.scale.x;
 
     stage.addChild(this.sprite);
   }

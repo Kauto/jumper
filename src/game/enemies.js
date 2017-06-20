@@ -29,7 +29,7 @@ Enemies.prototype.collision = function (hero) {
     let result = false;
 
     this.array.forEach((enemy) => {
-        result = result || enemy.collision(hero);
+        result = enemy.collision(hero) || result;
     });
 
     return result;
