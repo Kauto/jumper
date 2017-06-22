@@ -25932,6 +25932,8 @@ var Death = __webpack_require__(294).default;
 var Win = __webpack_require__(295).default;
 var Outro = __webpack_require__(301).default;
 var Cut1 = __webpack_require__(302).default;
+var Cut2 = __webpack_require__(441).default;
+var Cut3 = __webpack_require__(442).default;
 var Game = __webpack_require__(303);
 var AudioManager = __webpack_require__(313);
 
@@ -25976,9 +25978,13 @@ var levels = [function () {
 }, function () {
   return Win(audioManager, 2, 'Wenn die Ehegatten nicht beisammen lebten, würden die guten Ehen häufiger sein. - Andre Schaf');
 }, function () {
+  return Cut2(audioManager);
+}, function () {
   return game.run(__webpack_require__(440));
 }, function () {
   return Win(audioManager, 3, 'Die Ehe ist die verlogenste Form des Geschlechtsverkehrs; und eben deshalb hat sie das gute Gewissen auf ihrer Seite - Markus Madeja');
+}, function () {
+  return Cut3(audioManager);
 }, function () {
   return Outro(audioManager);
 }];
@@ -46971,7 +46977,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       's2': 'assets/intro/s2.jpg',
       't1': 'assets/intro/t1.jpg',
       'st1': 'assets/intro/st1.jpg',
-      'walking': 'assets/walking.png'
+      'walking': 'assets/walking.png',
+      'stephie': 'assets/stephie.png'
     },
     animation: function animation(scene, layer) {
       var l = void 0;
@@ -47079,6 +47086,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           scaleX: 0.8,
           scaleY: 0.8
         }, 7000)]])
+      })];
+      layer.unshift(l);
+      l = [__WEBPACK_IMPORTED_MODULE_0_animationvideo__["Sprites"].Image({
+        image: 'stephie',
+        x: -150,
+        y: 290,
+        arc: 30,
+        animation: __WEBPACK_IMPORTED_MODULE_0_animationvideo__["Sequence"](1, -33000, [[__WEBPACK_IMPORTED_MODULE_0_animationvideo__["Animations"].ChangeTo({
+          x: 950
+        }, 2000)]])
       })];
       layer.unshift(l);
       l = [__WEBPACK_IMPORTED_MODULE_0_animationvideo__["Sprites"].Text({
@@ -48233,7 +48250,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         scaleY: 40,
         a: 1,
         pixel: true,
-        animation: __WEBPACK_IMPORTED_MODULE_0_animationvideo__["Sequence"](1, -44500, [[__WEBPACK_IMPORTED_MODULE_0_animationvideo__["Animations"].Wait(8000)]])
+        animation: __WEBPACK_IMPORTED_MODULE_0_animationvideo__["Sequence"](1, -44500, [[__WEBPACK_IMPORTED_MODULE_0_animationvideo__["Animations"].Callback(function () {
+          return Audiomanager.playSound('sfx', 'gestoehn2');
+        }, 0), __WEBPACK_IMPORTED_MODULE_0_animationvideo__["Animations"].Wait(8000)]])
       }), __WEBPACK_IMPORTED_MODULE_0_animationvideo__["Sprites"].Emitter({
         'class': __WEBPACK_IMPORTED_MODULE_0_animationvideo__["Sprites"].Particle,
         x: function x(i) {
@@ -48257,9 +48276,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
               x: Math.random() * scene.w,
               y: Math.random() * scene.h
             }, 300, __WEBPACK_IMPORTED_MODULE_0_animationvideo__["Easing"].linear);
-          }], [__WEBPACK_IMPORTED_MODULE_0_animationvideo__["Animations"].Callback(function () {
-            return Audiomanager.playSound('sfx', 'gestoehn2');
-          }, 0), __WEBPACK_IMPORTED_MODULE_0_animationvideo__["Animations"].ChangeTo({
+          }], [__WEBPACK_IMPORTED_MODULE_0_animationvideo__["Animations"].ChangeTo({
             a: 1
           }, 500), __WEBPACK_IMPORTED_MODULE_0_animationvideo__["Animations"].Wait(7000), __WEBPACK_IMPORTED_MODULE_0_animationvideo__["Animations"].ChangeTo({
             a: 0
@@ -55836,7 +55853,7 @@ module.exports = Snail;
 /***/ (function(module, exports, __webpack_require__) {
 
 var Dino = __webpack_require__(82);
-var Button = __webpack_require__(441);
+var Button = __webpack_require__(439);
 var _inRange = __webpack_require__(60);
 
 var data = {
@@ -56000,71 +56017,7 @@ var data = {
 module.exports = data;
 
 /***/ }),
-/* 439 */,
-/* 440 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// const Snail = require('../enemyType/snail');
-var _inRange = __webpack_require__(60);
-
-var data = {
-  blockSize: 48,
-  musicFile: '../music/dd',
-  blockChecks: {
-    'isVictory': _inRange(7, 9),
-    'isOcuppied': _inRange(10, 20),
-    'isStandable': _inRange(20, 22)
-  },
-
-  level: function level() {
-    var level = [];
-
-    level[0] = '00000d000000000000000000000000000000000000000000000000000000000000000';
-    level[1] = '00000d000000000000ac00000000000000000000000000000000000abbbc000000000';
-    level[2] = '00000d00000000000000e000000000000000000000000000000000000000000000000';
-    level[3] = '00000d0000000ac00000d0000000000lbbbbc00000000000000000e00000000000000';
-    level[4] = 'bbbc0d00000000000000d0000000000k0000000000000000000000e00000000000000';
-    level[5] = '00000000000000000ac000000000000k00000000ac00000000000abc0000000000000';
-    level[6] = '00000000000000000000ac000000000k0000000000000000000000000000000000000';
-    level[7] = '0000000000000ac0000000000000000k0000000000000000ac0000000000000000070';
-    level[8] = '0000abbbbc000000000000000000000k00000000000ac000000000000000000000680';
-    level[9] = '000000000000000000000000000abbbbc000000000000000000000000000000000ac0';
-
-    return level;
-  },
-
-  load: function load() {
-    try {
-      PIXI.loader.add('l3bg', 'assets/map/level3/bg.jpeg');
-
-      for (var i = 1; i <= 21; i++) {
-        PIXI.loader.add('l3' + i, 'assets/map/level3/j' + i + '.png');
-      }
-    } catch (e) {}
-  },
-
-  getTextureBlock: function getTextureBlock(index) {
-    console.log(index);
-    return PIXI.loader.resources['l3' + index].texture;
-  },
-
-  getTextureBackground: function getTextureBackground() {
-    return PIXI.loader.resources['l3bg'].texture;
-  },
-
-  enemies: function enemies(_enemies) {
-    // enemies.add(new Snail(this, this.blockSize * 12, this.blockSize * 8));
-    // enemies.add(new Snail(this, this.blockSize * 15, this.blockSize * 8));
-    // enemies.add(new Snail(this, this.blockSize * 15, this.blockSize * 8, false));
-    // enemies.add(new Snail(this, this.blockSize * 53, this.blockSize * 8));
-    // enemies.add(new Snail(this, this.blockSize * 50, this.blockSize * 8));
-  }
-};
-
-module.exports = data;
-
-/***/ }),
-/* 441 */
+/* 439 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -56132,6 +56085,302 @@ var Button = function (_Dino) {
 }(Dino);
 
 module.exports = Button;
+
+/***/ }),
+/* 440 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// const Snail = require('../enemyType/snail');
+var _inRange = __webpack_require__(60);
+
+var data = {
+  blockSize: 48,
+  musicFile: '../music/dd',
+  blockChecks: {
+    'isVictory': _inRange(7, 9),
+    'isOcuppied': _inRange(10, 20),
+    'isStandable': _inRange(20, 22)
+  },
+
+  level: function level() {
+    var level = [];
+
+    level[0] = '00000d000000000000000000000000000000000000000000000000000000000000000';
+    level[1] = '00000d000000000000ac00000000000000000000000000000000000abbbc000000000';
+    level[2] = '00000d00000000000000e000000000000000000000000000000000000000000000000';
+    level[3] = '00000d0000000ac00000d0000000000lbbbbc00000000000000000e00000000000000';
+    level[4] = 'bbbc0d00000000000000d0000000000k0000000000000000000000e00000000000000';
+    level[5] = '00000000000000000ac000000000000k00000000ac00000000000abc0000000000000';
+    level[6] = '00000000000000000000ac000000000k0000000000000000000000000000000000000';
+    level[7] = '0000000000000ac0000000000000000k0000000000000000ac0000000000000000070';
+    level[8] = '0000abbbbc000000000000000000000k00000000000ac000000000000000000000680';
+    level[9] = '000000000000000000000000000abbbbc000000000000000000000000000000000ac0';
+
+    return level;
+  },
+
+  load: function load() {
+    try {
+      PIXI.loader.add('l3bg', 'assets/map/level3/bg.jpeg');
+
+      for (var i = 1; i <= 21; i++) {
+        PIXI.loader.add('l3' + i, 'assets/map/level3/j' + i + '.png');
+      }
+    } catch (e) {}
+  },
+
+  getTextureBlock: function getTextureBlock(index) {
+    console.log(index);
+    return PIXI.loader.resources['l3' + index].texture;
+  },
+
+  getTextureBackground: function getTextureBackground() {
+    return PIXI.loader.resources['l3bg'].texture;
+  },
+
+  enemies: function enemies(_enemies) {
+    // enemies.add(new Snail(this, this.blockSize * 12, this.blockSize * 8));
+    // enemies.add(new Snail(this, this.blockSize * 15, this.blockSize * 8));
+    // enemies.add(new Snail(this, this.blockSize * 15, this.blockSize * 8, false));
+    // enemies.add(new Snail(this, this.blockSize * 53, this.blockSize * 8));
+    // enemies.add(new Snail(this, this.blockSize * 50, this.blockSize * 8));
+  }
+};
+
+module.exports = data;
+
+/***/ }),
+/* 441 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_animationvideo__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_animationvideo___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_animationvideo__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__effects_effects__ = __webpack_require__(58);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__cutsceneBase__ = __webpack_require__(24);
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = (function (Audiomanager) {
+  return __WEBPACK_IMPORTED_MODULE_2__cutsceneBase__["a" /* default */]({
+    music: 'assets/music/cut',
+    addBindings: false,
+    images: {
+      'f4': 'assets/intro/f4.jpg'
+    },
+    animation: function animation(scene, layer, destroy) {
+      var l = void 0;
+      l = [__WEBPACK_IMPORTED_MODULE_0_animationvideo__["Sprites"].Rect({
+        color: '#fff',
+        animation: __WEBPACK_IMPORTED_MODULE_0_animationvideo__["Sequence"](1, 0, [[__WEBPACK_IMPORTED_MODULE_0_animationvideo__["Animations"].ChangeTo({
+          color: '#000'
+        }, 100, __WEBPACK_IMPORTED_MODULE_0_animationvideo__["Easing"].quadInOut), __WEBPACK_IMPORTED_MODULE_0_animationvideo__["Animations"].Wait()]])
+      })];
+      layer.unshift(l);
+      l = [__WEBPACK_IMPORTED_MODULE_0_animationvideo__["Sprites"].Image({
+        image: 'f4',
+        x: 400,
+        y: 300,
+        scaleX: 1,
+        scaleY: 1,
+        a: 0,
+        animation: __WEBPACK_IMPORTED_MODULE_0_animationvideo__["Sequence"](1, -0, [[__WEBPACK_IMPORTED_MODULE_0_animationvideo__["Animations"].ChangeTo({
+          a: 1
+        }, 1000), __WEBPACK_IMPORTED_MODULE_0_animationvideo__["Animations"].Wait(8000), __WEBPACK_IMPORTED_MODULE_0_animationvideo__["Animations"].ChangeTo({
+          a: 0
+        }, 1000)], [__WEBPACK_IMPORTED_MODULE_0_animationvideo__["Animations"].ChangeTo({
+          y: 200,
+          scaleX: 1.1,
+          scaleY: 1.1
+        }, 10000)]])
+      })];
+      layer.unshift(l);
+      l = [new __WEBPACK_IMPORTED_MODULE_0_animationvideo__["Sprites"].FastBlur({
+        alphaMode: 'lighter',
+        scaleX: 20,
+        scaleY: 20,
+        a: 0.4,
+        animation: __WEBPACK_IMPORTED_MODULE_0_animationvideo__["Sequence"](true, 0, [[__WEBPACK_IMPORTED_MODULE_0_animationvideo__["Animations"].ChangeTo({
+          a: 0.1
+        }, 5000), __WEBPACK_IMPORTED_MODULE_0_animationvideo__["Animations"].ChangeTo({
+          a: 0.4
+        }, 5000)]])
+      })];
+      layer.unshift(l);
+      l = [];
+      __WEBPACK_IMPORTED_MODULE_1__effects_effects__["b" /* textBox */](Audiomanager, l, 'In der Tat! Habe Steffi auf dem Konzert gesehen!', 25, 25, 430, 500);
+      __WEBPACK_IMPORTED_MODULE_1__effects_effects__["b" /* textBox */](Audiomanager, l, '(Ich hasse!)', 50, 250, 150, 2000);
+      __WEBPACK_IMPORTED_MODULE_1__effects_effects__["b" /* textBox */](Audiomanager, l, '(Ich liebe aber auch!)', 550, 270, 230, 4000);
+      layer.unshift(l);
+      layer.unshift([function (ctx, t) {
+        return t >= 10100 && destroy();
+      }]);
+      return layer;
+    }
+  });
+});
+
+/***/ }),
+/* 442 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_animationvideo__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_animationvideo___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_animationvideo__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_color__ = __webpack_require__(132);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_color___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_color__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__effects_effects__ = __webpack_require__(58);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__cutsceneBase__ = __webpack_require__(24);
+
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = (function (Audiomanager) {
+  return __WEBPACK_IMPORTED_MODULE_3__cutsceneBase__["a" /* default */]({
+    music: 'assets/music/cut3',
+    addBindings: false,
+    images: {
+      'f6': 'assets/intro/f6.jpg',
+      't3': 'assets/intro/t3.jpg',
+      'p1': 'assets/intro/p1.png',
+      'p2': 'assets/intro/p2.png'
+    },
+    animation: function animation(scene, layer, destroy) {
+      var l = void 0;
+      l = [__WEBPACK_IMPORTED_MODULE_0_animationvideo__["Sprites"].Rect({
+        color: '#fff',
+        animation: __WEBPACK_IMPORTED_MODULE_0_animationvideo__["Sequence"](1, 0, [[__WEBPACK_IMPORTED_MODULE_0_animationvideo__["Animations"].ChangeTo({
+          color: '#000'
+        }, 100, __WEBPACK_IMPORTED_MODULE_0_animationvideo__["Easing"].quadInOut), __WEBPACK_IMPORTED_MODULE_0_animationvideo__["Animations"].Wait()]])
+      })];
+      layer.unshift(l);
+      l = [__WEBPACK_IMPORTED_MODULE_0_animationvideo__["Sprites"].Image({
+        image: 'f6',
+        x: 375,
+        y: 260,
+        scaleX: 1,
+        scaleY: 1,
+        a: 0,
+        animation: __WEBPACK_IMPORTED_MODULE_0_animationvideo__["Sequence"](1, -0, [[__WEBPACK_IMPORTED_MODULE_0_animationvideo__["Animations"].ChangeTo({
+          a: 1
+        }, 1000), __WEBPACK_IMPORTED_MODULE_0_animationvideo__["Animations"].Wait(6000), __WEBPACK_IMPORTED_MODULE_0_animationvideo__["Animations"].ChangeTo({
+          a: 0
+        }, 1000)], [__WEBPACK_IMPORTED_MODULE_0_animationvideo__["Animations"].ChangeTo({
+          x: 425,
+          scaleX: 1.1,
+          scaleY: 1.1
+        }, 8000)]])
+      }), __WEBPACK_IMPORTED_MODULE_0_animationvideo__["Sprites"].Image({
+        image: 't3',
+        x: 350,
+        y: 390,
+        scaleX: 1.2,
+        scaleY: 1.2,
+        a: 0,
+        animation: __WEBPACK_IMPORTED_MODULE_0_animationvideo__["Sequence"](1, -8000, [[__WEBPACK_IMPORTED_MODULE_0_animationvideo__["Animations"].ChangeTo({
+          a: 1
+        }, 1000), __WEBPACK_IMPORTED_MODULE_0_animationvideo__["Animations"].Wait(6000), __WEBPACK_IMPORTED_MODULE_0_animationvideo__["Animations"].ChangeTo({
+          a: 0
+        }, 1000)], [__WEBPACK_IMPORTED_MODULE_0_animationvideo__["Animations"].ChangeTo({
+          x: 400,
+          scaleX: 1.3,
+          scaleY: 1.3
+        }, 8000)]])
+      }), __WEBPACK_IMPORTED_MODULE_0_animationvideo__["Sprites"].Group({
+        sprite: [__WEBPACK_IMPORTED_MODULE_0_animationvideo__["Sprites"].Image({
+          image: 'p1'
+        }), __WEBPACK_IMPORTED_MODULE_0_animationvideo__["Sprites"].Image({
+          image: 'p2',
+          animation: __WEBPACK_IMPORTED_MODULE_0_animationvideo__["Sequence"](true, 0, [[__WEBPACK_IMPORTED_MODULE_0_animationvideo__["Animations"].ChangeTo({
+            x: function x() {
+              return Math.random() * 10 - 5;
+            },
+            y: function y() {
+              return Math.random() * 20 - 5;
+            },
+            arc: function arc() {
+              return Math.random() * 30 - 15;
+            }
+          }), __WEBPACK_IMPORTED_MODULE_0_animationvideo__["Animations"].Wait(100)]])
+        }), __WEBPACK_IMPORTED_MODULE_0_animationvideo__["Sprites"].Emitter({
+          'class': __WEBPACK_IMPORTED_MODULE_0_animationvideo__["Sprites"].Particle,
+          x: function x(i) {
+            return i % 2 ? -65 : -135;
+          },
+          y: function y(i) {
+            return -70;
+          },
+          scaleX: 16,
+          scaleY: 16,
+          alphaMode: function alphaMode(i) {
+            return i % 2 ? 'lighter' : 'source-over';
+          },
+          count: 100,
+          color: function color(i) {
+            return __WEBPACK_IMPORTED_MODULE_1_color___default.a('#FF0000').mix(__WEBPACK_IMPORTED_MODULE_1_color___default.a('#ffeb13'), Math.random()).string();
+          },
+          a: 1,
+          animation: function animation(i) {
+            return __WEBPACK_IMPORTED_MODULE_0_animationvideo__["Sequence"](true, -2000 - i * 10, [[__WEBPACK_IMPORTED_MODULE_0_animationvideo__["Animations"].ChangeTo({
+              x: __WEBPACK_IMPORTED_MODULE_0_animationvideo__["Animations"].ChangeTo.createChangeByFunction(function () {
+                return Math.random() * 30 - 15;
+              }),
+              y: __WEBPACK_IMPORTED_MODULE_0_animationvideo__["Animations"].ChangeTo.createChangeByFunction(function () {
+                return Math.random() * 30 - 15;
+              }),
+              a: 0
+            }, 1000, __WEBPACK_IMPORTED_MODULE_0_animationvideo__["Easing"].expoOut)]]);
+          }
+        })],
+        x: 350,
+        y: 390,
+        scaleX: 1.2,
+        scaleY: 1.2,
+        a: 0,
+        animation: __WEBPACK_IMPORTED_MODULE_0_animationvideo__["Sequence"](1, -16000, [[__WEBPACK_IMPORTED_MODULE_0_animationvideo__["Animations"].ChangeTo({
+          a: 1
+        }, 1000), __WEBPACK_IMPORTED_MODULE_0_animationvideo__["Animations"].Callback(function () {
+          return Audiomanager.playSound('sfx', 'e_laugh');
+        }, 0), __WEBPACK_IMPORTED_MODULE_0_animationvideo__["Animations"].Wait(6000), __WEBPACK_IMPORTED_MODULE_0_animationvideo__["Animations"].ChangeTo({
+          a: 0
+        }, 1000)], [__WEBPACK_IMPORTED_MODULE_0_animationvideo__["Animations"].ChangeTo({
+          x: 400,
+          scaleX: 1.3,
+          scaleY: 1.3
+        }, 8000)]])
+      })];
+      layer.unshift(l);
+      l = [new __WEBPACK_IMPORTED_MODULE_0_animationvideo__["Sprites"].FastBlur({
+        alphaMode: 'lighter',
+        scaleX: 20,
+        scaleY: 20,
+        a: 0.4,
+        animation: __WEBPACK_IMPORTED_MODULE_0_animationvideo__["Sequence"](true, 0, [[__WEBPACK_IMPORTED_MODULE_0_animationvideo__["Animations"].ChangeTo({
+          a: 0.1
+        }, 5000), __WEBPACK_IMPORTED_MODULE_0_animationvideo__["Animations"].ChangeTo({
+          a: 0.4
+        }, 5000)]])
+      })];
+      layer.unshift(l);
+      l = [];
+      __WEBPACK_IMPORTED_MODULE_2__effects_effects__["b" /* textBox */](Audiomanager, l, 'Da ist sie doch!', 625, 250, 170, 500);
+      __WEBPACK_IMPORTED_MODULE_2__effects_effects__["b" /* textBox */](Audiomanager, l, 'Andreas hat sie gefangen!', 300, 50, 250, 1000);
+      __WEBPACK_IMPORTED_MODULE_2__effects_effects__["b" /* textBox */](Audiomanager, l, 'Da ist sie doch!', 25, 50, 170, 2000);
+      __WEBPACK_IMPORTED_MODULE_2__effects_effects__["b" /* textBox */](Audiomanager, l, 'Entlass mich nicht!', 25, 250, 200, 1500);
+      __WEBPACK_IMPORTED_MODULE_2__effects_effects__["b" /* textBox */](Audiomanager, l, 'Geht mir aus dem Weg Minions!', 50, 50, 280, 8500);
+      __WEBPACK_IMPORTED_MODULE_2__effects_effects__["b" /* textBox */](Audiomanager, l, 'Du musst erst an mir vorbei!', 450, 100, 280, 16500);
+      layer.unshift(l);
+      layer.unshift([function (ctx, t) {
+        return t >= 24400 && destroy();
+      }]);
+      return layer;
+    }
+  });
+});
 
 /***/ })
 /******/ ]);

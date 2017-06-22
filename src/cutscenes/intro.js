@@ -15,7 +15,8 @@ export default function (Audiomanager) {
       's2': 'assets/intro/s2.jpg',
       't1': 'assets/intro/t1.jpg',
       'st1': 'assets/intro/st1.jpg',
-      'walking': 'assets/walking.png'
+      'walking': 'assets/walking.png',
+      'stephie': 'assets/stephie.png'
     },
     animation: (scene, layer) => {
       let l;
@@ -171,6 +172,21 @@ export default function (Audiomanager) {
           ]])
         })
       ];
+      layer.unshift(l);
+      l = [
+        SP.Image({
+          image: 'stephie',
+          x: -150,
+          y: 290,
+          arc: 30,
+          animation: Sequence(1, -33000, [[
+            ANI.ChangeTo({
+              x: 950,
+            }, 2000)
+          ]])
+        })
+      ]
+      ;
       layer.unshift(l);
       l = [
         SP.Text({
