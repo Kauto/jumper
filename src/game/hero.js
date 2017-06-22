@@ -4,7 +4,7 @@ function Hero (levelData) {
   this.victory = 0;
   this.ax = 0;
   this.ay = 0;
-  this.x = 0;
+  this.x = levelData.startX || 0;
   this.y = -100;
   this.size = 1;
   this.height = levelData.blockSize * this.size;

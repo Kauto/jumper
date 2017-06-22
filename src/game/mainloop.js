@@ -38,7 +38,7 @@ Mainloop.prototype.init = function () {
   this.emitters.hero_jump();
   this.enemies.addEmitter(this.emitters);
 
-  this.g = 0.5;
+  this.g = this.level.g;
 
   this.now = Date.now();
 

@@ -6,6 +6,8 @@ function Level (levelData) {
   let level = levelData.level();
   this.levelData = levelData;
   this.data = [];
+  this.g = levelData.g || 0.5;
+
   for (let y = 0; y < level.length; y++) {
     this.data[y] = [];
 
