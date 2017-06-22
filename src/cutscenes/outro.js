@@ -435,6 +435,85 @@ export default function (Audiomanager) {
           ]])
         })
       ];
+
+      const credits = {
+        'DIRECTOR': [
+          'Markus Madeja'
+        ],
+        'WRITERS': [
+          'Dennis Foppe',
+          'Markus Madeja',
+          'Andre Schaf'
+        ],
+        'PRODUCER': [
+          'Markus Madeja'
+        ],
+        'EXECUTIVE PRODUCERS': [
+          'Dennis Foppe',
+          'Andre Schaf'
+        ],
+        'COSTUME DESIGNER': [
+          'Dennis Foppe'
+        ]
+      };
+
+      layer.unshift(l);
+      l = [];
+
+      let currentCreditTime = -54000,
+          roleInterval = -3000,
+          nameInterval = -500,
+          creditColor = '#FF5',
+          creditFont = '32px Audiowide',
+          creditTime = 7000;
+
+      Object.keys(credits).forEach((role) => {
+        currentCreditTime += roleInterval;
+        l.push(SP.Text({
+            text: role,
+            x: 400,
+            y: 700,
+            color: creditColor,
+            font: creditFont,
+            a: 0,
+            animation: Sequence(1, currentCreditTime, [[
+              ANI.ChangeTo({
+                a: 1,
+                y: 175,
+                scaleX: 0.3,
+                scaleY: 0.3,
+              }, creditTime, Easing.linear),
+              ANI.ChangeTo({
+                a: 0
+              }, 10, Easing.linear)
+            ]])
+          }));
+
+        credits[role].forEach((name) => {
+          currentCreditTime += nameInterval;
+
+          l.push(SP.Text({
+            text: name,
+            x: 400,
+            y: 700,
+            color: creditColor,
+            font: creditFont,
+            a: 0,
+            animation: Sequence(1, currentCreditTime, [[
+              ANI.ChangeTo({
+                a: 1,
+                y: 175,
+                scaleX: 0.3,
+                scaleY: 0.3,
+              }, creditTime, Easing.linear),
+              ANI.ChangeTo({
+                a: 0
+              }, 10, Easing.linear)
+            ]])
+          }));
+        })
+      });
+
       layer.unshift(l);
       l = [];
       textBox(Audiomanager, l, 'Oh Tobi! Du hast mich gerettet!', 500, 50, 290, 1000);

@@ -53,7 +53,7 @@ export default function (options) {
       if (process.env.NODE_ENV === 'development') {
         layer.unshift([
           function (ctx, t) {
-            console.log(t);
+            // console.log(t);
           }
         ]);
       }

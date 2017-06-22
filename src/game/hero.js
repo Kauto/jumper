@@ -141,9 +141,6 @@ Hero.prototype.moveInAir = function () {
 };
 
 Hero.prototype.animate = function (special) {
-  // console.log('PLAYYY');
-  // this.sprite.play();
-  // this.sprite.texture = PIXI.loader.resources["H" + (special ? "2" : "1")].texture;
 };
 
 Hero.prototype.checkVictory = function (level) {

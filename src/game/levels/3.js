@@ -39,7 +39,6 @@ const data = {
   },
 
   getTextureBlock: function(index) {
-    console.log(index);
     return PIXI.loader.resources['l3' + index].texture;
   },
 
