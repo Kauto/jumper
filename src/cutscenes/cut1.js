@@ -10,7 +10,7 @@ import cutsceneBase from './cutsceneBase';
 export default function (Audiomanager) {
   return cutsceneBase({
     music: 'assets/music/cut2',
-    addBindings: false,
+    //addBindings: false,
     images: {
       'f5': 'assets/intro/f5.jpg',
       't3': 'assets/intro/t3.jpg',

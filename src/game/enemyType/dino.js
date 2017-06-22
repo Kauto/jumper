@@ -88,7 +88,7 @@ class Dino {
     }
   }
 
-  rotateEnemy(toLeft) {
+  rotateEnemy (toLeft) {
     if (toLeft) {
       this.sprite.scale.x = this.scaleValue;
       this.sprite.anchor.set(0, 0);
@@ -99,7 +99,7 @@ class Dino {
     }
   }
 
-  isLeft(hero) {
+  isLeft (hero) {
     return this.ax <= 0;
   }
 
@@ -121,6 +121,10 @@ class Dino {
     this.sprite.y = this.y;
   }
 
+  backJump (hero) {
+    return -Math.abs(hero.ay) / 2;
+  }
+
   collision (hero) {
     if (this.hitPoints) {
       if (hero.x + hero.width > this.x && hero.x < this.x + this.width) {
@@ -131,17 +135,27 @@ class Dino {
         }
         else if (hero.y + hero.height <= this.y + this.deathLine && hero.y + hero.height >= this.y) {
           this.hitPoints -= 1;
-          hero.ay = -Math.abs(hero.ay) / 2;
+          hero.ay = this.backJump(hero);
           hero.canJump = true;
           hero.canJumpDelay = 5;
           if (!this.hitPoints) {
-            this.sprite.visible = false;
-            this.emitters.play('enemies.' + this.spriteName, this.x, this.y);
+            return this.dead(hero);
+          } else {
+            return this.hit(hero);
           }
-          return 'pop';
         }
       }
     }
+    return false;
+  }
+
+  dead (hero) {
+    this.sprite.visible = false;
+    this.emitters.play('enemies.' + this.spriteName, this.x, this.y);
+    return 'pop';
+  }
+
+  hit (hero) {
     return false;
   }
 

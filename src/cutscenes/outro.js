@@ -461,33 +461,33 @@ export default function (Audiomanager) {
       l = [];
 
       let currentCreditTime = -54000,
-          roleInterval = -3000,
-          nameInterval = -500,
-          creditColor = '#FF5',
-          creditFont = '32px Audiowide',
-          creditTime = 7000;
+        roleInterval = -3000,
+        nameInterval = -500,
+        creditColor = '#FF5',
+        creditFont = '32px Audiowide',
+        creditTime = 7000;
 
       Object.keys(credits).forEach((role) => {
         currentCreditTime += roleInterval;
         l.push(SP.Text({
-            text: role,
-            x: 400,
-            y: 700,
-            color: creditColor,
-            font: creditFont,
-            a: 0,
-            animation: Sequence(1, currentCreditTime, [[
-              ANI.ChangeTo({
-                a: 1,
-                y: 175,
-                scaleX: 0.3,
-                scaleY: 0.3,
-              }, creditTime, Easing.linear),
-              ANI.ChangeTo({
-                a: 0
-              }, 10, Easing.linear)
-            ]])
-          }));
+          text: role,
+          x: 400,
+          y: 700,
+          color: creditColor,
+          font: creditFont,
+          a: 0,
+          animation: Sequence(1, currentCreditTime, [[
+            ANI.ChangeTo({
+              a: [1, 1, 1, 1, 0],
+              scaleX: 0.1,
+              scaleY: 0.1,
+            }, creditTime, Easing.linear)
+          ], [
+            ANI.ChangeTo({
+              y: 175
+            }, creditTime, Easing.quadOut),
+          ]])
+        }));
 
         credits[role].forEach((name) => {
           currentCreditTime += nameInterval;
@@ -501,17 +501,17 @@ export default function (Audiomanager) {
             a: 0,
             animation: Sequence(1, currentCreditTime, [[
               ANI.ChangeTo({
-                a: 1,
-                y: 175,
-                scaleX: 0.3,
-                scaleY: 0.3,
-              }, creditTime, Easing.linear),
+                a: [1, 1, 1, 1, 0],
+                scaleX: 0.1,
+                scaleY: 0.1,
+              }, creditTime, Easing.linear)
+            ], [
               ANI.ChangeTo({
-                a: 0
-              }, 10, Easing.linear)
+                y: 175,
+              }, creditTime, Easing.quadOut),
             ]])
           }));
-        })
+        });
       });
 
       layer.unshift(l);

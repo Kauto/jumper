@@ -10,6 +10,7 @@ const Outro = require('./cutscenes/outro').default;
 const Cut1 = require('./cutscenes/cut1').default;
 const Cut2 = require('./cutscenes/cut2').default;
 const Cut3 = require('./cutscenes/cut3').default;
+const Cut4 = require('./cutscenes/cut4').default;
 const Game = require('./game/index');
 const AudioManager = require('audio-manager');
 
@@ -27,6 +28,7 @@ audioManager.createSound('boing').load();
 audioManager.createSound('pop').load();
 audioManager.createSound('e_laugh').load();
 audioManager.createSound('bionic').load();
+audioManager.createSound('huhu').load();
 // cutscenes
 audioManager.createSound('whip').load();
 audioManager.createSound('schlag').load();
@@ -42,9 +44,11 @@ function loop () {
   level(0);
 }
 const levels = [
+
+  () => Outro(audioManager),
   () => Intro(audioManager),
   () => game.run(require('./game/levels/1')),
-  () => Win(audioManager, 1, 'Nicht die Abwesenheit der Liebe, sondern die Abwesenheit der Freundschaft macht die unglücklichen Ehen. - Dennis Foppe'),
+  () => Win(audioManager, 1, 'Liebe ist nicht das was man erwartet zu bekommen, sondern das was man bereit ist zu geben - Dennis Foppe'),
   () => Cut1(audioManager),
   () => game.run(require('./game/levels/2')),
   () => Win(audioManager, 2, 'Das Glück des Mannes heißt: ich will. Das Glück des Weibes heißt: er will. - Andre Schaf'),
@@ -52,6 +56,9 @@ const levels = [
   () => game.run(require('./game/levels/3')),
   () => Win(audioManager, 3, 'Die Ehe ist die verlogenste Form des Geschlechtsverkehrs; und eben deshalb hat sie das gute Gewissen auf ihrer Seite - Markus Madeja'),
   () => Cut3(audioManager),
+  () => game.run(require('./game/levels/4')),
+  () => Cut4(audioManager),
+  () => game.run(require('./game/levels/5')),
   () => Outro(audioManager)
 ];
 function level (pos) {

@@ -1,4 +1,4 @@
-// const Snail = require('../enemyType/snail');
+const Boss1 = require('../enemyType/boss1');
 const _inRange = require('lodash/fp/inRange');
 
 const data = {
@@ -49,7 +49,7 @@ const data = {
 
 
   enemies: function (enemies) {
-    // enemies.add(new Snail(this, this.blockSize * 12, this.blockSize * 8));
+    enemies.add(new Boss1(this, this.blockSize * 14, this.blockSize * 7));
   }
 };
 

@@ -28,6 +28,7 @@ function Level (levelData) {
   this.checkIsOccupied = this.levelData.blockChecks.isOcuppied;
   this.checkIsVictory = this.levelData.blockChecks.isVictory;
   this.checkIsStandable = this.levelData.blockChecks.isStandable;
+  this.rumble = 0;
 }
 
 Level.prototype.getLevelData = function (x, y) {

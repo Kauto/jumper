@@ -102,10 +102,11 @@ Mainloop.prototype.run = function (level, hero, enemies) {
 
 Mainloop.prototype.mainloop = function (resolve, reject) {
   this.timer = requestAnimationFrame(this.mainloop.bind(this, resolve, reject));
-	var now = Date.now();
+	let now = Date.now();
 
   // move enemies
-  this.enemies.update(this.level, this.hero);
+  let sound = this.enemies.update(this.level, this.hero);
+  sound && this.sound.playSound('sfx', sound);
 
   // apply schwerkraft
   this.hero.applyAdditionalForce(0, this.g);
@@ -184,6 +185,12 @@ Mainloop.prototype.mainloop = function (resolve, reject) {
     }
   }
 
+  if (this.level.rumble) {
+    this.level.rumble--;
+    this.stage.y = Math.random() * 6 - 3;
+  } else {
+    this.stage.y = 0;
+  }
 
 	// The emitter requires the elapsed
 	// number of seconds since the last update

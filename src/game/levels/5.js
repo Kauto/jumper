@@ -1,15 +1,17 @@
 const Lava = require('../enemyType/lava');
+const Boss2 = require('../enemyType/boss2');
 const _inRange = require('lodash/fp/inRange');
 
 const data = {
   blockSize: 48,
-  musicFile: '../music/end2',
+  musicFile: '../music/end3',
   blockChecks: {
     'isVictory': _inRange(7, 9),
     'isOcuppied': _inRange(10, 20),
     'isStandable': _inRange(20, 22),
   },
   startX: 48,
+  startY: 48*8,
   g: 0.4,
   level: function () {
     let level = [];
@@ -55,6 +57,7 @@ const data = {
     enemies.add(new Lava(this, this.blockSize * 8, this.blockSize * 9));
     enemies.add(new Lava(this, this.blockSize * 11, this.blockSize * 9));
     enemies.add(new Lava(this, this.blockSize * 12, this.blockSize * 9));
+    enemies.add(new Boss2(this, this.blockSize * 13, this.blockSize * 8));
   }
 };
 

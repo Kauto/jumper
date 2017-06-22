@@ -1,52 +1,56 @@
-function Enemies(levelData) {
-    if (!(this instanceof Enemies)) return new Enemies(levelData);
-    this.array = [];
+function Enemies (levelData) {
+  if (!(this instanceof Enemies)) return new Enemies(levelData);
+  this.array = [];
 
-    levelData.enemies(this);
+  levelData.enemies(this);
 }
 
 Enemies.prototype.reset = function () {
-    this.array = [];
+  this.array = [];
 };
 
 Enemies.prototype.add = function (enemy) {
-    this.array.push(enemy);
+  this.array.push(enemy);
 };
 
 Enemies.prototype.load = function () {
-    this.array.forEach((enemy) => {
-        enemy.load();
-    })
+  this.array.forEach((enemy) => {
+    enemy.load();
+  });
 };
 
 Enemies.prototype.update = function (level, hero) {
-    this.array.forEach((enemy) => {
-        enemy.update(level, hero);
-    });
+  let result = false;
+
+  this.array.forEach((enemy) => {
+    result = enemy.update(level, hero) || result;
+  });
+
+  return result;
 };
 
 Enemies.prototype.collision = function (hero) {
-    let result = false;
+  let result = false;
 
-    this.array.forEach((enemy) => {
-        result = enemy.collision(hero) || result;
-    });
+  this.array.forEach((enemy) => {
+    result = enemy.collision(hero) || result;
+  });
 
-    return result;
+  return result;
 };
 
 Enemies.prototype.addEmitter = function (emitters) {
-    let result = false;
+  let result = false;
 
-    this.array.forEach((enemy) => {
-        result = enemy.addEmitter(emitters);
-    });
+  this.array.forEach((enemy) => {
+    result = enemy.addEmitter(emitters);
+  });
 };
 
 Enemies.prototype.addSpritesToStage = function (stage) {
-    this.array.forEach((enemy) => {
-        enemy.addSpritesToStage(stage);
-    })
+  this.array.forEach((enemy) => {
+    enemy.addSpritesToStage(stage);
+  });
 };
 
 module.exports = Enemies;
