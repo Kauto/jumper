@@ -1,4 +1,4 @@
-// const Snail = require('../enemyType/snail');
+const Spike = require('../enemyType/spike');
 const _inRange = require('lodash/fp/inRange');
 
 const data = {
@@ -49,11 +49,9 @@ const data = {
 
 
   enemies: function (enemies) {
-    // enemies.add(new Snail(this, this.blockSize * 12, this.blockSize * 8));
-    // enemies.add(new Snail(this, this.blockSize * 15, this.blockSize * 8));
-    // enemies.add(new Snail(this, this.blockSize * 15, this.blockSize * 8, false));
-    // enemies.add(new Snail(this, this.blockSize * 53, this.blockSize * 8));
-    // enemies.add(new Snail(this, this.blockSize * 50, this.blockSize * 8));
+    enemies.add(new Spike(this, this.blockSize * 2, this.blockSize * 3));
+    enemies.add(new Spike(this, this.blockSize * 3, this.blockSize * 3));
+    enemies.add(new Spike(this, this.blockSize * 20, this.blockSize * 1));
   }
 };
 
