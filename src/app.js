@@ -44,8 +44,6 @@ function loop () {
   level(0);
 }
 const levels = [
-
-  () => Outro(audioManager),
   () => Intro(audioManager),
   () => game.run(require('./game/levels/1')),
   () => Win(audioManager, 1, 'Liebe ist nicht das was man erwartet zu bekommen, sondern das was man bereit ist zu geben - Dennis Foppe'),
