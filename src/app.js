@@ -8,6 +8,8 @@ const Death = require('./cutscenes/death').default;
 const Win = require('./cutscenes/win').default;
 const Outro = require('./cutscenes/outro').default;
 const Cut1 = require('./cutscenes/cut1').default;
+const Cut2 = require('./cutscenes/cut2').default;
+const Cut3 = require('./cutscenes/cut3').default;
 const Game = require('./game/index');
 const AudioManager = require('audio-manager');
 
@@ -46,8 +48,10 @@ const levels = [
   () => Cut1(audioManager),
   () => game.run(require('./game/levels/2')),
   () => Win(audioManager, 2, 'Wenn die Ehegatten nicht beisammen lebten, würden die guten Ehen häufiger sein. - Andre Schaf'),
+  () => Cut2(audioManager),
   () => game.run(require('./game/levels/3')),
   () => Win(audioManager, 3, 'Die Ehe ist die verlogenste Form des Geschlechtsverkehrs; und eben deshalb hat sie das gute Gewissen auf ihrer Seite - Markus Madeja'),
+  () => Cut3(audioManager),
   () => Outro(audioManager)
 ];
 function level (pos) {

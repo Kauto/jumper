@@ -326,6 +326,7 @@ export default function (Audiomanager) {
           a: 1,
           pixel: true,
           animation: Sequence(1, -44500, [[
+            ANI.Callback(() => Audiomanager.playSound('sfx', 'gestoehn2'), 0),
             ANI.Wait(8000)
           ]])
         }),
@@ -351,7 +352,6 @@ export default function (Audiomanager) {
                 y: Math.random() * scene.h
               }, 300, Easing.linear)
             ], [
-              ANI.Callback(() => Audiomanager.playSound('sfx', 'gestoehn2'), 0),
               ANI.ChangeTo({
                 a: 1
               }, 500),
