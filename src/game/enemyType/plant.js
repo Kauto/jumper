@@ -7,39 +7,30 @@ class Plant extends Dino {
     this.orgY = y;
     this.t = 0;
     this.deathLine = 0;
+    this.spriteName = 'PLANT';
+  }
+
+  isLeft(hero) {
+    return (this.x + this.width / 2 < hero.x + hero.width / 2);
   }
 
   update (level, hero) {
     this.animate();
+    this.rotateEnemy(this.isLeft(hero));
 
     this.t = this.t + 0.021;
     let s = Math.sin(this.t);
     this.height = this.orgHeight / 2 + s * (this.orgHeight / 2 );
     this.y = this.orgY + (this.orgHeight - this.height);
 
-    this.sprite.texture = PIXI.loader.resources['G1' + this.ani + ((this.x + this.width / 2 < hero.x + hero.width / 2) ? 'd' : '')].texture;
     this.sprite.y = this.y;
     this.sprite.height = this.height;
-  }
-
-  addSpritesToStage (stage) {
-    this.sprite = new PIXI.Sprite(
-      PIXI.loader.resources['G10'].texture
-    );
-    this.sprite.x = this.x;
-    this.sprite.y = this.y;
-    this.sprite.width = this.width;
-    this.sprite.height = this.height;
-
-    stage.addChild(this.sprite);
   }
 
   load () {
     try {
-      PIXI.loader.add('G10', 'assets/G10.png');
-      PIXI.loader.add('G10d', 'assets/G10d.png');
-      PIXI.loader.add('G11', 'assets/G11.png');
-      PIXI.loader.add('G11d', 'assets/G11d.png');
+      PIXI.loader.add(this.spriteName + '0', 'assets/enemies/plant/G10.png');
+      PIXI.loader.add(this.spriteName + '1', 'assets/enemies/plant/G10.png');
     } catch (e) {
     }
   }

@@ -10,7 +10,7 @@ class Dino {
     this.hitPoints = 1;
     this.aniT = this.ani = 0;
     this.deathLine = Math.ceil(levelData.blockSize / 3);
-    this.spriteName = 'G0';
+    this.spriteName = 'DINO';
   }
 
   addEmitter (emitters) {
@@ -83,16 +83,24 @@ class Dino {
       if (this.ani > this.maxAni) {
         this.ani = 0;
       }
-    }
 
-    if (this.ax < 0) {
+      this.sprite.texture = PIXI.loader.resources[this.spriteName + this.ani].texture;
+    }
+  }
+
+  rotateEnemy(toLeft) {
+    if (toLeft) {
       this.sprite.scale.x = this.scaleValue;
       this.sprite.anchor.set(0, 0);
     }
-    else if (this.ax > 0) {
+    else {
       this.sprite.scale.x = -this.scaleValue;
       this.sprite.anchor.set(1, 0);
     }
+  }
+
+  isLeft(hero) {
+    return this.ax <= 0;
   }
 
   update (level, hero) {
@@ -101,6 +109,7 @@ class Dino {
     }
 
     this.animate();
+    this.rotateEnemy(this.isLeft(hero));
 
     if (level.isOccupied(this.x + this.ax + (this.ax > 0 ? this.width : 0), this.y, 0, 1)) {
       this.ax = -this.ax;
@@ -108,7 +117,6 @@ class Dino {
       this.x += this.ax;
     }
 
-    this.sprite.texture = PIXI.loader.resources[this.spriteName + this.ani].texture;
     this.sprite.x = this.x;
     this.sprite.y = this.y;
   }
@@ -153,10 +161,8 @@ class Dino {
 
   load () {
     try {
-      PIXI.loader.add('G00', 'assets/G00.png');
-      PIXI.loader.add('G00d', 'assets/G00d.png');
-      PIXI.loader.add('G01', 'assets/G01.png');
-      PIXI.loader.add('G01d', 'assets/G01d.png');
+      PIXI.loader.add(this.spriteName + '0', 'assets/enemies/dino/G00.png');
+      PIXI.loader.add(this.spriteName + '1', 'assets/enemies/dino/G01.png');
     } catch (e) {
     }
   }

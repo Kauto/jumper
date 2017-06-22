@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Jumper</title>
+    <title>S♥T</title>
     <style>
         @font-face {
             font-family: Audiowide;
@@ -79,6 +79,7 @@
         @media (max-aspect-ratio: 16/10) {
             #main canvas {
                 width: 100%;
+                cursor: none;
             }
         }
 
@@ -87,6 +88,7 @@
                 height: 100vh;
                 display: block;
                 margin: auto;
+                cursor: none;
             }
         }
 
@@ -141,6 +143,10 @@
     var r = [
       'dist/app<%= production ? ".min" : "" %>.js?<%= Date.now() %>'
     ];
+    if (!window.Path2D) {
+      // Load Path2D-Shim if not available
+      r.unshift('dist/canvas.min.js');
+    }
     if (!window.Promise) {
       // Load promise if not available
       r.unshift('dist/promise.min.js');

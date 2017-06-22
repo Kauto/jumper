@@ -1,5 +1,5 @@
 const Dino = require('../enemyType/dino');
-const Plant = require('../enemyType/plant');
+const Button = require('../enemyType/button');
 const _inRange = require('lodash/fp/inRange');
 
 const data = {
@@ -31,7 +31,7 @@ const data = {
   load: function () {
     try {
       for (let i = 0; i <= 11; i++) {
-        PIXI.loader.add('j' + i, 'assets/j' + i + '.png');
+        PIXI.loader.add('j' + i, 'assets/map/level2/j' + i + '.png');
       }
     } catch (e) {}
   },
@@ -56,6 +56,10 @@ const data = {
     enemies.add(new Dino(this, this.blockSize * 12, this.blockSize * 13));
     enemies.add(new Dino(this, this.blockSize * 15, this.blockSize * 13, false));
     enemies.add(new Dino(this, this.blockSize * 6, this.blockSize * 6));
+    enemies.add(new Button(this, 82, -150, 0));
+    enemies.add(new Button(this, 582, -1050, 1));
+    enemies.add(new Button(this, 282, -1850, 3));
+    enemies.add(new Button(this, 682, -3050, 2));
 
     /*
 

@@ -1,5 +1,4 @@
 import {
-  ImageManager,
   Engine,
   Scenes,
   Sprites,
@@ -8,7 +7,7 @@ import {
   Easing
 } from 'animationvideo';
 
-export default function (music, images, sceneAnimation, addBindings = true) {
+export default function (options) {
   return new Promise((resolve, reject) => {
     let canvas = document.createElement('canvas');
     canvas.width = 800;
@@ -19,18 +18,18 @@ export default function (music, images, sceneAnimation, addBindings = true) {
 
     let scene, engine, audio;
 
-    if (music) {
+    if (options.music) {
       audio = document.createElement('audio');
 
       if (process.env.NODE_ENV === 'development') {
         // for debug
         audio.controls = true;
         document.getElementById('main').appendChild(audio);
-        audio.onerror = () => audio.src = music + '.mp3';
+        audio.onerror = () => audio.src = options.music + '.mp3';
         // try skippable
-        audio.src = music + '.php';
+        audio.src = options.music + '.php';
       } else {
-        audio.src = music + '.mp3';
+        audio.src = options.music + '.mp3';
       }
 
       audio.preload = 'auto';
@@ -43,17 +42,21 @@ export default function (music, images, sceneAnimation, addBindings = true) {
 
     engine = Engine(canvas, scene);
 
-    scene.init(images).scene((scene, layer) => {
-      layer = sceneAnimation(scene, layer, destroy);
+    if (options.loading) {
+      console.log(options.loading);
+      scene.loading(options.loading);
+    }
 
-      /*
+    scene.init(options.images).scene((scene, layer) => {
+      layer = options.animation(scene, layer, destroy);
+
       if (process.env.NODE_ENV === 'development') {
         layer.unshift([
           function (ctx, t) {
             console.log(t);
           }
         ]);
-      }*/
+      }
       return layer;
     });
     engine.run();
@@ -75,7 +78,7 @@ export default function (music, images, sceneAnimation, addBindings = true) {
       resolve();
     }
 
-    if (addBindings) {
+    if (options.addBindings || options.addBindings === undefined) {
       canvas.addEventListener('click', destroy, false);
       window.addEventListener(
         'keydown', destroy, false

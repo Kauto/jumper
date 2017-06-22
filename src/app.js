@@ -7,6 +7,7 @@ const Intro = require('./cutscenes/intro').default;
 const Death = require('./cutscenes/death').default;
 const Win = require('./cutscenes/win').default;
 const Outro = require('./cutscenes/outro').default;
+const Cut1 = require('./cutscenes/cut1').default;
 const Game = require('./game/index');
 const AudioManager = require('audio-manager');
 
@@ -41,10 +42,12 @@ function loop () {
 const levels = [
   () => Intro(audioManager),
   () => game.run(require('./game/levels/1')),
-  () => Win(audioManager, 1),
+  () => Win(audioManager, 1, 'Nicht die Abwesenheit der Liebe, sondern die Abwesenheit der Freundschaft macht die unglücklichen Ehen. - Dennis Foppe'),
+  () => Cut1(audioManager),
   () => game.run(require('./game/levels/2')),
-  () => Win(audioManager, 2),
+  () => Win(audioManager, 2, 'Wenn die Ehegatten nicht beisammen lebten, würden die guten Ehen häufiger sein. - Andre Schaf'),
   () => game.run(require('./game/levels/3')),
+  () => Win(audioManager, 3, 'Die Ehe ist die verlogenste Form des Geschlechtsverkehrs; und eben deshalb hat sie das gute Gewissen auf ihrer Seite - Markus Madeja'),
   () => Outro(audioManager)
 ];
 function level (pos) {
