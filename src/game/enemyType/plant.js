@@ -30,7 +30,7 @@ class Plant extends Dino {
   load () {
     try {
       PIXI.loader.add(this.spriteName + '0', 'assets/enemies/plant/G10.png');
-      PIXI.loader.add(this.spriteName + '1', 'assets/enemies/plant/G10.png');
+      PIXI.loader.add(this.spriteName + '1', 'assets/enemies/plant/G11.png');
     } catch (e) {
     }
   }
