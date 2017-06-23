@@ -1,4 +1,5 @@
 const Spike = require('../enemyType/spike');
+const Fly = require('../enemyType/fly');
 const _inRange = require('lodash/fp/inRange');
 
 const data = {
@@ -48,7 +49,11 @@ const data = {
 
 
   enemies: function (enemies) {
-    enemies.add(new Spike(this, this.blockSize * 2, this.blockSize * 3));
+    enemies.add(new Fly(this, this.blockSize * 23, this.blockSize * 4));
+    enemies.add(new Fly(this, this.blockSize * 23, this.blockSize * 5));
+    enemies.add(new Fly(this, this.blockSize * 23, this.blockSize * 6));
+    enemies.add(new Fly(this, this.blockSize * 51, this.blockSize * 5));
+    enemies.add(new Fly(this, this.blockSize * 62, this.blockSize * 6));
     enemies.add(new Spike(this, this.blockSize * 3, this.blockSize * 3));
     enemies.add(new Spike(this, this.blockSize * 20, this.blockSize * 1));
   }
