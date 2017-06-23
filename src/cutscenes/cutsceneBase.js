@@ -43,7 +43,6 @@ export default function (options) {
     engine = Engine(canvas, scene);
 
     if (options.loading) {
-      console.log(options.loading);
       scene.loading(options.loading);
     }
 
@@ -53,7 +52,7 @@ export default function (options) {
       if (process.env.NODE_ENV === 'development') {
         layer.unshift([
           function (ctx, t) {
-            // console.log(t);
+            console.log(t);
           }
         ]);
       }
