@@ -110,10 +110,6 @@ class Boss2 extends Dino {
     hero.victory = 1;
     return 'huhu';
   }
-
-  hit (hero) {
-    return 'schlag';
-  }
 }
 
 module.exports = Boss2;

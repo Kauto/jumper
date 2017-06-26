@@ -11,6 +11,7 @@ class Boss1 extends Dino {
     this.moveToLeft = true;
     this.ax = 0;
     this.dizy = 0;
+    this.deathLine = 25;
   }
 
   isLeft (hero) {
@@ -85,10 +86,6 @@ class Boss1 extends Dino {
     super.dead(hero);
     hero.victory = 1;
     return 'bionic';
-  }
-
-  hit (hero) {
-    return 'schlag';
   }
 }
 

@@ -9,7 +9,7 @@ class Dino {
     this.maxAniT = 5;
     this.hitPoints = 1;
     this.aniT = this.ani = 0;
-    this.deathLine = Math.ceil(levelData.blockSize / 3);
+    this.deathLine = 18;
     this.spriteName = 'DINO';
   }
 
@@ -156,7 +156,7 @@ class Dino {
   }
 
   hit (hero) {
-    return false;
+    return 'schlag';
   }
 
   addSpritesToStage (stage) {
