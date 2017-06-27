@@ -42,7 +42,7 @@ Mainloop.prototype.init = function () {
 
   this.nowFunction = () => performance && performance.now() || Date.now();
   this.now = this.nowFunction();
-  this.interval = 1000 / 120;
+  this.interval = 1000 / 60;
   this.tolerance = 0.1;
 
   this.sound.playLoopSound('music', this.level.musicFile);
