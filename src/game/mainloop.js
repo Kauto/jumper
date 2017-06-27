@@ -40,7 +40,10 @@ Mainloop.prototype.init = function () {
 
   this.g = this.level.g;
 
-  this.now = Date.now();
+  this.nowFunction = () => performance && performance.now() || Date.now();
+  this.now = this.nowFunction();
+  this.interval = 1000 / 120;
+  this.tolerance = 0.1;
 
   this.sound.playLoopSound('music', this.level.musicFile);
 };
@@ -102,102 +105,110 @@ Mainloop.prototype.run = function (level, hero, enemies) {
 
 Mainloop.prototype.mainloop = function (resolve, reject) {
   this.timer = requestAnimationFrame(this.mainloop.bind(this, resolve, reject));
-	let now = Date.now();
+  const now = this.nowFunction(),
+    delta = (now - this.now);
 
-  // move enemies
-  let sound = this.enemies.update(this.level, this.hero);
-  sound && this.sound.playSound('sfx', sound);
+  if (delta >= this.interval - this.tolerance) {
+    this.now = now - (delta % this.interval);
 
-  // apply schwerkraft
-  this.hero.applyAdditionalForce(0, this.g);
-  this.hero.updatePositionY();
-  this.hero.checkAnimation();
+    for (let calcFrame = 0, frames = Math.floor(delta / this.interval); calcFrame < frames; calcFrame++) {
+      // move enemies
+      let sound = this.enemies.update(this.level, this.hero);
+      sound && this.sound.playSound('sfx', sound);
 
-  if (!this.hero.victory) {
-    this.hero.checkVictory(this.level) && this.sound.playSound('sfx', 'bionic');
-  }
+      // apply schwerkraft
+      this.hero.applyAdditionalForce(0, this.g);
+      this.hero.updatePositionY();
+      this.hero.checkAnimation();
 
-  if (this.hero.victory) {
-    if (this.hero.victoryAnimation(this.level)) {
-      return this.destroy(resolve);
-    }
-  } else {
-    this.hero.animate(this.key.down.isDown);
-
-    // runterfallen + gegner
-    if (!this.hero.dead) {
-      this.hero.checkFloorDeath(this.level) && this.sound.playSound('sfx', 'e_laugh');
-      let collision = this.enemies.collision(this.hero);
-      collision && this.sound.playSound('sfx', collision);
-    }
-
-    if (this.hero.dead) {
-      if (this.hero.deathAnimation(this.level)) {
-        return this.destroy(reject);
+      if (!this.hero.victory) {
+        this.hero.checkVictory(this.level) && this.sound.playSound('sfx', 'bionic');
       }
-    } else {
 
-      // collision detection with level
-      this.hero.checkCeiling(this.level);
-      this.hero.checkFloor(this.level);
-
-      this.hero.moveInAir();
-
-      if (this.key.right.isDown) {
-        if (this.hero.canJump) {
-          this.hero.ax = 3;
-        } else {
-          this.hero.ax = this.hero.ax + 0.25;
+      if (this.hero.victory) {
+        if (this.hero.victoryAnimation(this.level)) {
+          return this.destroy(resolve);
         }
-      }
-      if (this.key.left.isDown) {
-        if (this.hero.canJump) {
-          this.hero.ax = -3;
-        } else {
-          this.hero.ax = this.hero.ax - 0.25;
-        }
-      }
-
-      // jumping
-      if ((this.key.jump.isDown || this.key.up.isDown) && this.hero.canJump && this.jumpKey === false) {
-        this.sound.playSound('sfx', 'boing');
-        this.emitters.play('hero.jump', this.hero.x, this.hero.y + this.hero.height);
-        this.jumpKey = true;
-        this.hero.ay = -11;
-        this.hero.canJump = false;
-        //Addpartikel 15, hero.sprite.x - LevelX, hero.sprite.y + 96, hero.sprite.x + 48 - LevelX, hero.sprite.y + 96, False
       } else {
-        if (this.key.jump.isUp && this.key.up.isUp) {
-          this.jumpKey = false;
+        this.hero.animate(this.key.down.isDown);
+
+        // runterfallen + gegner
+        if (!this.hero.dead) {
+          this.hero.checkFloorDeath(this.level) && this.sound.playSound('sfx', 'e_laugh');
+          let collision = this.enemies.collision(this.hero);
+          collision && this.sound.playSound('sfx', collision);
+        }
+
+        if (this.hero.dead) {
+          if (this.hero.deathAnimation(this.level)) {
+            return this.destroy(reject);
+          }
+        } else {
+
+          // collision detection with level
+          this.hero.checkCeiling(this.level);
+          this.hero.checkFloor(this.level);
+
+          this.hero.moveInAir();
+
+          if (this.key.right.isDown) {
+            if (this.hero.canJump) {
+              this.hero.ax = 3;
+            } else {
+              this.hero.ax = this.hero.ax + 0.25;
+            }
+          }
+          if (this.key.left.isDown) {
+            if (this.hero.canJump) {
+              this.hero.ax = -3;
+            } else {
+              this.hero.ax = this.hero.ax - 0.25;
+            }
+          }
+
+          // jumping
+          if ((this.key.jump.isDown || this.key.up.isDown) && this.hero.canJump && this.jumpKey === false) {
+            this.sound.playSound('sfx', 'boing');
+            this.emitters.play('hero.jump', this.hero.x, this.hero.y + this.hero.height);
+            this.jumpKey = true;
+            this.hero.ay = -11;
+            this.hero.canJump = false;
+            //Addpartikel 15, hero.sprite.x - LevelX, hero.sprite.y + 96, hero.sprite.x + 48 - LevelX, hero.sprite.y + 96, False
+          } else {
+            if (this.key.jump.isUp && this.key.up.isUp) {
+              this.jumpKey = false;
+            }
+          }
+
+          //check links und rechts
+          this.hero.updatePositionXY(this.level);
+
+          // scrollen
+          if (this.hero.x + this.stage.x > 2 * this.renderer.width / 5) {
+            this.stage.x = Math.max(this.renderer.view.width - this.level.width, Math.min(2 * this.renderer.width / 5 - this.hero.x, 0));
+          }
+          if (this.hero.x + this.stage.x < 150) {
+            this.stage.x = Math.max(this.renderer.view.width - this.level.width, Math.min(150 - this.hero.x, 0));
+          }
         }
       }
 
-      //check links und rechts
-      this.hero.updatePositionXY(this.level);
-
-      // scrollen
-      if (this.hero.x + this.stage.x > 2 * this.renderer.width / 5) {
-        this.stage.x = Math.max(this.renderer.view.width - this.level.width, Math.min(2 * this.renderer.width / 5 - this.hero.x, 0));
-      }
-      if (this.hero.x + this.stage.x < 150) {
-        this.stage.x = Math.max(this.renderer.view.width - this.level.width, Math.min(150 - this.hero.x, 0));
+      if (this.level.rumble) {
+        this.level.rumble--;
+        this.stage.y = Math.random() * 6 - 3;
+      } else {
+        this.stage.y = 0;
       }
     }
+
+    console.log(delta);
+
+    // The emitter requires the elapsed
+    // number of seconds since the last update
+    this.emitters.update(delta * 0.001);
+
+    this.renderer.render(this.stageRoot);
   }
-
-  if (this.level.rumble) {
-    this.level.rumble--;
-    this.stage.y = Math.random() * 6 - 3;
-  } else {
-    this.stage.y = 0;
-  }
-
-	// The emitter requires the elapsed
-	// number of seconds since the last update
-	this.emitters.update((now - this.now) * 0.001);
-	this.now = now;
-
-  this.renderer.render(this.stageRoot);
 };
 
 module.exports = Mainloop;
