@@ -1,7 +1,7 @@
 const Dino = require('./dino');
 
 class Button extends Dino {
-  constructor (levelData, x, y, spriteNumber) {
+  constructor(levelData, x, y, spriteNumber) {
     super(levelData, x, y);
     this.height = this.orgHeight = levelData.blockSize * 2;
     this.spriteNumber = spriteNumber;
@@ -11,7 +11,11 @@ class Button extends Dino {
     this.hitPoints = 3;
   }
 
-  update (level, hero) {
+  update(level, hero) {
+    if (!this.hitPoints) {
+      return false;
+    }
+
     this.y = this.y + 2;
 
     if (this.y > level.height) {
@@ -21,7 +25,7 @@ class Button extends Dino {
     this.sprite.y = this.y;
   }
 
-  addSpritesToStage (stage) {
+  addSpritesToStage(stage) {
     this.sprite = new PIXI.Sprite(
       PIXI.loader.resources[this.spriteName + this.spriteNumber].texture
     );
@@ -33,7 +37,7 @@ class Button extends Dino {
     stage.addChild(this.sprite);
   }
 
-  load () {
+  load() {
     try {
       PIXI.loader.add(this.spriteName + '0', 'assets/enemies/button/join_now_n.gif');
       PIXI.loader.add(this.spriteName + '1', 'assets/enemies/button/order_n.gif');

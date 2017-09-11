@@ -31,7 +31,7 @@ Hero.prototype.processLoad = function () {
     this.jumpingFrames.push(PIXI.Texture.fromFrame('jumping' + val + '.png'));
   }
 
-  // create an AnimatedSprite (brings back memories from the days of Flash, right ?)
+  // create an AnimatedSprite
   this.sprite = new PIXI.extras.AnimatedSprite(this.walkingFrames);
   this.sprite.width = this.width;
   this.sprite.height = this.height;
@@ -39,6 +39,8 @@ Hero.prototype.processLoad = function () {
   this.sprite.y = this.y;
   this.sprite.animationSpeed = 0.05;
 
+  // save the correct factor for the scaling
+  // we need this to flip the sprite
   this.scaleValue = this.sprite.scale.x;
 
 };
@@ -160,9 +162,6 @@ Hero.prototype.victoryAnimation = function (level) {
   if (this.y < -this.height) {
     this.y = -this.height;
     this.victory += 1;
-  } else {
-    //hero.sprite.rotation += 0.1;
-    //Addpartikel 1, hero.sprite.x + 20 - LevelX, hero.sprite.y, hero.sprite.x + 28 - LevelX, hero.sprite.y + 48, True
   }
   return (this.victory >= 100);
 };
@@ -209,15 +208,11 @@ Hero.prototype.checkCeiling = function (level) {
 
 Hero.prototype.deathAnimation = function (level) {
   if (this.dead === 1) {
-    //BeginPlaySound Games & "e_laugh.wav"
     this.dead = this.dead + 1;
   }
   if (this.y > level.height) {
     this.y = level.height + 1;
     this.dead += 1;
-  } else {
-    //hero.sprite.rotation += 0.1;
-    //Addpartikel 1, hero.sprite.x + 20 - LevelX, hero.sprite.y, hero.sprite.x + 28 - LevelX, hero.sprite.y + 48, True
   }
   return (this.dead >= 15);
 };

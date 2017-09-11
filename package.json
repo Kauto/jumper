@@ -20,13 +20,14 @@
   },
   "homepage": "https://github.com/Kauto/jumper#readme",
   "devDependencies": {
-    "laravel-mix": "^1.0.7"
+    "laravel-mix": "^1.4.2",
+    "webpack-common-shake": "^1.5.3"
   },
   "dependencies": {
     "animationvideo": "^0.5.7",
     "audio-manager": "^0.1.18",
     "color": "^1.0.3",
     "pixi-particles": "^2.1.5",
-    "pixi.js": "^4.5.3"
+    "pixi.js": "^4.5.5"
   }
 }

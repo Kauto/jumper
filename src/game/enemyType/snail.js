@@ -6,8 +6,6 @@ class Snail extends Dino {
     this.spriteName = 'G2';
   }
 
-
-
   load () {
     try {
       PIXI.loader.add('G20', 'assets/enemies/snail/snail1.png');

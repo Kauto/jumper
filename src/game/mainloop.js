@@ -43,7 +43,7 @@ Mainloop.prototype.init = function () {
   this.nowFunction = () => performance && performance.now() || Date.now();
   this.now = this.nowFunction();
   this.interval = 1000 / 60;
-  this.tolerance = 0.1;
+  this.intervalTolerance = 0.1;
 
   this.sound.playLoopSound('music', this.level.musicFile);
 };
@@ -78,8 +78,8 @@ Mainloop.prototype.run = function (level, hero, enemies) {
     this.hero = hero;
     this.enemies = enemies;
 
+    // start mainloop directly if there is nothing in the loader-queue
     if (PIXI.loader._queue._tasks.length) {
-
       document.getElementById('loading').style.display = 'block';
       document.getElementById('main').style.display = 'none';
 
@@ -108,19 +108,21 @@ Mainloop.prototype.mainloop = function (resolve, reject) {
   const now = this.nowFunction(),
     delta = (now - this.now);
 
-  if (delta >= this.interval - this.tolerance) {
+  if (delta >= this.interval - this.intervalTolerance) {
     this.now = now - (delta % this.interval);
 
-    for (let calcFrame = 0, frames = Math.floor(delta / this.interval); calcFrame < frames; calcFrame++) {
+    // how many frames should be skipped. Maximum is a skip of 2 frames
+    for (let calcFrame = 0, frames = Math.min(3, Math.floor(delta / this.interval)); calcFrame < frames; calcFrame++) {
       // move enemies
       let sound = this.enemies.update(this.level, this.hero);
       sound && this.sound.playSound('sfx', sound);
 
-      // apply schwerkraft
+      // apply gravity
       this.hero.applyAdditionalForce(0, this.g);
       this.hero.updatePositionY();
       this.hero.checkAnimation();
 
+      // level finished?
       if (!this.hero.victory) {
         this.hero.checkVictory(this.level) && this.sound.playSound('sfx', 'bionic');
       }
@@ -132,7 +134,7 @@ Mainloop.prototype.mainloop = function (resolve, reject) {
       } else {
         this.hero.animate(this.key.down.isDown);
 
-        // runterfallen + gegner
+        // death at bottom or dead by an enemy
         if (!this.hero.dead) {
           this.hero.checkFloorDeath(this.level) && this.sound.playSound('sfx', 'e_laugh');
           let collision = this.enemies.collision(this.hero);
@@ -173,17 +175,16 @@ Mainloop.prototype.mainloop = function (resolve, reject) {
             this.jumpKey = true;
             this.hero.ay = -11;
             this.hero.canJump = false;
-            //Addpartikel 15, hero.sprite.x - LevelX, hero.sprite.y + 96, hero.sprite.x + 48 - LevelX, hero.sprite.y + 96, False
           } else {
             if (this.key.jump.isUp && this.key.up.isUp) {
               this.jumpKey = false;
             }
           }
 
-          //check links und rechts
+          //collision check left and right
           this.hero.updatePositionXY(this.level);
 
-          // scrollen
+          // scrolling of the level
           if (this.hero.x + this.stage.x > 2 * this.renderer.width / 5) {
             this.stage.x = Math.max(this.renderer.view.width - this.level.width, Math.min(2 * this.renderer.width / 5 - this.hero.x, 0));
           }
@@ -193,6 +194,7 @@ Mainloop.prototype.mainloop = function (resolve, reject) {
         }
       }
 
+      // rumble effect
       if (this.level.rumble) {
         this.level.rumble--;
         this.stage.y = Math.random() * 6 - 3;
@@ -200,8 +202,6 @@ Mainloop.prototype.mainloop = function (resolve, reject) {
         this.stage.y = 0;
       }
     }
-
-    console.log(delta);
 
     // The emitter requires the elapsed
     // number of seconds since the last update

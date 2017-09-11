@@ -1,8 +1,9 @@
 // Minimize html
-let fs = require('fs'),
+const fs = require('fs'),
     path = require('path'),
     minify = require('html-minifier').minify,
-    _template = require('lodash/template');
+    _template = require('lodash/template'),
+	ShakePlugin = require('webpack-common-shake').Plugin;
 
 function minimizeHtml () {
 let data = _template(fs.readFileSync(__dirname + '/src/index.html', 'utf8'))({
@@ -28,6 +29,10 @@ fs.writeFile(__dirname + '/index.html', result, () => {
 }
 
 let mix = require('laravel-mix');
+
+mix.webpackConfig({
+  plugins: [ new ShakePlugin() ]
+});
 
 /*
  |--------------------------------------------------------------------------

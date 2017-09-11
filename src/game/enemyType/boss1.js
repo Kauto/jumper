@@ -67,13 +67,13 @@ class Boss1 extends Dino {
 
   load () {
     try {
-      PIXI.loader.add('BOSS10', 'assets/enemies/boss1/e1a.png');
-      PIXI.loader.add('BOSS11', 'assets/enemies/boss1/e2a.png');
-      PIXI.loader.add('BOSS12', 'assets/enemies/boss1/e3a.png');
-      PIXI.loader.add('BOSS13', 'assets/enemies/boss1/e4a.png');
-      PIXI.loader.add('BOSS14', 'assets/enemies/boss1/e5a.png');
-      PIXI.loader.add('BOSS15', 'assets/enemies/boss1/e6a.png');
-      PIXI.loader.add('BOSS16', 'assets/enemies/boss1/e7a.png');
+      PIXI.loader.add(this.spriteName + '0', 'assets/enemies/boss1/e1a.png');
+      PIXI.loader.add(this.spriteName + '1', 'assets/enemies/boss1/e2a.png');
+      PIXI.loader.add(this.spriteName + '2', 'assets/enemies/boss1/e3a.png');
+      PIXI.loader.add(this.spriteName + '3', 'assets/enemies/boss1/e4a.png');
+      PIXI.loader.add(this.spriteName + '4', 'assets/enemies/boss1/e5a.png');
+      PIXI.loader.add(this.spriteName + '5', 'assets/enemies/boss1/e6a.png');
+      PIXI.loader.add(this.spriteName + '6', 'assets/enemies/boss1/e7a.png');
     } catch (e) {
     }
   }

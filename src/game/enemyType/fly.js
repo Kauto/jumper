@@ -15,10 +15,6 @@ class Fly extends Dino {
     return (this.x + this.width / 2 > hero.x + hero.width / 2);
   }
 
-  // backJump (hero) {
-  //   return -Math.abs(hero.ay);
-  // }
-
   update (level, hero) {
     if (!this.hitPoints) {
       return false;
