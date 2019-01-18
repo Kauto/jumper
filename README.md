@@ -6,6 +6,6 @@ npm install
 ```
 to install. Use
 ```bash
-npm run watch
+npm start
 ```
-to run the watcher. Open the file `index.html` to see the game. JS-code is in `src/app.js` and will be compiled to `dist/app.js`.
+to run the game. You may need to refresh once because first compiling can be slow.
