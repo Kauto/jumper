@@ -1,13 +1,15 @@
 {
   "name": "jumper",
-  "version": "1.0.0",
-  "description": "",
-  "main": "main.js",
+  "version": "1.0.1",
+  "description": "wedding game",
+  "main": "dist/app.js",
+  "umd:main": "dist/app.min.js",
+  "browser": "dist/app.min.js",
+  "source": "src/app.js",
   "scripts": {
-    "dev": "NODE_ENV=development webpack --progress --hide-modules",
-    "watch": "NODE_ENV=development webpack --watch --progress --hide-modules",
-    "hot": "NODE_ENV=development webpack-dev-server --inline --hot",
-    "production": "NODE_ENV=production webpack --progress --hide-modules"
+    "build": "parcel build index.html",
+    "dev": "parcel index.html",
+    "start": "opn http://localhost:1234 && parcel index.html"
   },
   "repository": {
     "type": "git",
@@ -20,14 +22,17 @@
   },
   "homepage": "https://github.com/Kauto/jumper#readme",
   "devDependencies": {
-    "laravel-mix": "^1.4.2",
-    "webpack-common-shake": "^1.5.3"
+    "opn-cli": "^4.0.0",
+    "parcel-bundler": "^1.11.0",
+    "parcel-plugin-clean-dist": "0.0.6",
+    "parcel-plugin-static-files-copy": "^2.0.0"
   },
   "dependencies": {
     "animationvideo": "^0.5.7",
     "audio-manager": "^0.1.18",
-    "color": "^1.0.3",
-    "pixi-particles": "^2.1.5",
-    "pixi.js": "^4.5.5"
+    "color": "^3.1.0",
+    "lodash": "^4.17.11",
+    "pixi-particles": "^3.1.0",
+    "pixi.js": "^4.8.5"
   }
 }
